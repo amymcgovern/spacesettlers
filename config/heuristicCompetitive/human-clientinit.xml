@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TeamClientConfig>
+	<!-- Name of the client class (this is used to construct the client so it needs to be the full class name) -->
+	<classname>spacesettlers.clients.HumanTeamClient</classname>
+	
+	<!-- You can choose the color your team's ships will be on the screen.  Specify the red, green, and blue components -->
+	<teamColorRed>255</teamColorRed>
+	<teamColorGreen>0</teamColorGreen>
+	<teamColorBlue>0</teamColorBlue>
+	
+	<!-- The name that shows up in the ladder -->
+	<ladderName>Human Team</ladderName>
+	
+	<!-- The number of ships in the team.  Note, if this is bigger than the maximum number of allowable ships per team, it is ignored -->
+	<numberInitialShipsInTeam>1</numberInitialShipsInTeam>
+	
+	<!-- Optional:  if the agent needs to read in from a file, it can specify the path to it here -->
+	<knowledgeFile>foo.xml.gz</knowledgeFile>
+</TeamClientConfig>

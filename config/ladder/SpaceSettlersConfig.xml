@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SpaceSettlersConfig>
+	<!-- Height/Width in pixels -->
+	<height>1080</height>
+	<width>1600</width>
+	
+	<!-- Number of steps of simulation -->
+	<simulationSteps>5000</simulationSteps>
+
+	<!-- Timestep for a simulation (in seconds for the physics equations) -->
+	<simulationTimeStep>0.05</simulationTimeStep>
+	
+	<!-- Used to initialize all Random objects in the simulator.  If this is 0, it is set using system time. 
+	     Set to a non-zero number to make repeatable games. -->
+	<randomSeed>0</randomSeed>
+
+	<!-- Scoring mechanism used for this game: Can be Resources, Beacons, ... (more as we add them) -->
+	<scoringMethod>Damage</scoringMethod>
+
+	<!-- Specify the number of the beacons.  The locations are initialized randomly -->
+	<numBeacons>6</numBeacons>
+	
+	<!-- Specify the maximum number of ships in a team -->
+	<maximumShipsPerTeam>1</maximumShipsPerTeam>
+	<maximumInitialShipsPerTeam>1</maximumInitialShipsPerTeam>
+	
+	<!-- Specify any controllable clients in the simulator (this can include heuristics).  
+	     Note, all clients are teams since eventually all clients can make new ships. -->
+	<teams>
+		<!-- Each team needs a name (so you know what other items belong to that team) and a pointer
+		     to the configuration file for that team.  Also, teams can have initial bounding boxes
+		     which bound where the ships and the base will be created. -->
+		<HighLevelTeamConfig>
+			<teamName>RandomClient</teamName>
+			<configFile>random-clientinit.xml</configFile>
+		</HighLevelTeamConfig>
+		<HighLevelTeamConfig>
+			<teamName>BeaconCollectorTeam</teamName>
+			<configFile>beacon-clientinit.xml</configFile>
+		</HighLevelTeamConfig>
+		<HighLevelTeamConfig>
+			<teamName>HumanTeam</teamName>
+			<configFile>human-clientinit.xml</configFile>
+		</HighLevelTeamConfig>
+		<HighLevelTeamConfig>
+			<teamName>HeuristicMinerTeam</teamName>
+			<!-- Pick the one you intend to play against (self versus other) -->
+			<configFile>aggressive-heuristic-clientinit.xml</configFile>
+		</HighLevelTeamConfig>
+	</teams>
+
+	<!-- Each team needs a base.  Optionally, you can initialize the location of the base -->
+	<bases>
+		<BaseConfig>
+			<teamName>RandomClient</teamName>
+		</BaseConfig>
+		<BaseConfig>
+			<teamName>BeaconCollectorTeam</teamName>
+		</BaseConfig>
+		<BaseConfig>
+			<teamName>HumanTeam</teamName>
+		</BaseConfig>
+		<BaseConfig>
+			<teamName>HeuristicMinerTeam</teamName>
+		</BaseConfig>
+	</bases>
+	
+	<!-- Specify the options for creating asteroids.  Their locations are random. -->
+	<asteroids>
+		<!-- The probability that a newly spawned asteroid will be mineable -->
+		<probabilityMineable>0.5</probabilityMineable>
+		
+		<!-- The number of asteroids when the game starts -->
+		<numberInitialAsteroids>40</numberInitialAsteroids>
+		
+		<!-- The maximum number of asteroids in a game -->
+		<maximumNumberAsteroids>80</maximumNumberAsteroids>
+
+		<!-- The probability an asteroid is movable -->
+		<probabilityMoveable>0.5</probabilityMoveable>
+		
+		<!-- The maximum initial velocity of a move-able asteroid -->
+		<maxInitialVelocity>15</maxInitialVelocity>
+		
+		<!-- The average proportion of each type of resource in an asteroid.  This needs to add to 1. -->
+		<probabilityFuelType>0.2</probabilityFuelType>
+		<probabilityWaterType>0.5</probabilityWaterType>
+		<probabilityMetalsType>0.3</probabilityMetalsType>
+	</asteroids>
+	
+</SpaceSettlersConfig>

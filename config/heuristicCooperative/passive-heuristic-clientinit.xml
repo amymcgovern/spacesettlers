@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TeamClientConfig>
+	<!-- The name of the client class (this is used to construct the client so it needs to be the full class name) -->
+	<classname>spacesettlers.clients.PacifistHeuristicAsteroidCollectorTeamClient</classname>
+	
+	<!-- You can choose the color your team's ships will be on the screen.  Specify the red, green, and blue components -->
+	<teamColorRed>0</teamColorRed>
+	<teamColorGreen>200</teamColorGreen>
+	<teamColorBlue>200</teamColorBlue>
+	
+	<!-- The name that shows up in the ladder -->
+	<!-- <ladderName>Aggressive Heuristic Asteroid Collector Team</ladderName> -->
+	<ladderName>Pacifist Heuristic Asteroid Collector</ladderName>
+	
+	<!-- The number of ships in the team.  Note, if this is bigger than the maximum number of allowable ships per team, it is ignored -->
+	<numberInitialShipsInTeam>2</numberInitialShipsInTeam>
+	
+	<!-- Optional:  if the agent needs to read in from a file, it can specify the path to it here -->
+	<knowledgeFile>spacesettlers/clients/aggressive_knowledge.xml</knowledgeFile>
+</TeamClientConfig>
