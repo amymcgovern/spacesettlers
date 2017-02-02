@@ -21,8 +21,8 @@
 	<numBeacons>6</numBeacons>
 	
 	<!-- Specify the maximum number of ships in a team -->
-	<maximumShipsPerTeam>10</maximumShipsPerTeam>
-	<maximumInitialShipsPerTeam>2</maximumInitialShipsPerTeam>
+	<maximumShipsPerTeam>1</maximumShipsPerTeam>
+	<maximumInitialShipsPerTeam>1</maximumInitialShipsPerTeam>
 	
 	<!-- Specify any controllable clients in the simulator (this can include heuristics).  
 	     Note, all clients are teams since eventually all clients can make new ships. -->
@@ -36,12 +36,12 @@
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
 			<teamName>BeaconCollectorTeam</teamName>
-			<configFile>beacon-clientinit.xml</configFile>
+			<configFile>beacon-clientinit.xml</configFile>			
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
-			<teamName>ExampleGATeam</teamName>
-			<configFile>example-ga-clientinit.xml</configFile>
-		</HighLevelTeamConfig>
+			<teamName>DoNothingTeam</teamName>
+			<configFile>donothing-clientinit.xml</configFile>
+		</HighLevelTeamConfig>		
 		<!-- you can uncomment the human team if you want to play against them in this environment.  Make sure to add their base below also. -->
 		<!-- 
 		<HighLevelTeamConfig>
@@ -63,9 +63,6 @@
 		</BaseConfig>
 		<BaseConfig>
 			<teamName>BeaconCollectorTeam</teamName>
-		</BaseConfig>
-		<BaseConfig>
-			<teamName>ExampleGATeam</teamName>
 		</BaseConfig>
 		<!-- uncomment if you want to play human -->
 		<!-- 

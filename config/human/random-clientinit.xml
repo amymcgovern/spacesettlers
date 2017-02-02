@@ -9,7 +9,7 @@
 	<teamColorBlue>120</teamColorBlue>
 	
 	<!-- The name that shows up in the ladder -->
-	<ladderName>Random Client</ladderName>
+	<ladderName>Amy's Random Team</ladderName>
 	
 	<!-- The number of ships in the team.  Note, if this is bigger than the maximum number of allowable ships per team, it is ignored -->
 	<numberInitialShipsInTeam>2</numberInitialShipsInTeam>

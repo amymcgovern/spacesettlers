@@ -31,7 +31,7 @@
 			<initialRegionCenterX>640</initialRegionCenterX>
 			<initialRegionCenterY>400</initialRegionCenterY>
 			<initialRegionRadius>300</initialRegionRadius>
-		</HighLevelTeamConfig>
+		</HighLevelTeamConfig>		
 	</staticTeams>
 
 	<!-- The list of variable clients/teams.  Each will participate in numRepeatMatches but against 

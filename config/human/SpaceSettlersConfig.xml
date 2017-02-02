@@ -31,8 +31,8 @@
 		     to the configuration file for that team.  Also, teams can have initial bounding boxes
 		     which bound where the ships and the base will be created. -->
 		<HighLevelTeamConfig>
-			<teamName>RandomClient</teamName>
-			<configFile>random-clientinit.xml</configFile>
+			<teamName>Amy</teamName>
+			<configFile>spacesettlersinit.xml</configFile>
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
 			<teamName>BeaconCollectorTeam</teamName>
@@ -52,7 +52,7 @@
 	<!-- Each team needs a base.  Optionally, you can initialize the location of the base -->
 	<bases>
 		<BaseConfig>
-			<teamName>RandomClient</teamName>
+			<teamName>Amy</teamName>
 		</BaseConfig>
 		<BaseConfig>
 			<teamName>BeaconCollectorTeam</teamName>
