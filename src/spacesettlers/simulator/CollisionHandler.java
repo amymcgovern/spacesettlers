@@ -129,7 +129,7 @@ public class CollisionHandler {
 				if (ship.getEnergy() <= 0) {
 					// if you killed the ship, only count the final amount of damage needed to kill it 
 					firingShip.incrementDamageInflicted((int) initialEnergy);
-					ship.incrementDamageReceived((int) initialEnergy);
+					ship.incrementDamageReceived(-(int) initialEnergy);
 				} else {
 					// otherwise a missile is a fixed amount of damage
 					firingShip.incrementDamageInflicted(-missile.getDamage());
@@ -163,7 +163,7 @@ public class CollisionHandler {
 				if (base.getEnergy() <= 0) {
 					// if the base is dead, you can only count the energy it had prior to being dead
 					firingShip.incrementDamageInflicted((int) initialEnergy);
-					base.incrementDamageReceived((int) initialEnergy);
+					base.incrementDamageReceived(-(int) initialEnergy);
 					//System.out.println("Firing at a dead base - should give only " + (int) -initialEnergy + " in damage");
 				} else {
 					// otherwise the missles count constant
