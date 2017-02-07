@@ -110,9 +110,12 @@ public class PacifistReflexAgent extends TeamClient {
 		if (true) {
 			Asteroid asteroid = knowledge.pickHighestValueAsteroid(space);
 			AbstractAction newAction = null;
-
+			
 			if (asteroid != null) {
-				newAction = new FastMoveToObjectAction(space, currentPosition, asteroid);
+				//check if there is a asteroid in front of us
+				//Currently we get stuck in these method. Will look at some more tomorrow. 
+				boolean pathclear = knowledge.isPathClear(space, ship, asteroid.getPosition());
+				newAction = new FastMoveToObjectAction(space, currentPosition, asteroid);	
 			}
 			
 			return newAction;

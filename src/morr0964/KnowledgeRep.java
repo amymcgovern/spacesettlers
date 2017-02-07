@@ -124,4 +124,24 @@ public class KnowledgeRep {
 		}
 		return 0;
 	}
+	
+	/**
+	 * Returns a set of all objects we want to avoid
+	 * @param 
+	 */
+	public boolean isPathClear(Toroidal2DPhysics space, Ship ship, Position objectGoal){
+		Position currentPosition = ship.getPosition();
+		System.out.print("We are not stuck");
+		//We get stuck here. Will look at tomorrow moring 
+		Set<AbstractObject> allObjects = space.getAllObjects();
+		for (AbstractObject obj: allObjects){
+			if( obj.getClass() != Asteroid.class || obj.getClass() != Base.class)
+				allObjects.remove(obj);
+		}
+		System.out.print(" If not here we are stuck ");
+		//I am not 100% sure what this last param does. I think 1 should be fine. 
+		boolean pathclear = space.isPathClearOfObstructions(currentPosition, objectGoal, allObjects, 1);
+		return pathclear;
+	}
+	
 }
