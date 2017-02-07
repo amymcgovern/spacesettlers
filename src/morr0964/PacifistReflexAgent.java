@@ -107,6 +107,7 @@ public class PacifistReflexAgent extends TeamClient {
 		}
 
 		// otherwise aim for the best asteroid
+<<<<<<< HEAD
 		if (true) {
 			Asteroid asteroid = knowledge.pickHighestValueAsteroid(space);
 			AbstractAction newAction = null;
@@ -120,9 +121,15 @@ public class PacifistReflexAgent extends TeamClient {
 			
 			return newAction;
 		} 
+=======
+		Asteroid asteroid = knowledge.pickHighestValueAsteroid(space);
+		AbstractAction newAction = null;
+		if (asteroid != null) {
+			newAction = new FastMoveToObjectAction(space, currentPosition, asteroid);
+		}
+		return newAction;
+>>>>>>> d69809b8b56a86e58d98d0faf4924a6dd7d20234
 		
-		//otherwise keep doing what it was doing
-		return ship.getCurrentAction();
 	}
 
 

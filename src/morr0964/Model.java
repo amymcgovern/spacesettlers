@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
+import spacesettlers.objects.AbstractObject;
 import spacesettlers.objects.Asteroid;
 import spacesettlers.objects.Ship;
 import spacesettlers.simulator.Toroidal2DPhysics;
@@ -11,85 +12,47 @@ import spacesettlers.utilities.Position;
 import spacesettlers.utilities.Vector2D;
 
 /**
- * The model keeps track of asteroid velocities in order to predict their future locations.
- * This can help agents target future asteroid position instead of chasing after them if they are mobile.
+ * The model keeps track of what the agent is doing, so it doesn't get distracted by beacons when going
+ * home, or change its target asteroid prematurely (wasting energy)
  *  
  * @author Harrison
  *
  */
 public class Model extends KnowledgeRep {
-	//stores velocities of asteroids
-	HashMap <UUID, Vector2D> asteroidToVelocityMap;
-	//stores old position of asteroids
-	HashMap <UUID, Position> asteroidToPositionMap;
-	//time step of last position
-	double oldTime;
+	//stores the current goal object
+	private AbstractObject currentGoal;
 	
-
 	/**
-	 * Initializes the hash maps for future use
+	 * Creates the model and initializes the current goal to null (no goal)
 	 */
-	public Model(Toroidal2DPhysics space){
-		//create HashMaps
-		asteroidToVelocityMap=new HashMap<UUID, Vector2D>();
-		asteroidToPositionMap=new HashMap<UUID, Position>();
-		
-		//populate position map
-		Set<Asteroid> asteroids=space.getAsteroids();
-		for(Asteroid a:asteroids){
-			asteroidToPositionMap.put(a.getId(),a.getPosition());
-		}
-		
-		//set time step
-		oldTime=space.getTimestep();
+	public Model(){
+		currentGoal=null;
 	}
 	
 	/**
-	 * updates the asteroid velocities
-	 * @param space the space with the asteroids
+	 * Resets the goal to nothing
+	 * @param space the space 
 	 */
-	public void update(Toroidal2DPhysics space){
-		//get all current asteroids and current timestep
-		Set<Asteroid> asteroids=space.getAsteroids();
-		double currentTime=space.getTimestep();
-		//clear old velocities
-		asteroidToVelocityMap.clear();
-		
-		//compare to old positions and calculate velocity
-		Position pos1, pos2;
-		Vector2D vel;
-		for(Asteroid a:asteroids){
-			pos1=asteroidToPositionMap.get(a.getId());
-			pos2=a.getPosition();
-			
-			//If old asteroid position is known, calculate velocity and store it
-			if(pos1!=null){
-				vel=new Vector2D((pos2.getX()-pos1.getX())/(currentTime-oldTime),(pos2.getY()-pos1.getY())/(currentTime-oldTime));
-				asteroidToVelocityMap.put(a.getId(),vel);
-			}
-			//otherwise, assume 0 velocity
-			else{
-				asteroidToVelocityMap.put(a.getId(),new Vector2D());
-			}
-		}
-		
-		//update old positions and timestamp
-		asteroidToPositionMap.clear();
-		for(Asteroid a:asteroids){
-			asteroidToPositionMap.put(a.getId(),a.getPosition());
-		}
-		oldTime=space.getTimestep();
+	public void reset(){
+		currentGoal=null;
 	}
 	
 	/**
-	 * Predicts the location of an asteroid with UUID id, time time units from now
-	 * @param time how far in the future it should predict
-	 * @param id the id of the asteroid for prediction
-	 * @return the position at that time (null if invalid id)
+	 * Sets the target to obj
+	 * @param obj the new target
 	 */
-	public Position getFutureLocation(double time, UUID id){
-		Position pos=null;
-		
-		return pos;
+	public void setGoal(AbstractObject obj){
+		currentGoal=obj;
+	}
+	
+	/**
+	 * Returns the current goal, with updated values
+	 * @return the current goal
+	 */
+	public AbstractObject getGoal(Toroidal2DPhysics space){
+		if(currentGoal!=null){
+			currentGoal=space.getObjectById(currentGoal.getId());
+		}
+		return currentGoal;
 	}
 }

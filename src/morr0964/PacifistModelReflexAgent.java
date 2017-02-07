@@ -27,6 +27,7 @@ import spacesettlers.utilities.Position;
 /**
  * Collects asteroids and brings them to the base, picks up beacons as needed for energy.
  * Dynamically chooses thresholds for collecting energy and base return based on proximity.
+ * Also keeps track of current goal, so the AI does not get distracted. 
  * 
  * Built for use with only 1 ship
  * 
@@ -41,7 +42,7 @@ public class PacifistModelReflexAgent extends TeamClient {
 	 */
 	@Override
 	public void initialize(Toroidal2DPhysics space) {
-		knowledge=new Model(space);
+		knowledge=new Model();
 	}
 	
 	/**
@@ -53,9 +54,6 @@ public class PacifistModelReflexAgent extends TeamClient {
 		//set up the hashmap of actions for each actionable item
 		HashMap<UUID, AbstractAction> actions = new HashMap<UUID, AbstractAction>();
 		
-		//update the model
-		knowledge.update(space);
-
 		// loop through each actionable item and get their corresponding action
 		for (AbstractObject actionable :  actionableObjects) {
 			if (actionable instanceof Ship) {
@@ -84,6 +82,26 @@ public class PacifistModelReflexAgent extends TeamClient {
 		AbstractAction current = ship.getCurrentAction();
 		Position currentPosition = ship.getPosition();
 		
+		//there is a goal, go for it
+		AbstractObject goal=knowledge.getGoal(space);
+		if(goal!=null){
+			//if its a base, check if we've reached it, and gently approach if not
+			if(goal instanceof Base){
+				// if the ship reached the base, end the goal
+				if (ship.getResources().getTotal() == 0 && ship.getEnergy() > 2000) {
+					knowledge.reset();
+				}
+				else{
+					return new MoveToObjectAction(space, currentPosition, goal);
+				}
+			}
+			//otherwise, check if it still exists, and  quickly move to it if it does (reset otherwise)
+			//also don't continue if critically low on energy
+			else if(ship.getEnergy()>1000||(goal instanceof Beacon)){
+				return new FastMoveToObjectAction(space,currentPosition,goal);
+			}
+		}
+		//if the goal is empty, or over, find a new goal
 		//get location of base and nearest beacon to help determine later actions
 		Beacon beacon = knowledge.pickNearestBeacon(space,ship);
 		Base base = knowledge.pickNearestBase(space,ship);
@@ -94,34 +112,23 @@ public class PacifistModelReflexAgent extends TeamClient {
 		double baseDist=knowledge.findDistance(space,ship,base);
 		
 		// aim for a beacon if there isn't enough energy, or if there is a beacon pretty close and energy is low
-		if (ship.getEnergy() < (2000-2*beaconDist)) {
-			return new FastMoveToObjectAction(space, currentPosition, beacon);
+		if (ship.getEnergy() < (2000-beaconDist)||ship.getEnergy() < 1000) {
+			knowledge.setGoal(beacon);
 		}
 
 		// if the ship has enough resources available, take it back to base if it isn't doing anything right now
-		if (ship.getResources().getTotal() > 5.0*baseDist && current.isMovementFinished(space)) {
-			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, base);
-			return newAction;
-		}
-		// if the ship reached the base, end the action
-		if (ship.getResources().getTotal() == 0 && ship.getEnergy() > 2000) {
-			current = null;
+		if (ship.getResources().getTotal() > (5.0*baseDist+1000)) {
+			knowledge.setGoal(base);
 		}
 
 		// otherwise aim for the best asteroid
-		if (current == null || current.isMovementFinished(space)) {
+		if(goal==null){
 			Asteroid asteroid = knowledge.pickHighestValueAsteroid(space);
-			AbstractAction newAction = null;
-
-			if (asteroid != null) {
-				newAction = new FastMoveToObjectAction(space, currentPosition, asteroid);
-			}
-			
-			return newAction;
-		} 
+			knowledge.setGoal(asteroid);
+		}
 		
-		//otherwise keep doing what it was doing
-		return ship.getCurrentAction();
+		//if reached here, recall method with new goal
+		return getAsteroidCollectorAction(space,ship);
 	}
 
 
@@ -161,7 +168,7 @@ public class PacifistModelReflexAgent extends TeamClient {
 			PurchaseCosts purchaseCosts) {
 
 		HashMap<UUID, PurchaseTypes> purchases = new HashMap<UUID, PurchaseTypes>();
-		double BASE_BUYING_DISTANCE = 200;
+		double BASE_BUYING_DISTANCE = 400;
 		boolean bought_base = false;
 
 		if (purchaseCosts.canAfford(PurchaseTypes.BASE, resourcesAvailable)) {
@@ -188,23 +195,7 @@ public class PacifistModelReflexAgent extends TeamClient {
 					}
 				}
 			}		
-		} 
-		
-		// can I buy a ship?
-		if (purchaseCosts.canAfford(PurchaseTypes.SHIP, resourcesAvailable) && bought_base == false) {
-			for (AbstractActionableObject actionableObject : actionableObjects) {
-				if (actionableObject instanceof Base) {
-					Base base = (Base) actionableObject;
-					
-					purchases.put(base.getId(), PurchaseTypes.SHIP);
-					break;
-				}
-
-			}
-
 		}
-
-
 		return purchases;
 	}
 
