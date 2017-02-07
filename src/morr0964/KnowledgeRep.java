@@ -124,38 +124,4 @@ public class KnowledgeRep {
 		}
 		return 0;
 	}
-	
-	/**
-	 * Predicts the intercept point based on current velocities
-	 * @param space
-	 * @param ship
-	 * @param obj
-	 * @return
-	 */
-	public Position getInterceptPosition(Toroidal2DPhysics space, Ship ship, AbstractObject obj){
-		double timeFactor=space.findShortestDistance(ship.getPosition(), obj.getPosition());
-		double x=obj.getPosition().getX()+obj.getPosition().getxVelocity()*timeFactor/25;
-		double y=obj.getPosition().getY()+obj.getPosition().getyVelocity()*timeFactor/25;
-		Position pos=new Position(x,y);
-		toroidalWrap(pos,space);
-		return pos;
-	}
-	
-	/**
-	 * Torridial wrap based on the height/width of the environment
-	 *  
-	 * @param position
-	 */
-	private void toroidalWrap(Position position, Toroidal2DPhysics space) {
-		while (position.getX() < 0) {
-			position.setX(position.getX() + space.getWidth());
-		}
-
-		while (position.getY() < 0) {
-			position.setY(position.getY() + space.getHeight());
-		}
-
-		position.setX(position.getX() % space.getWidth());
-		position.setY(position.getY() % space.getHeight());
-	}
 }

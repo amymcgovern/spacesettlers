@@ -93,12 +93,12 @@ public class PacifistReflexAgent extends TeamClient {
 		
 		// aim for a beacon if there isn't enough energy, or if there is a beacon pretty close and energy is low
 		if (ship.getEnergy() < (2000-2*beaconDist)) {
-			return new MoveAction(space, currentPosition, knowledge.getInterceptPosition(space, ship, beacon));
+			return new FastMoveToObjectAction(space, currentPosition, beacon);
 		}
 
 		// if the ship has enough resources available, take it back to base if it isn't doing anything right now
-		if (ship.getResources().getTotal() > 5.0*baseDist && current.isMovementFinished(space)) {
-			AbstractAction newAction = new MoveAction(space, currentPosition, base.getPosition());
+		if (ship.getResources().getTotal() > (5.0*baseDist+1000) && current.isMovementFinished(space)) {
+			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, base);
 			return newAction;
 		}
 		// if the ship reached the base, end the action
@@ -107,12 +107,12 @@ public class PacifistReflexAgent extends TeamClient {
 		}
 
 		// otherwise aim for the best asteroid
-		if (current == null || current.isMovementFinished(space)) {
+		if (true) {
 			Asteroid asteroid = knowledge.pickHighestValueAsteroid(space);
 			AbstractAction newAction = null;
 
 			if (asteroid != null) {
-				newAction = new PredictiveMoveToObjectAction(space, currentPosition, knowledge.getInterceptPosition(space, ship, asteroid),asteroid);
+				newAction = new FastMoveToObjectAction(space, currentPosition, asteroid);
 			}
 			
 			return newAction;
