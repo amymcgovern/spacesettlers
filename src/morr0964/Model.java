@@ -17,7 +17,7 @@ import spacesettlers.utilities.Vector2D;
  * @author Harrison
  *
  */
-public class AsteroidModel extends KnowledgeRep {
+public class Model extends KnowledgeRep {
 	//stores velocities of asteroids
 	HashMap <UUID, Vector2D> asteroidToVelocityMap;
 	//stores old position of asteroids
@@ -29,7 +29,7 @@ public class AsteroidModel extends KnowledgeRep {
 	/**
 	 * Initializes the hash maps for future use
 	 */
-	public AsteroidModel(Toroidal2DPhysics space){
+	public Model(Toroidal2DPhysics space){
 		//create HashMaps
 		asteroidToVelocityMap=new HashMap<UUID, Vector2D>();
 		asteroidToPositionMap=new HashMap<UUID, Position>();

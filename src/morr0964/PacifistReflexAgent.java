@@ -97,7 +97,7 @@ public class PacifistReflexAgent extends TeamClient {
 		}
 
 		// if the ship has enough resources available, take it back to base if it isn't doing anything right now
-		if (ship.getResources().getTotal() > (5.0*baseDist+1000) && current.isMovementFinished(space)) {
+		if (ship.getResources().getTotal() > (5.0*baseDist+1000)) {
 			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, base);
 			return newAction;
 		}

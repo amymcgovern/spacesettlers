@@ -34,14 +34,14 @@ import spacesettlers.utilities.Position;
  */
 public class PacifistModelReflexAgent extends TeamClient {
 	//used to gain access knowledge of space
-	AsteroidModel knowledge;
+	Model knowledge;
 	
 	/**
 	 * Sets up the AI by initializing knowledge representation
 	 */
 	@Override
 	public void initialize(Toroidal2DPhysics space) {
-		knowledge=new AsteroidModel(space);
+		knowledge=new Model(space);
 	}
 	
 	/**
