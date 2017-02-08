@@ -13,7 +13,7 @@ import spacesettlers.utilities.Vector2D;
 
 /**
  * The model keeps track of what the agent is doing, so it doesn't get distracted by beacons when going
- * home, or change its target asteroid prematurely (wasting energy)
+ * home, or change its target asteroid prematurely (wasting energy). It also has all the parent KnowledgeRep functionality
  *  
  * @author Harrison
  *

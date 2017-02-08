@@ -24,11 +24,12 @@ import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
 import spacesettlers.objects.resources.ResourcePile;
 import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Position;
+import spacesettlers.utilities.Vector2D;
 
 /**
  * Collects asteroids and brings them to the base, picks up beacons as needed for energy.
  * Dynamically chooses thresholds for collecting energy and base return based on proximity.
- * 
+ * Has basic collision avoidance (not 100% guarantee)
  * Built for use with only 1 ship
  * 
  * @author Brad (based on amy's code)
@@ -107,27 +108,38 @@ public class PacifistReflexAgent extends TeamClient {
 		}
 
 		// otherwise aim for the best asteroid
-
-		if (true) {
-			Asteroid asteroid = knowledge.pickHighestValueAsteroid(space);
-			AbstractAction newAction = null;
-			
-			if (asteroid != null) {
-				//check if there is a asteroid in front of us
-				//Currently we get stuck in these method. Will look at some more tomorrow. 
-				boolean pathclear = knowledge.isPathClear(space, ship, asteroid.getPosition());
-				newAction = new FastMoveToObjectAction(space, currentPosition, asteroid);	
-			}
-			
-			return newAction;
-		} 
-
 		Asteroid asteroid = knowledge.pickHighestValueAsteroid(space);
 		AbstractAction newAction = null;
+		
 		if (asteroid != null) {
 			//knowledge.isPathClear(space, ship, asteroid.getPosition());
 			newAction = new FastMoveToObjectAction(space, currentPosition, asteroid);
+			//check if there is a asteroid in front of us
+			boolean pathclear = knowledge.isPathClear(space, ship, asteroid.getPosition());
+			if(pathclear){
+				//if clear, go for it
+				newAction = new FastMoveToObjectAction(space, currentPosition, asteroid);
+			}
+			else{
+				//otherwise turn left a bit
+				Vector2D pathDir=knowledge.findDistanceVector(space,ship,asteroid).unit().multiply(50);
+				pathDir=pathDir.rotate(.25);
+				Position evasivePos=new Position(currentPosition.getX()+pathDir.getXValue(),currentPosition.getY()+pathDir.getYValue());
+				//handle toroidal stuff
+				while (evasivePos.getX() < 0) {
+					evasivePos.setX(evasivePos.getX() + space.getWidth());
+				}
+				while (evasivePos.getY() < 0) {
+					evasivePos.setY(evasivePos.getY() + space.getHeight());
+				}
+
+				evasivePos.setX(evasivePos.getX() % space.getWidth());
+				evasivePos.setY(evasivePos.getY() % space.getHeight());
+				newAction=new MoveAction(space,currentPosition,evasivePos,pathDir);
+				System.out.println("evasive");
+			}
 		}
+		
 		return newAction;
 		
 	}
@@ -169,7 +181,7 @@ public class PacifistReflexAgent extends TeamClient {
 			PurchaseCosts purchaseCosts) {
 
 		HashMap<UUID, PurchaseTypes> purchases = new HashMap<UUID, PurchaseTypes>();
-		double BASE_BUYING_DISTANCE = 200;
+		double BASE_BUYING_DISTANCE = 400;
 		boolean bought_base = false;
 
 		if (purchaseCosts.canAfford(PurchaseTypes.BASE, resourcesAvailable)) {
@@ -197,20 +209,6 @@ public class PacifistReflexAgent extends TeamClient {
 				}
 			}		
 		} 
-		
-		// can I buy a ship?
-		if (purchaseCosts.canAfford(PurchaseTypes.SHIP, resourcesAvailable) && bought_base == false) {
-			for (AbstractActionableObject actionableObject : actionableObjects) {
-				if (actionableObject instanceof Base) {
-					Base base = (Base) actionableObject;
-					
-					purchases.put(base.getId(), PurchaseTypes.SHIP);
-					break;
-				}
-
-			}
-
-		}
 
 
 		return purchases;
