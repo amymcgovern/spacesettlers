@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TeamClientConfig>
 	<!-- The name of the client class (this is used to construct the client so it needs to be the full class name) -->
-	<classname>morr0964.PacifistModelReflexAgent</classname>
+	<classname>morr0964.PacifistReflexAgent</classname>
 	
 	<!-- You can choose the color your team's ships will be on the screen.  Specify the red, green, and blue components -->
 	<teamColorRed>200</teamColorRed>

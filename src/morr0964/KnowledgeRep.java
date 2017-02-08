@@ -1,5 +1,6 @@
 package morr0964;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import spacesettlers.objects.AbstractObject;
@@ -9,6 +10,7 @@ import spacesettlers.objects.Beacon;
 import spacesettlers.objects.Ship;
 import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Position;
+import spacesettlers.utilities.Vector2D;
 
 /**
  * This class includes methods that extract useful information for navigating the space,
@@ -126,21 +128,39 @@ public class KnowledgeRep {
 	}
 	
 	/**
-	 * Returns a set of all objects we want to avoid
-	 * @param 
+	 * Returns the distance vecotr to the object from the ship
+	 * @param space the space that is being operated in
+	 * @param ship the ship 
+	 * @param obj the object
+	 * @return the distance vecotr (null if invalid)
+	 */
+	public Vector2D findDistanceVector(Toroidal2DPhysics space, Ship ship, AbstractObject obj){
+		if(obj!=null){
+			return space.findShortestDistanceVector(ship.getPosition(), obj.getPosition());
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns true if the (straight line) path is clear, false otherwise
+	 * @param space the space
+	 * @param ship the ship that is moving
+	 * @param objectGoal the goal location
+	 * @return is the path clear?
 	 */
 	public boolean isPathClear(Toroidal2DPhysics space, Ship ship, Position objectGoal){
+		//gather obstructions
 		Position currentPosition = ship.getPosition();
-		System.out.print("We are not stuck");
-		//We get stuck here. Will look at tomorrow moring 
 		Set<AbstractObject> allObjects = space.getAllObjects();
+		Set<AbstractObject> obstacles = new HashSet<AbstractObject>();
 		for (AbstractObject obj: allObjects){
-			if( obj.getClass() != Asteroid.class || obj.getClass() != Base.class)
-				allObjects.remove(obj);
+			if(obj instanceof Asteroid && !(((Asteroid)obj).isMineable()))
+				obstacles.add(obj);
+			if(obj instanceof Base)
+				obstacles.add(obj);
 		}
-		System.out.print(" If not here we are stuck ");
-		//I am not 100% sure what this last param does. I think 1 should be fine. 
-		boolean pathclear = space.isPathClearOfObstructions(currentPosition, objectGoal, allObjects, 1);
+		//check if the path is clear of them
+		boolean pathclear = space.isPathClearOfObstructions(currentPosition, objectGoal, obstacles, 50);
 		return pathclear;
 	}
 	
