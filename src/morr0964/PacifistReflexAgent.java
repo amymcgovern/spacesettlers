@@ -125,7 +125,7 @@ public class PacifistReflexAgent extends TeamClient {
 		Asteroid asteroid = knowledge.pickHighestValueAsteroid(space);
 		AbstractAction newAction = null;
 		if (asteroid != null) {
-			knowledge.isPathClear(space, ship, asteroid.getPosition());
+			//knowledge.isPathClear(space, ship, asteroid.getPosition());
 			newAction = new FastMoveToObjectAction(space, currentPosition, asteroid);
 		}
 		return newAction;
