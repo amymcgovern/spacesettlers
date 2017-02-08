@@ -7,7 +7,8 @@ import spacesettlers.utilities.Position;
 
 /**
  * Calls MoveAction for the actual movements but allows you to aim for a spacewar object
- * and to stop when the object dies (e.g. someone (maybe you) reached it)
+ * and to stop when the object dies (e.g. someone (maybe you) reached it), but sets a higher
+ * target velocity than the standard moveToObjectAction
  * 
  * @author amy
  */

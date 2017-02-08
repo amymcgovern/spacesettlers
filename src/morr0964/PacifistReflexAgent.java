@@ -29,7 +29,7 @@ import spacesettlers.utilities.Vector2D;
 /**
  * Collects asteroids and brings them to the base, picks up beacons as needed for energy.
  * Dynamically chooses thresholds for collecting energy and base return based on proximity.
- * 
+ * Has basic collision avoidance (not 100% guarantee)
  * Built for use with only 1 ship
  * 
  * @author Brad (based on amy's code)

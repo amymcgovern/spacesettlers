@@ -14,7 +14,7 @@ import spacesettlers.utilities.Vector2D;
 
 /**
  * This class includes methods that extract useful information for navigating the space,
- * such as finding the closest bases, beacons, and best asteroid targets.
+ * such as finding the closest bases, beacons, and best asteroid targets and possible obstacles.
  * It was built to be used by the PacifistReflexAgent
  * 
  * @author Brad (based partially on amy's code)
