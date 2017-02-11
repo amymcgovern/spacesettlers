@@ -47,6 +47,11 @@ abstract public class TeamClient {
 	Random random;
 	
 	/**
+	 * Maximum number of ships (copy of what is stored in Team, since the individual clients can't access Team)
+	 */
+	int maxNumberShips;
+	
+	/**
 	 * Transformation for mouse clicks
 	 */
 	AffineTransform mouseTransform;
@@ -83,6 +88,24 @@ abstract public class TeamClient {
 		this.teamName = teamName;
 	}
 	
+	/**
+	 * Get the maximum number of ships for this team
+	 * @return
+	 */
+	public int getMaxNumberShips() {
+		return maxNumberShips;
+	}
+
+	/**
+	 * Set the maximum number of ships (just a copy from Team, setting this inside your
+	 * client will have NO effect on the simulator)
+	 * 
+	 * @param maxNumberShips
+	 */
+	public void setMaxNumberShips(int maxNumberShips) {
+		this.maxNumberShips = maxNumberShips;
+	}
+
 	/**
 	 * Called when the team is created from the config file
 	 * @param knowledgeFile

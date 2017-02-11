@@ -443,6 +443,7 @@ public class SpaceSettlersSimulator {
 			newTeamClient.setTeamName(teamConfig.getTeamName());
 			newTeamClient.setKnowledgeFile(teamClientConfig.getKnowledgeFile());
 			newTeamClient.setRandom(random);
+			newTeamClient.setMaxNumberShips(simConfig.getMaximumShipsPerTeam());
 			newTeamClient.initialize(simulatedSpace.deepClone());
 			return newTeamClient;
 		} catch (ClassNotFoundException e) {
