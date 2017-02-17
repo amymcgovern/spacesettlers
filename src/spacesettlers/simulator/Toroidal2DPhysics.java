@@ -508,7 +508,9 @@ public class Toroidal2DPhysics {
 					action = new DoNothingAction();
 				}
 
-				Movement actionMovement = action.getMovement(this, ship);
+				// need to clone the ship and space because otherwise the ship can affect
+				// itself inside AbstractAction
+				Movement actionMovement = action.getMovement(this.deepClone(), ship.deepClone());
 
 				Position newPosition = applyMovement(currentPosition, actionMovement, timeStep);
 				if (newPosition.isValid()) {
