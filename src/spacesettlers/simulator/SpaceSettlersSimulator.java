@@ -40,7 +40,7 @@ import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
 import spacesettlers.utilities.Position;
 import spacesettlers.utilities.Vector2D;
 
-public class SpaceSettlersSimulator {
+public final class SpaceSettlersSimulator {
 
 	/**
 	 * Max time allowed in MILLISECONDS for a team to return actions

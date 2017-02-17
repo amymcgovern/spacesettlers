@@ -7,7 +7,7 @@ package spacesettlers.utilities;
  * @author amy
  *
  */
-public class Movement {
+public final class Movement {
 	/**
 	 * Acceleration in orientation
 	 */
