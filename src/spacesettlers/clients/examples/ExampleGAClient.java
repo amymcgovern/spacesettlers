@@ -59,12 +59,6 @@ public class ExampleGAClient extends TeamClient {
 	 */
 	private int steps = 0;
 	
-	/**
-	 * Random number generator for learning
-	 */
-	private Random rand;
-	
-
 	@Override
 	public Map<UUID, AbstractAction> getMovementStart(Toroidal2DPhysics space,
 			Set<AbstractActionableObject> actionableObjects) {
@@ -82,7 +76,7 @@ public class ExampleGAClient extends TeamClient {
 				
 				if (ship.getCurrentAction() == null || ship.getCurrentAction().isMovementFinished(space)) {
 					ExampleGAState currentState = new ExampleGAState(space, ship);
-					action = currentPolicy.getCurrentAction(space, ship, currentState, rand);
+					action = currentPolicy.getCurrentAction(space, ship, currentState, random);
 					//System.out.println("New random action is " + action);
 				} else {
 					action = ship.getCurrentAction();
@@ -158,7 +152,6 @@ public class ExampleGAClient extends TeamClient {
 			population = new ExampleGAPopulation(populationSize);
 		}
 
-		rand = new Random();
 		currentPolicy = population.getFirstMember();
 	}
 

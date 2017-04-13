@@ -31,7 +31,6 @@ import spacesettlers.utilities.Position;
  */
 public class RandomTeamClient extends TeamClient {
 	HashSet<SpacewarGraphics> graphics;
-	Random random;
 	boolean fired = false;
 	
 	public static int RANDOM_MOVE_RADIUS = 200;
@@ -40,7 +39,6 @@ public class RandomTeamClient extends TeamClient {
 	@Override
 	public void initialize(Toroidal2DPhysics space) {
 		graphics = new HashSet<SpacewarGraphics>();
-		random = new Random();
 	}
 
 	@Override
