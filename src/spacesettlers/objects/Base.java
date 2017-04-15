@@ -78,6 +78,7 @@ public class Base extends AbstractActionableObject {
 		newBase.healingIncrement = healingIncrement;
 		newBase.resources = new ResourcePile();
 		newBase.resources.add(resources);
+		newBase.numFlags = numFlags;
 		return newBase;
 	}
 
@@ -135,6 +136,18 @@ public class Base extends AbstractActionableObject {
 		team.incrementTotalResources(newResources);
 		team.incrementAvailableResources(newResources);
 	}
+	
+	/**
+	 * Add a flag to this team.  The flag itself is then killed so it can regenerate.
+	 * 
+	 * @param flag
+	 */
+	public void addFlag(Flag flag) {
+		flag.depositFlag();
+		super.incrementFlags();
+		team.incrementTotalFlagsCollected();
+	}
+	
 
 	/**
 	 * Change the healing energy (from a collision or just time healing it)

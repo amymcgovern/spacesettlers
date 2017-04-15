@@ -161,7 +161,70 @@
 		</java>
 	</target>
 
-	
+
+	<target name="spacesettlers-ctf-compete" depends="jar-spacesettlers">
+		<java classname="spacesettlers.simulator.RunSimulator"
+		      fork="true" 
+		      dir="src"
+			  classpath="${dist}/spacesettlers.jar">
+			<jvmarg	value="-Xmx10G" />
+			<arg line="--graphics true "/>
+			<arg line="--configPath ../config/captureTheFlagCompetitive/"/>
+			<arg line="--simulatorConfigFile SpaceSettlersConfig.xml"/>
+			<classpath>
+				<pathelement location="${dist}/spacesettlers.jar"/>
+			</classpath>
+		</java>
+	</target>
+
+	<target name="spacesettlers-ctf-coop" depends="jar-spacesettlers">
+		<java classname="spacesettlers.simulator.RunSimulator"
+		      fork="true" 
+		      dir="src"
+			  classpath="${dist}/spacesettlers.jar">
+			<jvmarg	value="-Xmx10G" />
+			<arg line="--graphics true "/>
+			<arg line="--configPath ../config/captureTheFlagCooperative/"/>
+			<arg line="--simulatorConfigFile SpaceSettlersConfig.xml"/>
+			<classpath>
+				<pathelement location="${dist}/spacesettlers.jar"/>
+			</classpath>
+		</java>
+	</target>
+
+	   <target name="ctfLadderCompete" depends="jar-spacesettlers">
+	            <java classname="spacesettlers.ladder.RunLadder"
+	                  fork="true"
+	                  dir="src"
+	                      classpath="${dist}/spacesettlers.jar">
+		        <jvmarg value="-Xmx10G" />
+	                    <arg line="--graphics false "/>
+	    				<arg line="--configPath ../config/captureTheFlagCompetitive/"/>
+	                    <arg line="--ladderConfigFile LadderConfig.xml"/>
+		    			<arg line="--simulatorConfigFile SpaceSettlersConfig.xml"/>
+	                    <classpath>
+	                        <pathelement location="${dist}/spacesettlers.jar"/>
+	                    </classpath>
+	            </java>
+		</target>
+
+	   <target name="ctfLadderCoop" depends="jar-spacesettlers">
+	            <java classname="spacesettlers.ladder.RunLadder"
+	                  fork="true"
+	                  dir="src"
+	                      classpath="${dist}/spacesettlers.jar">
+		        <jvmarg value="-Xmx10G" />
+	                    <arg line="--graphics false "/>
+	    				<arg line="--configPath ../config/captureTheFlagCooperative/"/>
+	                    <arg line="--ladderConfigFile LadderConfig.xml"/>
+		    			<arg line="--simulatorConfigFile SpaceSettlersConfig.xml"/>
+	                    <classpath>
+	                        <pathelement location="${dist}/spacesettlers.jar"/>
+	                    </classpath>
+	            </java>
+		</target>
+
+
 	<target name="doc" depends="init">
 	    <javadoc destdir="docs/api"
 	             author="true"

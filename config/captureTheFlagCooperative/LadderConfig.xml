@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LadderConfig>
+	<!-- The number of times each match is repeated -->
+	<numRepeatMatches>5</numRepeatMatches>
+
+	<!-- The maximum number of variable (e.g. can change each match) teams in a game -->
+	<maximumNumberVariableTeams>1</maximumNumberVariableTeams>
+	
+	<!-- Write out the results to this file -->
+	<outputFileName>self-ladder.html</outputFileName>
+	
+	<!-- The list of static clients/teams.  These play in each match. -->
+	<staticTeams>
+		<HighLevelTeamConfig>
+			<teamName>SimpleFlagCollector</teamName>
+			<configFile>passive-flag2ships-clientinit.xml</configFile>
+		</HighLevelTeamConfig>
+	</staticTeams>
+
+	<!-- The list of variable clients/teams.  Each will participate in numRepeatMatches but against 
+		 each other and the static teams. -->
+	<variableTeams>
+		<HighLevelTeamConfig>
+			<teamName>SecondSimpleFlag2</teamName>
+			<configFile>passive-flag3ships-clientinit.xml</configFile>
+		</HighLevelTeamConfig>
+		<HighLevelTeamConfig>
+			<teamName>RandomTeam</teamName>
+			<configFile>random-flag-clientinit.xml</configFile>
+		</HighLevelTeamConfig>
+	</variableTeams>
+
+</LadderConfig>

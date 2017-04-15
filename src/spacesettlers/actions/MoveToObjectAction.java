@@ -3,6 +3,7 @@ package spacesettlers.actions;
 import spacesettlers.objects.AbstractObject;
 import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Position;
+import spacesettlers.utilities.Vector2D;
 
 /**
  * Calls MoveAction for the actual movements but allows you to aim for a spacewar object
@@ -26,7 +27,21 @@ public class MoveToObjectAction extends MoveAction {
 		this.goalObject = goalObject;
 		this.originalGoalLocation = goalObject.getPosition().deepCopy();
 	}
-	
+
+	/**
+	 * Initialize with your location and the goal object 
+	 * 
+	 * @param space
+	 * @param currentLocation
+	 * @param goalObject
+	 */
+	public MoveToObjectAction(Toroidal2DPhysics space, Position currentLocation, AbstractObject goalObject, 
+			Vector2D goalVelocity) {
+		super(space, currentLocation, goalObject.getPosition(), goalVelocity);
+		this.goalObject = goalObject;
+		this.originalGoalLocation = goalObject.getPosition().deepCopy();
+	}
+
 	/**
 	 * Return the goal object (and remember it is a clone so use its UUID!)
 	 * @return

@@ -3,6 +3,7 @@ package spacesettlers.simulator;
 import spacesettlers.objects.Asteroid;
 import spacesettlers.objects.Base;
 import spacesettlers.objects.Beacon;
+import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
 import spacesettlers.objects.AbstractObject;
 import spacesettlers.objects.weapons.EMP;
@@ -39,40 +40,50 @@ public class CollisionHandler {
 	 */
 	public void collide(AbstractObject object1, AbstractObject object2, Toroidal2DPhysics space) {
 		// if either object is a beacon, handle that (and don't elastically collide)
-		if (object1.getClass() == Beacon.class) {
+		if (object1 instanceof Beacon) {
 			beaconCollision((Beacon) object1, object2);
 			return;
-		} else if (object2.getClass() == Beacon.class) {
+		} else if (object2 instanceof Beacon) {
 			beaconCollision((Beacon) object2, object1);
 			return;
 		}
 
 		// if either object is a missile, handle that (and don't elastically collide)
-		if (object1.getClass() == Missile.class) {
+		if (object1 instanceof Missile) {
 			missileCollision((Missile) object1, object2);
 			return;
-		} else if (object2.getClass() == Missile.class) {
+		} else if (object2 instanceof Missile) {
 			missileCollision((Missile) object2, object1);
 			return;
 		}
 		
 		// if either object is a EMP, handle that (and don't elastically collide)
-		if (object1.getClass() == EMP.class) {
+		if (object1 instanceof EMP) {
 			EMPCollision((EMP) object1, object2);
 			return;
-		} else if (object2.getClass() == EMP.class) {
+		} else if (object2 instanceof EMP) {
 			EMPCollision((EMP) object2, object1);
+			return;
+		}
+		
+		// if the object is a flag, handle either moving it (same team) or picking it up (opposite team)
+		// and don't elastically collide
+		if (object1 instanceof Flag && object2 instanceof Ship) {
+			flagCollision((Flag) object1, (Ship) object2);
+			return;
+		} else if (object2 instanceof Flag && object1 instanceof Ship) {
+			flagCollision((Flag) object2, (Ship) object1);
 			return;
 		}
 		
 		// handle mineable asteroid collisions (e.g. mine them if needed and don't elastically collide, e.g
 		// no damage for mining)
-		if (object1.getClass() == Asteroid.class && object2.getClass() == Ship.class) {
+		if (object1 instanceof Asteroid && object2 instanceof Ship) {
 			if (((Asteroid) object1).isMineable()) {
 				mineAsteroid((Asteroid) object1, (Ship) object2);
 				return;
 			}
-		} else if (object2.getClass() == Asteroid.class && object1.getClass() == Ship.class) {
+		} else if (object2 instanceof Asteroid && object1 instanceof Ship) {
 			if (((Asteroid) object2).isMineable()) {
 				mineAsteroid((Asteroid) object2, (Ship) object1);
 				return;
@@ -100,14 +111,36 @@ public class CollisionHandler {
 
 		
 		// handle base collisions
-		if (object1.getClass() == Base.class) {
+		if (object1 instanceof Base) {
 			baseCollision((Base) object1, object2);
-		} else if (object2.getClass() == Base.class) {
+		} else if (object2 instanceof Base) {
 			baseCollision((Base) object2, object1);
 		}
 		
 	}
 	
+	/**
+	 * Collide with a Flag.  The rules are as follows:
+	 * 1) If a ship touches a flag from their own team, it disappears and reappears at the next time 
+	 * step in a random alcove
+	 * 2) If a ship touches a flag from a team other than their own, that ship picks up the flag.
+	 * 
+	 * Anything else that touches a flag is ignored or just bounces off
+	 *  
+	 * @param object1
+	 * @param object2
+	 */
+	private void flagCollision(Flag flag, Ship ship) {
+		if (flag.getTeamName().equalsIgnoreCase(ship.getTeamName())) {
+			flag.setAlive(false);
+			flag.setRespawn(true);
+		} else {
+			ship.addFlag(flag);
+			flag.pickupFlag(ship);
+		}
+		
+	}
+
 	/**
 	 * Collide with a missile
 	 * @param object1
@@ -296,8 +329,17 @@ public class CollisionHandler {
 			Ship ship = (Ship) object;
 			
 			if (ship.getTeamName().equalsIgnoreCase(base.getTeamName())) {
+				// deposit the resources
 				base.addResources(ship.getResources());
 				ship.resetResources();
+				
+				// deposit the flag (if there is one)
+				if (ship.isCarryingFlag()) {
+					base.addFlag(ship.getFlag());
+					ship.depositFlag();
+				}
+
+				// heal the ship 
 				double origEnergy = ship.getEnergy();
 				ship.updateEnergy(base.getHealingEnergy());
 				double energyChange = ship.getEnergy() - origEnergy;

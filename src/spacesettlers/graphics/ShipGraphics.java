@@ -9,6 +9,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 
 import spacesettlers.gui.JSpaceSettlersComponent;
+import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
 import spacesettlers.objects.resources.ResourceTypes;
 import spacesettlers.utilities.Position;
@@ -24,8 +25,8 @@ public class ShipGraphics extends SpacewarGraphics {
     public static final Color THRUST_SPUTTER_COLOR = new Color(193, 72, 8);
     public static final Color SHIELD_COLOR = new Color(190, 40, 140);
     public static final Shape SHIP_SHAPE = new Polygon(new int[]{54, 108, 100, 141, 85, 73, 106, 89, 80, 40, 54, -54,
-            -40, -80, -89, -106, -73, -85, -141, -100, -108, -54}, new int[]{-89, 3, 18, 89, 89, 69, 69, 38, 53, 53,
-            75, 75, 53, 53, 38, 69, 69, 89, 89, 18, 3, -89}, 22);
+            -40, -80, -89, -106, -73, -85, -141, -100, -108, -54, 54}, new int[]{-89, 3, 18, 89, 89, 69, 69, 38, 53, 53,
+            75, 75, 53, 53, 38, 69, 69, 89, 89, 18, 3, -89, -89}, 23);
     public static final Shape THRUST_SHAPE = new Polygon(new int[]{44, -44, 0}, new int[]{65, 65, 200}, 3);
     public static final Shape THRUST_SPUTTER_SHAPE = new Polygon(new int[]{30, -30, 0}, new int[]{65, 65, 170}, 3);
 	public static final Color SHIP_SHIELD_COLOR = Color.WHITE;
@@ -111,7 +112,7 @@ public class ShipGraphics extends SpacewarGraphics {
         number = Integer.toString(ship.getNumBeacons());
         graphics.setPaint(BeaconGraphics.BEACON_COLOR);
         graphics.drawString(number, (int) drawLocation.getX() - 24, (int) drawLocation.getY() + 23);
-        
+
         // if the ship is shielded, show the shield around it
         if (ship.isShielded()) {
 	        double shieldRadius = ship.getRadius() + 4;
@@ -132,6 +133,20 @@ public class ShipGraphics extends SpacewarGraphics {
 	        graphics.draw(shieldShape);
         }
         
+        // if the ship has a flag, put a tiny flag inside the ship
+        if (ship.isCarryingFlag()) {
+        	AffineTransform transformFlag =
+                    AffineTransform.getTranslateInstance(drawLocation.getX(), drawLocation.getY());
+        	transformFlag.scale(Flag.FLAG_RADIUS / 2.0, Flag.FLAG_RADIUS / 2.0);
+        	Shape tinyFlag = transformFlag.createTransformedShape(FlagGraphics.FLAG_SHAPE);
+        	if (shipColor.equals(Color.WHITE)) {
+            	graphics.setColor(Color.BLACK);
+        	} else {
+            	graphics.setColor(Color.WHITE);
+        	}
+        	graphics.fill(tinyFlag);
+        }
+	
 	}
 
 	/**

@@ -15,6 +15,7 @@ import spacesettlers.configs.SpaceSettlersConfig;
 import spacesettlers.objects.Asteroid;
 import spacesettlers.objects.Base;
 import spacesettlers.objects.Beacon;
+import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.AbstractObject;
@@ -67,6 +68,11 @@ public class Toroidal2DPhysics {
 	 * The list of ships
 	 */
 	Set<Ship> ships;
+	
+	/**
+	 * The ets of flags
+	 */
+	Set<Flag> flags;
 	
 	/**
 	 * List of all weapons currently in play
@@ -126,6 +132,7 @@ public class Toroidal2DPhysics {
 		asteroids = new HashSet<Asteroid>();
 		bases = new HashSet<Base>();
 		ships = new HashSet<Ship>();
+		flags = new HashSet<Flag>();
 		weapons = new HashSet<AbstractWeapon>();
 		objectsById = new HashMap<UUID, AbstractObject>();
 		maxTime = simConfig.getSimulationSteps();
@@ -151,6 +158,7 @@ public class Toroidal2DPhysics {
 		asteroids = new HashSet<Asteroid>();
 		bases = new HashSet<Base>();
 		ships = new HashSet<Ship>();
+		flags = new HashSet<Flag>();
 		weapons = new HashSet<AbstractWeapon>();
 		objectsById = new HashMap<UUID, AbstractObject>();
 		teamInfo = new HashSet<ImmutableTeamInfo>();
@@ -177,6 +185,7 @@ public class Toroidal2DPhysics {
 		asteroids = new HashSet<Asteroid>();
 		bases = new HashSet<Base>();
 		ships = new HashSet<Ship>();
+		flags = new HashSet<Flag>();
 		weapons = new HashSet<AbstractWeapon>();
 		objectsById = new HashMap<UUID, AbstractObject>();
 		maxTime = other.maxTime;
@@ -192,24 +201,28 @@ public class Toroidal2DPhysics {
 	public void addObject(AbstractObject obj) {
 		allObjects.add(obj);
 
-		if (obj.getClass() == Beacon.class) {
+		if (obj instanceof Beacon) {
 			beacons.add((Beacon) obj);
 		}
 		
-		if (obj.getClass() == Asteroid.class) {
+		if (obj instanceof Asteroid) {
 			asteroids.add((Asteroid) obj);
 		}
 		
-		if (obj.getClass() == Base.class) {
+		if (obj instanceof Base) {
 			bases.add((Base) obj);
 		}
 		
-		if (obj.getClass() == Ship.class) {
+		if (obj instanceof Ship) {
 			ships.add((Ship) obj);
 		}
 		
 		if (obj instanceof AbstractWeapon) {
 			weapons.add((AbstractWeapon)obj);
+		}
+		
+		if (obj instanceof Flag) {
+			flags.add((Flag) obj);
 		}
 		
 		objectsById.put(obj.getId(), obj);
@@ -241,6 +254,10 @@ public class Toroidal2DPhysics {
 		
 		if (obj instanceof AbstractWeapon) {
 			weapons.remove((AbstractWeapon)obj);
+		}
+		
+		if (obj instanceof Flag) {
+			flags.remove((Flag) obj);
 		}
 		
 		objectsById.remove(obj.getId());
@@ -295,6 +312,15 @@ public class Toroidal2DPhysics {
 	 */
 	public Set<AbstractWeapon> getWeapons() {
 		return weapons;
+	}
+	
+	
+	/**
+	 * Return the list of flags currently in play
+	 * @return
+	 */
+	public Set<Flag> getFlags() {
+		return flags;
 	}
 
 	/**
@@ -371,6 +397,37 @@ public class Toroidal2DPhysics {
 		return randLocation;
 	}
 
+	/**
+	 * Returns a new random free location inside the specified box of space
+	 * 
+	 * @param rand Random number generator
+	 * @return
+	 */
+	public Position getRandomFreeLocationInRegion(Random rand, int freeRadius, 
+			int ULX, int ULY, int LRX, int LRY) {
+		int boxWidth = LRX - ULX;
+		int boxHeight = LRY - ULY;
+		
+		//System.out.println("Making a random location inside UL (x,y) " + ULX + ", " + ULY + 
+		//		" to LR (x,y) " + LRY + ", " + LRY);
+		
+		Position centerPosition = new Position(boxWidth / 2 + ULX, boxHeight / 2 + ULY);
+		//System.out.println("Center position is " + centerPosition);
+		double newX = ((2 * rand.nextDouble()) - 1) * (boxWidth / 2.0) + centerPosition.getX();
+		double newY = ((2 * rand.nextDouble()) - 1) * (boxHeight / 2.0) + centerPosition.getY();
+		Position randLocation = new Position(newX, newY);
+		toroidalWrap(randLocation);
+
+		while (!isLocationFree(randLocation, freeRadius)) {
+			newX = ((2 * rand.nextDouble()) - 1) * (boxWidth / 2.0) + centerPosition.getX();
+			newY = ((2 * rand.nextDouble()) - 1) * (boxHeight / 2.0) + centerPosition.getY();
+			randLocation = new Position(newX, newY);
+			toroidalWrap(randLocation);
+		}
+
+		//System.out.println("random location chosen is " + randLocation);
+		return randLocation;
+	}
 
 
 	/**
@@ -839,9 +896,18 @@ public class Toroidal2DPhysics {
 	public void respawnDeadObjects(Random random, double asteroidMaxVelocity) {
 		for (AbstractObject object : allObjects) {
 			if (!object.isAlive() && object.canRespawn()) {
-				Position newPostion = getRandomFreeLocation(random, object.getRadius() * 2);
+				Position newPostion = null;
+				
+				if (object instanceof Flag) {
+					Flag flag = (Flag) object;
+					newPostion = flag.getNewStartingPosition(random);
+				} else {
+					newPostion = getRandomFreeLocation(random, object.getRadius() * 2);
+				}
+				
 				object.setPosition(newPostion);
 				object.setAlive(true);
+				object.setDrawable(true);
 
 				// reset the UUID if it is a asteroid or beacon
 				if (object instanceof Asteroid || object instanceof Beacon) {
@@ -849,7 +915,7 @@ public class Toroidal2DPhysics {
 				}
 
 				// make moveable asteroids move again when they respawn
-                if (object.isMoveable()) {
+                if (object.isMoveable() && !(object instanceof Flag)) {
                     Vector2D randomMotion = Vector2D.getRandom(random, asteroidMaxVelocity);
                     object.getPosition().setTranslationalVelocity(randomMotion);
                 }

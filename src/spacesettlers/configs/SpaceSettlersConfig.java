@@ -53,9 +53,20 @@ public class SpaceSettlersConfig {
 	BaseConfig[] bases;
 	
 	/**
-	 * Configuration for the asteroids
+	 * Configuration for the random asteroids
 	 */
-	AsteroidConfig asteroids;
+	RandomAsteroidConfig randomAsteroids;
+	
+	/**
+	 * Configuration for the fixed asteroids (if any)
+	 */
+	FixedAsteroidConfig[] fixedAsteroids;
+	
+	/**
+	 * Used for capture the flag (can be not specified in other environments)
+	 */
+	FlagConfig[] flags;
+	
 	
 	/**
 	 * Scoring method for this game
@@ -133,8 +144,26 @@ public class SpaceSettlersConfig {
 	/**
 	 * @return the asteroids
 	 */
-	public AsteroidConfig getAsteroids() {
-		return asteroids;
+	public RandomAsteroidConfig getRandomAsteroids() {
+		return randomAsteroids;
+	}
+
+	/**
+	 * Return the fixed location asteroids (if any)
+	 * @return
+	 */
+	public FixedAsteroidConfig[] getFixedAsteroids() {
+		return fixedAsteroids;
+	}
+	
+	
+	/**
+	 * Return the flag configs
+	 * @return
+	 */
+
+	public FlagConfig[] getFlags() {
+		return flags;
 	}
 
 	/**

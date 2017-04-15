@@ -59,6 +59,16 @@ public class Ship extends AbstractActionableObject {
 	 * when bullets explode or reach their target)
 	 */
 	int numWeaponsInAir;
+	
+	/**
+	 * Does the ship currently have a flag?
+	 */
+	boolean carryingFlag;
+	
+	/**
+	 * Reference to the flag the ship has (if it has one)
+	 */
+	Flag flag;
 
 
 	/**
@@ -82,6 +92,9 @@ public class Ship extends AbstractActionableObject {
 		numWeaponsInAir = 0;
 		maxEnergy = SHIP_MAX_ENERGY;
 		currentPowerups.add(SpaceSettlersPowerupEnum.FIRE_MISSILE);
+		this.carryingFlag = false;
+		this.flag = null;
+		this.numFlags = 0;
 	}
 
 	/**
@@ -109,6 +122,11 @@ public class Ship extends AbstractActionableObject {
 		newShip.killsInflicted = killsInflicted;
 		newShip.killsReceived = killsReceived;
 		newShip.damageInflicted = damageInflicted;
+		newShip.carryingFlag = carryingFlag;
+		newShip.numFlags = numFlags;
+		if (newShip.flag != null){
+			newShip.flag = flag.deepClone();
+		}
 		return newShip;
 	}
 
@@ -120,6 +138,35 @@ public class Ship extends AbstractActionableObject {
 		energy = SHIP_INITIAL_ENERGY;
 	}
 
+
+	/**
+	 * Is the ship carrying a flag right now?  True if so.  False otherwise.
+	 * 
+	 * @return
+	 */
+	public boolean isCarryingFlag() {
+		return carryingFlag;
+	}
+	
+	/**
+	 * Get the flag (this is a deep clone from the client point of view) of the flag the ship is carrying
+	 * @return
+	 */
+	public Flag getFlag() {
+		return flag;
+	}
+
+	/**
+	 * Add the flag to the ship's inventory
+	 * 
+	 * @param flag
+	 */
+	public void addFlag(Flag flag) {
+		this.flag = flag;
+		this.carryingFlag = true;
+		this.incrementFlags();
+		//System.out.println("Ship " + this + " has a flag now");
+	}
 	
 	/**
 	 * Get the color of this team
@@ -174,6 +221,10 @@ public class Ship extends AbstractActionableObject {
 			lastRespawnCounter = respawnCounter; 
 			resetResources();
 			resetPowerups();
+			if (carryingFlag) {
+				dropFlag();
+			}
+			
 		} else {
 			resetEnergy();
 		}
@@ -181,6 +232,15 @@ public class Ship extends AbstractActionableObject {
 		super.setAlive(value);
 	}
 
+	/**
+	 * A ship drops the flag when it dies
+	 */
+	private void dropFlag() {
+		carryingFlag = false;
+		flag.dropFlag();
+		flag = null;
+	}
+	
 
 	/**
 	 * When an item dies, its power ups disappear
@@ -226,7 +286,8 @@ public class Ship extends AbstractActionableObject {
 	}
 
 	public String toString() {
-		String str = "Ship id " + id + " team " + teamName + " at " + position + " resources " + resources;
+		String str = "Ship id " + id + " team " + teamName + " at " + position + " resources " + resources + 
+				" flags: " + numFlags;
 		return str;
 	}
 
@@ -254,6 +315,15 @@ public class Ship extends AbstractActionableObject {
 		if (energy > maxEnergy) {
 			energy = maxEnergy;
 		}
+	}
+
+	/**
+	 * Deposit the flag by setting the ship to not carry it
+	 */
+	public void depositFlag() {
+		this.carryingFlag = false;
+		flag.depositFlag();
+		flag = null;
 	}		
 
 }

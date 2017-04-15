@@ -25,10 +25,10 @@ public class ObjectInfoPanel extends JPanel {
 	JLabel objectName;
 	
 	class InnerObjectPanel extends JPanel {
-		JLabel isAlive, mass, radius;
+		JLabel isAlive, mass, radius, flag;
 		
 		public InnerObjectPanel() {
-			setLayout(new GridLayout(3,2));
+			setLayout(new GridLayout(4,2));
 			
 			JLabel isA = new JLabel("Alive: ");
 			add(isA);
@@ -47,12 +47,20 @@ public class ObjectInfoPanel extends JPanel {
 			
 			radius = new JLabel("unknown");
 			add(radius);
+			
+			JLabel flagL = new JLabel("Flags: ");
+			add(flagL);
+			
+			flag = new JLabel("0");
+			add(flag);
+			
 		}
 		
 		public void updateData(SpaceSettlersSimulator simulator) {
 			isAlive.setText(selectedObject.isAlive() + "");
 			mass.setText(selectedObject.getMass() + "");
 			radius.setText(selectedObject.getRadius() + "");
+			flag.setText(selectedObject.getNumFlags() + "");
 		}
 
 		

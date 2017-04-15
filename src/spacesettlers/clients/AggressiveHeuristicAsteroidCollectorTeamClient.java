@@ -131,7 +131,8 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 				}
 			} else {
 				asteroidToShipMap.put(asteroid.getId(), ship);
-				newAction = new MoveToObjectAction(space, currentPosition, asteroid);
+				newAction = new MoveToObjectAction(space, currentPosition, asteroid, 
+						asteroid.getPosition().getTranslationalVelocity());
 			}
 			return newAction;
 		} else {
@@ -195,7 +196,8 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 					newAction = new MoveToObjectAction(space, currentPosition, beacon);
 				}
 			} else {
-				newAction = new MoveToObjectAction(space, currentPosition, enemy);
+				newAction = new MoveToObjectAction(space, currentPosition, enemy,
+						enemy.getPosition().getTranslationalVelocity());
 			}
 			return newAction;
 		} else {

@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SpaceSettlersConfig>
+	<!-- Height/Width in pixels -->
+	<height>1080</height>
+	<width>1600</width>
+	
+	<!-- Number of steps of simulation -->
+	<simulationSteps>20000</simulationSteps>
+
+	<!-- Timestep for a simulation (in seconds for the physics equations) -->
+	<simulationTimeStep>0.05</simulationTimeStep>
+	
+	<!-- Used to initialize all Random objects in the simulator.  If this is 0, it is set using system time. 
+	     Set to a non-zero number to make repeatable games. -->
+	<randomSeed>0</randomSeed>
+
+	<!-- Scoring mechanism used for this game: Can be Resources, Beacons, ... (more as we add them) -->
+	<scoringMethod>Flags</scoringMethod>
+
+	<!-- Specify the number of the beacons.  The locations are initialized randomly -->
+	<numBeacons>5</numBeacons>
+	
+	<!-- Specify the maximum number of ships in a team -->
+	<maximumShipsPerTeam>6</maximumShipsPerTeam>
+	<maximumInitialShipsPerTeam>3</maximumInitialShipsPerTeam>
+	
+	<!-- Specify any controllable clients in the simulator (this can include heuristics).  
+	     Note, all clients are teams since eventually all clients can make new ships. -->
+	<teams>
+		<!-- Each team needs a name (so you know what other items belong to that team) and a pointer
+		     to the configuration file for that team.  Also, teams can have initial bounding boxes
+		     which bound where the ships and the base will be created. -->
+ 		<!-- The there are only two teams for CTF and the heuristic is a Flag Collector team (similar to beacons) -->
+		<HighLevelTeamConfig>
+			<teamName>SimpleFlagCollector</teamName>
+			<configFile>simple-flag-collector-clientinit.xml</configFile>
+		</HighLevelTeamConfig>
+		<HighLevelTeamConfig>
+			<teamName>HumanFlagTeam</teamName>
+			<configFile>human-flag-clientinit.xml</configFile>
+		</HighLevelTeamConfig>		
+	</teams>
+
+	<!-- Each team needs a base.  Optionally, you can initialize the location of the base -->
+	<bases>
+		<BaseConfig>
+			<teamName>SimpleFlagCollector</teamName>
+			<fixedLocation>true</fixedLocation>
+			<x>700</x>
+			<y>540</y>
+			<boundingBoxULX>550</boundingBoxULX>
+			<boundingBoxULY>340</boundingBoxULY>
+			<boundingBoxLRX>650</boundingBoxLRX>
+			<boundingBoxLRY>740</boundingBoxLRY>
+		</BaseConfig>
+		<BaseConfig>
+			<teamName>HumanFlagTeam</teamName>
+			<fixedLocation>true</fixedLocation>
+			<x>900</x>
+			<y>540</y>
+			<boundingBoxULX>950</boundingBoxULX>
+			<boundingBoxULY>340</boundingBoxULY>
+			<boundingBoxLRX>1050</boundingBoxLRX>
+			<boundingBoxLRY>740</boundingBoxLRY>
+		</BaseConfig>
+	</bases>
+	
+	<flags>
+		<FlagConfig>
+			<teamName>SimpleFlagCollector</teamName>
+			<startX>
+				<int>350</int>
+				<int>375</int>
+			</startX>
+			<startY>
+				<int>250</int>
+				<int>800</int>
+			</startY>
+		</FlagConfig>
+		<FlagConfig>
+			<teamName>HumanFlagTeam</teamName>
+			<startX>
+				<int>1250</int>
+				<int>1250</int>
+			</startX>
+			<startY>
+				<int>250</int>
+				<int>800</int>
+			</startY>
+		</FlagConfig>
+	</flags>
+	
+	<!-- Specify the options for creating asteroids.  Their locations not random for CTF. -->
+	<randomAsteroids>
+		<!-- The probability that a newly spawned asteroid will be mineable -->
+		<probabilityMineable>1.0</probabilityMineable>
+		
+		<!-- The number of asteroids when the game starts -->
+		<numberInitialAsteroids>10</numberInitialAsteroids>
+		
+		<!-- The maximum number of asteroids in a game -->
+		<maximumNumberAsteroids>10</maximumNumberAsteroids>
+
+		<!-- The probability an asteroid is movable -->
+		<probabilityMoveable>1.0</probabilityMoveable>
+		
+		<!-- The maximum initial velocity of a move-able asteroid -->
+		<maxInitialVelocity>15</maxInitialVelocity>
+		
+		<!-- The average proportion of each type of resource in an asteroid.  This needs to add to 1. -->
+		<probabilityFuelType>0.2</probabilityFuelType>
+		<probabilityWaterType>0.5</probabilityWaterType>
+		<probabilityMetalsType>0.3</probabilityMetalsType>
+	</randomAsteroids>
+	
+	<!-- For asteroid configuration in CTF: You must specify the full location and radius for the full playing field of asteroids -->
+	<fixedAsteroids>
+	<!--Make a wall of smaller asteroids down the middle of the board (enough space to shoot 
+	but not enough to fit a ship through.  it should divide the bases-->
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>250</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>300</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>350</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>400</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>450</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>500</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>550</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>600</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>650</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>700</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>750</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>800</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>850</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<!-- Now make an alcove for the flag for each team. This one is the upper left. -->
+		<FixedAsteroidConfig>
+			<x>300</x>
+			<y>150</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>350</x>
+			<y>150</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>400</x>
+			<y>175</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>425</x>
+			<y>225</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>425</x>
+			<y>275</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>400</x>
+			<y>325</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>350</x>
+			<y>350</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>300</x>
+			<y>350</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		
+		<!-- Lower left flag alcove. -->
+		<FixedAsteroidConfig>
+			<x>300</x>
+			<y>700</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>350</x>
+			<y>700</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>400</x>
+			<y>725</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>425</x>
+			<y>775</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>425</x>
+			<y>825</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>400</x>
+			<y>875</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>350</x>
+			<y>900</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>300</x>
+			<y>900</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+
+		<!-- Upper right flag alcove. -->
+		<FixedAsteroidConfig>
+			<x>1300</x>
+			<y>150</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1250</x>
+			<y>150</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1200</x>
+			<y>175</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1175</x>
+			<y>225</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1175</x>
+			<y>275</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1200</x>
+			<y>325</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1250</x>
+			<y>350</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1300</x>
+			<y>350</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		
+		<!-- Lower left flag alcove. -->
+		<FixedAsteroidConfig>
+			<x>1300</x>
+			<y>700</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1250</x>
+			<y>700</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1200</x>
+			<y>725</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1175</x>
+			<y>775</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1175</x>
+			<y>825</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1200</x>
+			<y>875</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1250</x>
+			<y>900</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1300</x>
+			<y>900</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		
+		<!-- a couple of wrap around ones to make navigation more fun -->
+		<FixedAsteroidConfig>
+			<x>0</x>
+			<y>0</y>
+			<radius>100</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>0</y>
+			<radius>75</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>0</x>
+			<y>540</y>
+			<radius>75</radius>
+		</FixedAsteroidConfig>
+		
+		
+	</fixedAsteroids>
+	
+</SpaceSettlersConfig>

@@ -77,6 +77,11 @@ public class Team {
 	double score;
 	
 	/**
+	 * The number of flags collected by this team
+	 */
+	int totalFlagsCollected;
+	
+	/**
 	 * available (unspent) resourcesAvailable from the asteroids and the total resourcesAvailable earned
 	 */
 	ResourcePile availableResources, totalResources;
@@ -148,6 +153,7 @@ public class Team {
 		this.totalKillsReceived = 0;
 		this.totalDamageInflicted = 0;
 		this.totalDamageReceived = 0;
+		this.totalFlagsCollected = 0;
 		executor = null;
 	}
 	
@@ -179,6 +185,7 @@ public class Team {
 		newTeam.totalKillsReceived = this.totalKillsReceived;
 		newTeam.totalDamageInflicted = this.totalDamageInflicted;
 		newTeam.totalDamageReceived = this.totalDamageReceived;
+		newTeam.totalFlagsCollected = this.totalFlagsCollected;
 		return newTeam;
 	}
 	
@@ -823,6 +830,21 @@ public class Team {
 	 */
 	public ResourcePile getTotalResources() {
 		return totalResources;
+	}
+
+	/**
+	 * Get the total flags collected by this team
+	 * @return
+	 */
+	public int getTotalFlagsCollected() {
+		return totalFlagsCollected;
+	}
+
+	/**
+	 * Increment the total flags collected by this team
+	 */
+	public void incrementTotalFlagsCollected() {
+		this.totalFlagsCollected++;
 	}
 
 	

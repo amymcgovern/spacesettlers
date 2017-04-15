@@ -50,6 +50,10 @@ abstract public class AbstractObject {
 	 */
 	protected ResourcePile resources;
 	
+	/**
+	 * Number of flags this ship or base has collected
+	 */
+	protected int numFlags;
 	
 	/**
 	 * The graphics for this object in the GUI
@@ -67,6 +71,11 @@ abstract public class AbstractObject {
 	protected UUID id;
 	
 	/**
+	 * flag to allow an object to respawn or not
+	 */
+	protected boolean respawn;
+	
+	/**
 	 * All objects start at rest
 	 */
 	public AbstractObject(int mass, int radius) {
@@ -76,6 +85,8 @@ abstract public class AbstractObject {
 		position = new Position(0,0);
 		this.id = UUID.randomUUID();
 		resources = new ResourcePile();
+		this.numFlags = 0;
+		this.respawn = true;
 	}
 
 	/**
@@ -88,6 +99,8 @@ abstract public class AbstractObject {
 		this.position = position;
 		this.id = UUID.randomUUID();
 		resources = new ResourcePile();
+		this.numFlags = 0;
+		this.respawn = true;
 	}
 
 	
@@ -222,7 +235,17 @@ abstract public class AbstractObject {
 	 * Assumes you can respawn immediately unless you override.
 	 */
 	public boolean canRespawn() {
-		return true;
+		return respawn;
+	}
+	
+	/**
+	 * Set the respawn flag
+	 * 
+	 * @param newRespawn
+	 * @return
+	 */
+	public void setRespawn(boolean newRespawn) {
+		this.respawn = newRespawn;
 	}
 	
 	/**
@@ -284,4 +307,20 @@ abstract public class AbstractObject {
 	public void resetId() {
 		id = UUID.randomUUID();
 	}
+
+	/**
+	 * Get the total number of flags owned by this object (ship or base)
+	 * @return
+	 */
+	public int getNumFlags() {
+		return numFlags;
+	}
+	
+	/**
+	 * Increment the number of flags held by this object
+	 */
+	public void incrementFlags() {
+		numFlags++;
+	}
+	
 }

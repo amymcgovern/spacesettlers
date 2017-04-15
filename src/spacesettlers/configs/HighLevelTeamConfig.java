@@ -19,7 +19,7 @@ public class HighLevelTeamConfig {
 	/**
 	 * Bounding box for the initialization of the team
 	 */
-	int initialRegionCenterX, initialRegionCenterY, initialRegionRadius;
+	int initialRegionULX, initialRegionULY, initialRegionLRX, initialRegionLRY;
 		
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
@@ -39,38 +39,39 @@ public class HighLevelTeamConfig {
 		return configFile;
 	}
 
-	/**
-	 * @return the initialRegionCenterX
-	 */
-	public int getInitialRegionCenterX() {
-		return initialRegionCenterX;
+
+	public int getInitialRegionULX() {
+		return initialRegionULX;
 	}
 
-	/**
-	 * @return the initialRegionCenterY
-	 */
-	public int getInitialRegionCenterY() {
-		return initialRegionCenterY;
+	public int getInitialRegionULY() {
+		return initialRegionULY;
 	}
 
-	/**
-	 * @return the initialRegionRadius
-	 */
-	public int getInitialRegionRadius() {
-		return initialRegionRadius;
+	public int getInitialRegionLRX() {
+		return initialRegionLRX;
 	}
 
-	public void setInitialRegionCenterX(int initialRegionCenterX) {
-		this.initialRegionCenterX = initialRegionCenterX;
+	public int getInitialRegionLRY() {
+		return initialRegionLRY;
 	}
 
-	public void setInitialRegionCenterY(int initialRegionCenterY) {
-		this.initialRegionCenterY = initialRegionCenterY;
+	public void setInitialRegionULX(int initialRegionULX) {
+		this.initialRegionULX = initialRegionULX;
 	}
 
-	public void setInitialRegionRadius(int initialRegionRadius) {
-		this.initialRegionRadius = initialRegionRadius;
+	public void setInitialRegionULY(int initialRegionULY) {
+		this.initialRegionULY = initialRegionULY;
 	}
+
+	public void setInitialRegionLRX(int initialRegionLRX) {
+		this.initialRegionLRX = initialRegionLRX;
+	}
+
+	public void setInitialRegionLRY(int initialRegionLRY) {
+		this.initialRegionLRY = initialRegionLRY;
+	}
+
 	
 	
 	

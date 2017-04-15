@@ -11,11 +11,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import spacesettlers.clients.Team;
-import spacesettlers.configs.AsteroidConfig;
-import spacesettlers.configs.BaseConfig;
-import spacesettlers.configs.HighLevelTeamConfig;
-import spacesettlers.configs.LadderConfig;
-import spacesettlers.configs.SpaceSettlersConfig;
+import spacesettlers.configs.*;
 import spacesettlers.simulator.SimulatorException;
 import spacesettlers.simulator.SpaceSettlersSimulator;
 
@@ -75,7 +71,10 @@ public class Ladder {
 		xstream.alias("SpaceSettlersConfig", SpaceSettlersConfig.class);
 		xstream.alias("HighLevelTeamConfig", HighLevelTeamConfig.class);
 		xstream.alias("BaseConfig", BaseConfig.class);
-		xstream.alias("AsteroidConfig", AsteroidConfig.class);
+		xstream.alias("AsteroidConfig", RandomAsteroidConfig.class);
+		xstream.alias("FixedAsteroidConfig", FixedAsteroidConfig.class);
+		xstream.alias("FlagConfig", FlagConfig.class);
+
 
 		try { 
 			simConfig = (SpaceSettlersConfig) xstream.fromXML(new File(configFile));
@@ -105,9 +104,10 @@ public class Ladder {
 
 	/**
 	 * Runs the ladder for the specified number of games
+	 * @throws SimulatorException 
 	 */
 	@SuppressWarnings("unchecked")
-	public void run() {
+	public void run() throws SimulatorException {
 		ArrayList<HighLevelTeamConfig[]>clientsPerMatch = getAllClientsForAllMatches();
 		
 		int numGames = clientsPerMatch.size() * ladderConfig.getNumRepeatMatches();
@@ -120,12 +120,31 @@ public class Ladder {
 				// setup the simulator for this match
 				simConfig.setTeams(teamsForMatch);
 
+				// set the bases to match the teams for this game.  Read in the ones
+				// from the config file first (and rename them)
+				// only make new ones if we don't have enough
+				BaseConfig[] defaultBases = simConfig.getBases();
 				BaseConfig[] baseConfig = new BaseConfig[teamsForMatch.length];
 				for (int i = 0; i < teamsForMatch.length; i++) {
-					baseConfig[i] = new BaseConfig(teamsForMatch[i].getTeamName());
+					if (i < defaultBases.length) {
+						baseConfig[i] = defaultBases[i];
+						baseConfig[i].setTeamName(teamsForMatch[i].getTeamName());
+					} else {
+						baseConfig[i] = new BaseConfig(teamsForMatch[i].getTeamName());
+					}
 				}
-
 				simConfig.setBases(baseConfig);
+				
+				// if there are flags, then set the flags to also match the teams for this game
+				FlagConfig[] flagConfigs = simConfig.getFlags();
+				if (flagConfigs != null && flagConfigs.length > 0) {
+					if (flagConfigs.length != teamsForMatch.length) {
+						throw new SimulatorException("Error: The number of flags in the config file doesn't match the number of teams for the match");
+					}
+					for (int i = 0; i < teamsForMatch.length; i++) {
+						flagConfigs[i].setTeamName(teamsForMatch[i].getTeamName());
+					}
+				}
 
 				// tell the user the match is about to begin
 				String str = "***Game " + gameIndex + " / " + numGames + " with teams ";

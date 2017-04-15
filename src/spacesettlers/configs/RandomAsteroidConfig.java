@@ -1,6 +1,11 @@
 package spacesettlers.configs;
 
-public class AsteroidConfig {
+/**
+ * Configuration for radomly generated asteroids
+ * @author amy
+ *
+ */
+public class RandomAsteroidConfig {
 	double probabilityMineable;
 	
 	int numberInitialAsteroids;
@@ -16,7 +21,7 @@ public class AsteroidConfig {
 	double probabilityWaterType;
 	
 	double probabilityMetalsType;
-
+	
 	/**
 	 * @return the probabilityMineable
 	 */
@@ -57,7 +62,6 @@ public class AsteroidConfig {
 	public double getProbabilityMetalsType() {
 		return probabilityMetalsType;
 	}
-	
-	
+
 	
 }

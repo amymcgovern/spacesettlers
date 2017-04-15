@@ -122,7 +122,8 @@ public class AggressiveHeuristicAsteroidCollectorSingletonTeamClient extends Tea
 			// if there is no enemy nearby, go for an asteroid
 			if (enemy == null) {
 				if (asteroid != null) {
-					newAction = new MoveToObjectAction(space, currentPosition, asteroid);
+					newAction = new MoveToObjectAction(space, currentPosition, asteroid,
+							asteroid.getPosition().getTranslationalVelocity());
 					shouldShoot = false;
 					return newAction;
 				} else {
@@ -141,14 +142,17 @@ public class AggressiveHeuristicAsteroidCollectorSingletonTeamClient extends Tea
 				// we are aggressive, so aim for enemies if they are nearby
 				if (enemyDistance < asteroidDistance) {
 					shouldShoot = true;
-					newAction = new MoveToObjectAction(space, currentPosition, enemy);
+					newAction = new MoveToObjectAction(space, currentPosition, enemy, 
+							enemy.getPosition().getTranslationalVelocity());
 				} else {
 					shouldShoot = false;
-					newAction = new MoveToObjectAction(space, currentPosition, asteroid);
+					newAction = new MoveToObjectAction(space, currentPosition, asteroid,
+							asteroid.getPosition().getTranslationalVelocity());
 				}
 				return newAction;
 			} else {
-				newAction = new MoveToObjectAction(space, currentPosition, enemy);
+				newAction = new MoveToObjectAction(space, currentPosition, enemy,
+						enemy.getPosition().getTranslationalVelocity());
 			}
 			return newAction;
 		}

@@ -24,17 +24,14 @@ import spacesettlers.actions.PurchaseTypes;
 import spacesettlers.clients.ImmutableTeamInfo;
 import spacesettlers.clients.Team;
 import spacesettlers.clients.TeamClient;
-import spacesettlers.configs.AsteroidConfig;
-import spacesettlers.configs.BaseConfig;
-import spacesettlers.configs.HighLevelTeamConfig;
-import spacesettlers.configs.SpaceSettlersConfig;
-import spacesettlers.configs.TeamClientConfig;
+import spacesettlers.configs.*;
 import spacesettlers.gui.SpaceSettlersGUI;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.AbstractObject;
 import spacesettlers.objects.Asteroid;
 import spacesettlers.objects.Base;
 import spacesettlers.objects.Beacon;
+import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
 import spacesettlers.utilities.Position;
@@ -45,27 +42,27 @@ public final class SpaceSettlersSimulator {
 	/**
 	 * Max time allowed in MILLISECONDS for a team to return actions
 	 */
-    public static int TEAM_ACTION_TIMEOUT = 300;
+	public static int TEAM_ACTION_TIMEOUT = 300;
 
 	/**
 	 * Max time allowed in MILLISECONDS for a getMovement to return
 	 */
-    public static int MOVEMENT_TIMEOUT = 300;
+	public static int MOVEMENT_TIMEOUT = 300;
 
 	/**
 	 * Max time allowed in MILLISECONDS for a endAction to return
 	 */
-    public static int TEAM_END_ACTION_TIMEOUT = 300;
+	public static int TEAM_END_ACTION_TIMEOUT = 300;
 
 	/**
 	 * Max time allowed in MILLISECONDS for a graphic generation to return
 	 */
-    public static int TEAM_GRAPHICS_TIMEOUT = 200;
-    
-    /**
-     * Probability that new asteroids spawn on any given turn
-     */
-    public final static double ASTEROID_SPAWN_PROBABILITY = 0.01;
+	public static int TEAM_GRAPHICS_TIMEOUT = 200;
+
+	/**
+	 * Probability that new asteroids spawn on any given turn
+	 */
+	public final static double ASTEROID_SPAWN_PROBABILITY = 0.01;
 
 	/**
 	 * A list of the clients (e.g. agents who can control ships) in the simulator. It is indexed by team name.
@@ -101,17 +98,17 @@ public final class SpaceSettlersSimulator {
 	 * Current timestep of the simulator
 	 */
 	int timestep;
-	
+
 	/**
 	 * If debug mode is true, then only run single threaded
 	 */
 	boolean debug = false;
-	
+
 	/**
 	 * True if the simulation is paused and false otherwise
 	 */
 	boolean isPaused = false;
-	
+
 	/**
 	 * Time to sleep between graphics updates (in milliseconds, set to 40 for default but can be changed in the GUI)
 	 */
@@ -141,11 +138,11 @@ public final class SpaceSettlersSimulator {
 		// see if debug mode is on
 		if (parserConfig.getBoolean("debug")) {
 			debug = true;
-			
-		    TEAM_ACTION_TIMEOUT = Integer.MAX_VALUE;
-		    MOVEMENT_TIMEOUT = Integer.MAX_VALUE;
-		    TEAM_END_ACTION_TIMEOUT = Integer.MAX_VALUE;
-		    TEAM_GRAPHICS_TIMEOUT = Integer.MAX_VALUE;
+
+			TEAM_ACTION_TIMEOUT = Integer.MAX_VALUE;
+			MOVEMENT_TIMEOUT = Integer.MAX_VALUE;
+			TEAM_END_ACTION_TIMEOUT = Integer.MAX_VALUE;
+			TEAM_GRAPHICS_TIMEOUT = Integer.MAX_VALUE;
 		}
 
 		// create the GUI after everything is created in the simulator
@@ -179,15 +176,15 @@ public final class SpaceSettlersSimulator {
 		if (parserConfig.getBoolean("graphics")) {
 			gui = new SpaceSettlersGUI(simConfig, this);
 		}
-		
+
 		// see if debug mode is on
 		if (parserConfig.getBoolean("debug")) {
 			debug = true;
-			
-		    TEAM_ACTION_TIMEOUT = Integer.MAX_VALUE;
-		    MOVEMENT_TIMEOUT = Integer.MAX_VALUE;
-		    TEAM_END_ACTION_TIMEOUT = Integer.MAX_VALUE;
-		    TEAM_GRAPHICS_TIMEOUT = Integer.MAX_VALUE;
+
+			TEAM_ACTION_TIMEOUT = Integer.MAX_VALUE;
+			MOVEMENT_TIMEOUT = Integer.MAX_VALUE;
+			TEAM_END_ACTION_TIMEOUT = Integer.MAX_VALUE;
+			TEAM_GRAPHICS_TIMEOUT = Integer.MAX_VALUE;
 		}
 		// create the GUI after everything is created in the simulator
 		System.out.println(this);
@@ -205,7 +202,7 @@ public final class SpaceSettlersSimulator {
 			gui = new SpaceSettlersGUI(simConfig, this);
 		}
 	}
-	
+
 
 	/**
 	 * Sleep so the gui can update (From Andy Fagg's tree code)
@@ -234,12 +231,22 @@ public final class SpaceSettlersSimulator {
 			simulatedSpace.addObject(beacon);
 		}
 
+		// place any fixed location asteroids
+		FixedAsteroidConfig[] fixedAsteroidConfigs = simConfig.getFixedAsteroids();
+		if (fixedAsteroidConfigs != null) {
+			for (FixedAsteroidConfig fixedAsteroidConfig : fixedAsteroidConfigs) {
+				Asteroid asteroid = createNewFixedAsteroid(fixedAsteroidConfig);
+				simulatedSpace.addObject(asteroid);
+			}
+		}
+
 		// place the asteroids
-		AsteroidConfig asteroidConfig = simConfig.getAsteroids();
-		for (int a = 0; a < asteroidConfig.getNumberInitialAsteroids(); a++) {
-			Asteroid asteroid = createNewAsteroid(asteroidConfig);
+		RandomAsteroidConfig randomAsteroidConfig = simConfig.getRandomAsteroids();
+		for (int a = 0; a < randomAsteroidConfig.getNumberInitialAsteroids(); a++) {
+			Asteroid asteroid = createNewRandomAsteroid(randomAsteroidConfig);
 			simulatedSpace.addObject(asteroid);
 		}
+
 
 		// create the clients
 		for (HighLevelTeamConfig teamConfig : simConfig.getTeams()) {
@@ -250,18 +257,46 @@ public final class SpaceSettlersSimulator {
 
 			TeamClientConfig teamClientConfig = getTeamClientConfig(teamConfig, parserConfig.getString("configPath"));
 
-			// if the team doesn't provide default radiii and bases, create one
-			if (teamConfig.getInitialRegionRadius() == 0) {
-				teamConfig.setInitialRegionRadius(simulatedSpace.width / 4);
-				teamConfig.setInitialRegionCenterX(random.nextInt(simConfig.getWidth()));
-				teamConfig.setInitialRegionCenterY(random.nextInt(simConfig.getHeight()));
-				System.out.println("Base location not provided for team " + teamConfig.getTeamName() + "...generating: (X, Y, radius) = " + 
-						teamConfig.getInitialRegionCenterX() + "," + teamConfig.getInitialRegionCenterY() + "," + teamConfig.getInitialRegionRadius());
+			// grab the home base config for this team (to get starting locations as needed)
+			BaseConfig thisBaseConfig = null;
+			for (BaseConfig baseConfig : simConfig.getBases()) {
+				String teamName = baseConfig.getTeamName();
+				if (teamName.equalsIgnoreCase(teamConfig.getTeamName())) {
+					thisBaseConfig = baseConfig;
+					break;
+				}
 			}
 
+			// now either use the base config for the default region radius or the teamConfig file
+			if (thisBaseConfig != null && thisBaseConfig.isFixedLocation()) {
+				teamConfig.setInitialRegionULX(thisBaseConfig.getBoundingBoxULX());
+				teamConfig.setInitialRegionULY(thisBaseConfig.getBoundingBoxULY());
+				teamConfig.setInitialRegionLRX(thisBaseConfig.getBoundingBoxLRX());
+				teamConfig.setInitialRegionLRY(thisBaseConfig.getBoundingBoxLRY());
+				System.out.println("Initial provided for team " + teamConfig.getTeamName() 
+				+ "UL (x,y) = " + teamConfig.getInitialRegionULX() + ", " +
+					teamConfig.getInitialRegionULY() + " LR (x,y) = " + 
+				teamConfig.getInitialRegionLRX() + ", " +  
+					teamConfig.getInitialRegionLRY());
+			
+			} else {
+				// if the team doesn't provide default radiii and bases, create one
+				if (teamConfig.getInitialRegionULX() == 0 && teamConfig.getInitialRegionLRX() == 0) {
+					teamConfig.setInitialRegionULX(random.nextInt(simConfig.getWidth()));
+					teamConfig.setInitialRegionLRX(teamConfig.getInitialRegionULX() + simConfig.getWidth() / 4);
+					teamConfig.setInitialRegionULY(random.nextInt(simConfig.getHeight()));
+					teamConfig.setInitialRegionLRY(teamConfig.getInitialRegionULX() + simConfig.getHeight() / 4);
+
+					System.out.println("Initial location not provided for team " + teamConfig.getTeamName() 
+						+ "...generating: UL (x,y) = " + teamConfig.getInitialRegionULX() + ", " +
+							teamConfig.getInitialRegionULY() + " LR (x,y) = " + 
+						teamConfig.getInitialRegionLRX() + ", " +
+							teamConfig.getInitialRegionLRY());
+				}
+			}
 
 			TeamClient teamClient = createTeamClient(teamConfig, teamClientConfig);
-
+			
 			// make the team inside the simulator for this team
 			Team team = createTeam(teamConfig, teamClient, teamClientConfig);
 
@@ -297,11 +332,18 @@ public final class SpaceSettlersSimulator {
 
 			}
 
-			// make the base in the region specified for this team
-			// ensure bases are not created right next to asteroids (free by 3 * base_radius for now)
-			Position freeLocation = simulatedSpace.getRandomFreeLocationInRegion(random, 3 * Base.BASE_RADIUS, 
-					thisTeamConfig.getInitialRegionCenterX(), thisTeamConfig.getInitialRegionCenterY(),
-					thisTeamConfig.getInitialRegionRadius());
+			// make the location based on fixed or random
+			Position baseLocation;
+
+			if (baseConfig.isFixedLocation()) {
+				baseLocation = new Position(baseConfig.getX(), baseConfig.getY());
+			} else {
+				// make the base in the region specified for this team
+				// ensure bases are not created right next to asteroids (free by 3 * base_radius for now)
+				baseLocation = simulatedSpace.getRandomFreeLocationInRegion(random, 3 * Base.BASE_RADIUS, 
+						thisTeamConfig.getInitialRegionULX(), thisTeamConfig.getInitialRegionULY(), 
+						thisTeamConfig.getInitialRegionLRX(), thisTeamConfig.getInitialRegionLRY());
+			}
 
 
 			// get this team as well as the client
@@ -313,29 +355,87 @@ public final class SpaceSettlersSimulator {
 				}
 			}
 
-			Base base = new Base(freeLocation, baseConfig.getTeamName(), thisTeam, true);
+			Base base = new Base(baseLocation, baseConfig.getTeamName(), thisTeam, true);
 			simulatedSpace.addObject(base);
 			thisTeam.addBase(base);
 		}
+		
+		
+		/**
+		 * If there are flags specified (presumably for capture the flag games), create them
+		 * and match their color to their team.  Randomly choose their starting location
+		 * from the specified set of starting locations.
+		 */
+		if (simConfig.getFlags() != null) {
+			for (FlagConfig flagConfig : simConfig.getFlags()) {
+				// get the right team to match the flag
+				Team thisTeam = null;
+				for (Team team : teams) {
+					if (team.getTeamName().equalsIgnoreCase(flagConfig.getTeamName())) {
+						thisTeam = team;
+						break;
+					}
+				}
+				int[] startX = flagConfig.getStartX();
+				int[] startY = flagConfig.getStartY();
+				
+				Position[] startingPositions = new Position[startX.length];
+				for (int i = 0; i < startX.length; i++) {
+					startingPositions[i] = new Position(startX[i], startY[i]);
+				}
+				//System.out.println("Starting Locations are " + startingPositions);
+				Position flagPosition = startingPositions[random.nextInt(startingPositions.length)];
+				//System.out.println("Chosen location is " + flagPosition);
+				Flag flag = new Flag(flagPosition, flagConfig.getTeamName(), thisTeam, startingPositions);
+				
+				simulatedSpace.addObject(flag);
+			}
+		}
+		
 
+	}
+
+	/**
+	 * Create a new fixed location asteroid following all rules of the config files
+	 * 
+	 * Fixed asteroids specify a x, y location and a radius.  They are always non-mineable. 
+	 * 
+	 * @param asteroidConfig
+	 * @return
+	 */
+	private Asteroid createNewFixedAsteroid(FixedAsteroidConfig asteroidConfig) {
+		boolean mineable = false;
+		boolean moveable = false;
+
+		int radius = asteroidConfig.getRadius();
+
+		// create the asteroid (no fuels in it either)
+		Asteroid asteroid = new Asteroid(new Position(asteroidConfig.getX(), asteroidConfig.getY()), 
+				mineable, radius, moveable, 0, 0, 0);
+
+		return asteroid;
 	}
 
 	/**
 	 * Create a new asteroid following all rules of the config files
 	 * 
+	 * Asteroids can either be fixed location or randomly generated.  If they are
+	 * fixed, they need x, y, and radius.  
+	 * 
 	 * @param asteroidConfig
 	 * @return
 	 */
-	private Asteroid createNewAsteroid(AsteroidConfig asteroidConfig) {
+	private Asteroid createNewRandomAsteroid(RandomAsteroidConfig asteroidConfig) {
 		// choose if the asteroid is mine-able
 		double prob = random.nextDouble();
-		
+
 		boolean mineable = false;
 		if (prob < asteroidConfig.getProbabilityMineable()) {
 			mineable = true;
 		}
-		
-		// choose the radius
+
+		// asteroids 
+		// choose the radius randomly for random asteroids
 		int radius = random.nextInt(Asteroid.MAX_ASTEROID_RADIUS - Asteroid.MIN_ASTEROID_RADIUS) + Asteroid.MIN_ASTEROID_RADIUS;
 
 		// choose if the asteroid is moving or stationary
@@ -349,13 +449,13 @@ public final class SpaceSettlersSimulator {
 		double fuel = random.nextDouble() * asteroidConfig.getProbabilityFuelType();
 		double water = random.nextDouble() * asteroidConfig.getProbabilityWaterType(); 
 		double metals = random.nextDouble() * asteroidConfig.getProbabilityMetalsType(); 
-		
+
 		// renormalize so it all adds to 1
 		double normalize = fuel + water + metals;
 		fuel = fuel / normalize;
 		water = water / normalize;
 		metals = metals / normalize;
-		
+
 		// create the asteroid
 		Asteroid asteroid = new Asteroid(simulatedSpace.getRandomFreeLocation(random, radius * 2), 
 				mineable, radius, moveable, fuel, water, metals);
@@ -384,8 +484,9 @@ public final class SpaceSettlersSimulator {
 		for (int s = 0; s < numShips; s++) {
 			// put the ships in the initial region for the team
 			Position freeLocation = simulatedSpace.getRandomFreeLocationInRegion(random, Ship.SHIP_RADIUS, 
-					teamConfig.getInitialRegionCenterX(), teamConfig.getInitialRegionCenterY(),
-					teamConfig.getInitialRegionRadius());
+					teamConfig.getInitialRegionULX(), teamConfig.getInitialRegionULY(), 
+					teamConfig.getInitialRegionLRX(), teamConfig.getInitialRegionLRY());
+			System.out.println("Starting ship for team " + team.getTeamName() + " in location " + freeLocation);
 			Ship ship = new Ship(teamConfig.getTeamName(), team.getTeamColor(), freeLocation);
 			team.addShip(ship);
 		}
@@ -478,7 +579,9 @@ public final class SpaceSettlersSimulator {
 		xstream.alias("SpaceSettlersConfig", SpaceSettlersConfig.class);
 		xstream.alias("HighLevelTeamConfig", HighLevelTeamConfig.class);
 		xstream.alias("BaseConfig", BaseConfig.class);
-		xstream.alias("AsteroidConfig", AsteroidConfig.class);
+		xstream.alias("AsteroidConfig", RandomAsteroidConfig.class);
+		xstream.alias("FixedAsteroidConfig", FixedAsteroidConfig.class);
+		xstream.alias("FlagConfig", FlagConfig.class);
 
 		try { 
 			simConfig = (SpaceSettlersConfig) xstream.fromXML(new File(configFile));
@@ -494,7 +597,7 @@ public final class SpaceSettlersSimulator {
 	void advanceTime() {
 		// update the team info (to send into the space for use by other teams)
 		updateTeamInfo();
-		
+
 		ExecutorService teamExecutor;
 		if (debug) {
 			teamExecutor = Executors.newSingleThreadExecutor();
@@ -553,8 +656,8 @@ public final class SpaceSettlersSimulator {
 					if (!(swObject instanceof AbstractActionableObject)) {
 						continue;
 					}
-					
-					 // verify that the object has the power up associated with it
+
+					// verify that the object has the power up associated with it
 					AbstractActionableObject actionableObject = (AbstractActionableObject) swObject;
 					if (actionableObject.isValidPowerup(powerups.get(key))) {
 						allPowerups.put(key, powerups.get(key));
@@ -581,30 +684,30 @@ public final class SpaceSettlersSimulator {
 		// cleanup and remove dead weapons
 		simulatedSpace.cleanupDeadWeapons();
 
-		// respawn any objects that died (and that should respawn)
-        final double asteroidMaxVelocity = simConfig.getAsteroids().getMaxInitialVelocity();
-        simulatedSpace.respawnDeadObjects(random, asteroidMaxVelocity);
+		// respawn any objects that died (and that should respawn - this includes Flags)
+		final double asteroidMaxVelocity = simConfig.getRandomAsteroids().getMaxInitialVelocity();
+		simulatedSpace.respawnDeadObjects(random, asteroidMaxVelocity);
 
 		// spawn new asteroids with a small probability (up to the maximum number allowed)
-        int maxAsteroids = simConfig.getAsteroids().getMaximumNumberAsteroids();
-        int numAsteroids = simulatedSpace.getAsteroids().size();
-        if (numAsteroids < maxAsteroids) {
-        	if (random.nextDouble() < ASTEROID_SPAWN_PROBABILITY) {
-        		//System.out.println("Spawning a new asteroid");
-    			Asteroid asteroid = createNewAsteroid(simConfig.getAsteroids());
-    			simulatedSpace.addObject(asteroid);
-        	}
-        }
+		int maxAsteroids = simConfig.getRandomAsteroids().getMaximumNumberAsteroids();
+		int numAsteroids = simulatedSpace.getAsteroids().size();
+		if (numAsteroids < maxAsteroids) {
+			if (random.nextDouble() < ASTEROID_SPAWN_PROBABILITY) {
+				//System.out.println("Spawning a new asteroid");
+				Asteroid asteroid = createNewRandomAsteroid(simConfig.getRandomAsteroids());
+				simulatedSpace.addObject(asteroid);
+			}
+		}
 
-        
-        
-		updateScores();
 		
-//		for (Team team : teams) {
-//			for (Ship ship : team.getShips()) {
-//				System.out.println("Ship " + ship.getTeamName() + ship.getId() + " has resourcesAvailable " + ship.getMoney());
-//			}
-//		}
+
+		updateScores();
+
+		//		for (Team team : teams) {
+		//			for (Ship ship : team.getShips()) {
+		//				System.out.println("Ship " + ship.getTeamName() + ship.getId() + " has resourcesAvailable " + ship.getMoney());
+		//			}
+		//		}
 	}
 
 	/**
@@ -615,7 +718,7 @@ public final class SpaceSettlersSimulator {
 		for (Team team : teams) {
 			teamInfo.add(new ImmutableTeamInfo(team));
 		}
-		
+
 		simulatedSpace.setTeamInfo(teamInfo);
 	}
 
@@ -630,14 +733,14 @@ public final class SpaceSettlersSimulator {
 		if (purchases == null) {
 			return;
 		}
-		
+
 		for (UUID key : purchases.keySet()) {
 			PurchaseTypes purchase = purchases.get(key);
 			// skip the purchase if there isn't enough resourcesAvailable
 			if (!team.canAfford(purchase)) {
 				continue;
 			}
-			
+
 			// get the object where the item is to be purchased (on on whom it is to be purchased)
 			AbstractActionableObject purchasingObject = (AbstractActionableObject) simulatedSpace.getObjectById(key);
 
@@ -645,7 +748,7 @@ public final class SpaceSettlersSimulator {
 			if (!purchasingObject.getTeamName().equalsIgnoreCase(team.getTeamName())) {
 				continue;
 			}
-			
+
 			switch (purchase) {
 			case BASE:
 				// only purchase if this is a ship (can't buy a base next to a base)
@@ -656,7 +759,7 @@ public final class SpaceSettlersSimulator {
 					Position newPosition = simulatedSpace.getRandomFreeLocationInRegion(random, 
 							Base.BASE_RADIUS, (int) ship.getPosition().getX(), 
 							(int) ship.getPosition().getY(), (2 * ship.getRadius() + Base.BASE_RADIUS));
-	
+
 					// make the new base and add it to the lists
 					Base base = new Base(newPosition, team.getTeamName(), team, false);
 					simulatedSpace.addObject(base);
@@ -670,16 +773,16 @@ public final class SpaceSettlersSimulator {
 				// can only buy if there are enough ships
 				if (team.getShips().size() >= team.getMaxNumberShips())
 					break;
-				
+
 				// Ships can only be purchased near a base (which launches them)
 				if (purchasingObject instanceof Base) {
 					Base base = (Base) purchasingObject;
-					
+
 					// set the new ship just away from the base (to avoid a collision)
 					Position newPosition = simulatedSpace.getRandomFreeLocationInRegion(random, 
 							Ship.SHIP_RADIUS, (int) base.getPosition().getX(), 
 							(int) base.getPosition().getY(), (2 * base.getRadius() + Ship.SHIP_RADIUS));
-	
+
 					// make the new ship and add it to the lists
 					Ship ship = new Ship(team.getTeamName(), team.getTeamColor(), newPosition);
 					simulatedSpace.addObject(ship);
@@ -688,7 +791,7 @@ public final class SpaceSettlersSimulator {
 					team.decrementAvailableResources(team.getCurrentCost(purchase));
 					team.updateCost(purchase);
 				}
-				
+
 				break;
 
 			case POWERUP_SHIELD:
@@ -709,7 +812,7 @@ public final class SpaceSettlersSimulator {
 					System.out.println("Buying a emp launcher");
 				}
 				break;
-				
+
 			case POWERUP_DOUBLE_BASE_HEALING_SPEED:
 				// this can only be purchased on bases
 				if (purchasingObject instanceof Base) {
@@ -720,7 +823,7 @@ public final class SpaceSettlersSimulator {
 					System.out.println("Buying a healing doubler for a base");
 				}
 				break;
-				
+
 			case POWERUP_DOUBLE_MAX_ENERGY:
 				purchasingObject.addPowerup(SpaceSettlersPowerupEnum.DOUBLE_MAX_ENERGY);
 				// charge the team for the purchase
@@ -728,7 +831,7 @@ public final class SpaceSettlersSimulator {
 				team.updateCost(purchase);
 				System.out.println("Buying a energy doubler");
 				break;
-				
+
 			case POWERUP_DOUBLE_WEAPON_CAPACITY:
 				purchasingObject.addPowerup(SpaceSettlersPowerupEnum.DOUBLE_WEAPON_CAPACITY);
 				// charge the team for the purchase
@@ -736,18 +839,18 @@ public final class SpaceSettlersSimulator {
 				team.updateCost(purchase);
 				System.out.println("Buying a weapons doubler");
 				break;
-		
+
 			case NOTHING:
 				break;
-				
+
 			default:
 				break;
 			}
 
-			
+
 		}
-		
-		
+
+
 
 	}
 
@@ -784,6 +887,20 @@ public final class SpaceSettlersSimulator {
 				// not subtracting damage received because it is a negative number (inflicted is positive)
 				team.setScore(1000* team.getTotalKillsInflicted() + team.getTotalDamageInflicted() + team.getTotalDamageReceived());
 			}
+		} else if (simConfig.getScoringMethod().equalsIgnoreCase("Flags")) {
+			// this scores by the raw number of flags collected (competitive ladder)
+			for (Team team : teams) {
+				team.setScore(team.getTotalFlagsCollected());
+			}
+		} else if (simConfig.getScoringMethod().equalsIgnoreCase("TotalFlags")) {
+			// this score sums the flags for the two sides (cooperative ladder)
+			int totalFlags = 0;
+			for (Team team : teams) {
+				totalFlags += team.getTotalFlagsCollected();
+			}
+			for (Team team : teams) {
+				team.setScore(totalFlags);
+			}
 		} else {
 			System.err.println("Error: Scoring method " + simConfig.getScoringMethod() + " is not recognized.  Scores will all be 0.");
 		}
@@ -805,7 +922,7 @@ public final class SpaceSettlersSimulator {
 			while (isPaused()) {
 				mySleep(50);
 			}
-			
+
 			advanceTime();
 
 			if (gui != null) {
@@ -815,6 +932,13 @@ public final class SpaceSettlersSimulator {
 
 			if (timestep % 5000 == 0) {
 				System.out.println("On time step " + timestep);
+				
+				// print out the score every 5000 steps for debugging
+                for (Team team : teams) {
+                    String str = "Team: " + team.getLadderName() + " scored " + team.getScore();
+                    System.out.println(str);
+                }
+
 			}
 		}
 
@@ -872,7 +996,7 @@ public final class SpaceSettlersSimulator {
 
 		}
 	}
-	
+
 	/**
 	 * Returns the physics engine (should only be called outside of the clients because they don't have access to this for security)
 	 * @return
@@ -888,7 +1012,7 @@ public final class SpaceSettlersSimulator {
 	public boolean isPaused() {
 		return isPaused;
 	}
-	
+
 	/**
 	 * Set the paused state (called from the GUI)
 	 * @param isPaused
@@ -896,7 +1020,7 @@ public final class SpaceSettlersSimulator {
 	public void setPaused(boolean isPaused) {
 		this.isPaused = isPaused;
 	}
-	
+
 	/**
 	 * Set the sleep (called by the GUI)
 	 * @return
@@ -912,8 +1036,8 @@ public final class SpaceSettlersSimulator {
 	public void setGraphicsSleep(int graphicsSleep) {
 		this.graphicsSleep = graphicsSleep;
 	}
-	
-	
+
+
 
 
 }
