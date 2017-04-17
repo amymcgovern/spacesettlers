@@ -32,19 +32,19 @@
 		     which bound where the ships and the base will be created. -->
  		<!-- The there are only two teams for CTF and the heuristic is a Flag Collector team (similar to beacons) -->
 		<HighLevelTeamConfig>
-			<teamName>SimpleFlagCollector</teamName>
-			<configFile>simple-flag-collector-clientinit.xml</configFile>
+			<teamName>Team1</teamName>
+			<configFile>aggressive-flag3ships-clientinit.xml</configFile>
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
-			<teamName>HumanFlagTeam</teamName>
-			<configFile>human-flag-clientinit.xml</configFile>
+			<teamName>Team2</teamName>
+			<configFile>passive-flag3ships-clientinit.xml</configFile>
 		</HighLevelTeamConfig>		
 	</teams>
 
 	<!-- Each team needs a base.  Optionally, you can initialize the location of the base -->
 	<bases>
 		<BaseConfig>
-			<teamName>SimpleFlagCollector</teamName>
+			<teamName>Team1</teamName>
 			<fixedLocation>true</fixedLocation>
 			<x>700</x>
 			<y>540</y>
@@ -54,7 +54,7 @@
 			<boundingBoxLRY>740</boundingBoxLRY>
 		</BaseConfig>
 		<BaseConfig>
-			<teamName>HumanFlagTeam</teamName>
+			<teamName>Team2</teamName>
 			<fixedLocation>true</fixedLocation>
 			<x>900</x>
 			<y>540</y>
@@ -67,7 +67,7 @@
 	
 	<flags>
 		<FlagConfig>
-			<teamName>SimpleFlagCollector</teamName>
+			<teamName>Team1</teamName>
 			<startX>
 				<int>350</int>
 				<int>375</int>
@@ -78,7 +78,7 @@
 			</startY>
 		</FlagConfig>
 		<FlagConfig>
-			<teamName>HumanFlagTeam</teamName>
+			<teamName>Team2</teamName>
 			<startX>
 				<int>1250</int>
 				<int>1250</int>
