@@ -896,16 +896,27 @@ public class Toroidal2DPhysics {
 	public void respawnDeadObjects(Random random, double asteroidMaxVelocity) {
 		for (AbstractObject object : allObjects) {
 			if (!object.isAlive() && object.canRespawn()) {
-				Position newPostion = null;
+				Position newPosition = null;
 				
+				// flags should re-spawn at a randomly chosen starting location
 				if (object instanceof Flag) {
 					Flag flag = (Flag) object;
-					newPostion = flag.getNewStartingPosition(random);
+					newPosition = flag.getNewStartingPosition(random);
+
+					// ensure their starting location is free (to handle the thought bug the class
+					// introduced of putting a ship or a base where the flag should spawn)
+					while (!this.isLocationFree(newPosition, flag.getRadius())) {
+						double offset = ((random.nextDouble() * 2.0) - 1.0) * (flag.getRadius() * 5.0);
+						newPosition.setX(newPosition.getX() + offset);
+						offset = ((random.nextDouble() * 2.0) - 1.0) * (flag.getRadius() * 5.0);
+						newPosition.setY(newPosition.getY() + offset);
+					}
+					
 				} else {
-					newPostion = getRandomFreeLocation(random, object.getRadius() * 2);
+					newPosition = getRandomFreeLocation(random, object.getRadius() * 2);
 				}
 				
-				object.setPosition(newPostion);
+				object.setPosition(newPosition);
 				object.setAlive(true);
 				object.setDrawable(true);
 
