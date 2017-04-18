@@ -86,6 +86,7 @@ public class Flag extends AbstractObject {
 		if (newFlag.carryingShip != null) {
 			newFlag.carryingShip = this.carryingShip.deepClone();
 		}
+		newFlag.id = id;
 		return newFlag;
 	}
 
