@@ -12,8 +12,8 @@ import spacesettlers.utilities.Vector2D;
  * @author amy
  */
 public class MoveToObjectAction extends MoveAction {
-	AbstractObject goalObject;
-	Position originalGoalLocation;
+	protected AbstractObject goalObject;
+	protected Position originalGoalLocation;
 	
 	/**
 	 * Initialize with your location and the goal object 
@@ -59,6 +59,7 @@ public class MoveToObjectAction extends MoveAction {
 	 */
 	public boolean isMovementFinished(Toroidal2DPhysics space) {
 		if (super.isMovementFinished(space)) {
+			//System.out.println("Super movement finished");
 			return true;
 		}
 		
@@ -66,16 +67,19 @@ public class MoveToObjectAction extends MoveAction {
 		
 		// goal object disappeared
 		if (newGoalObj == null) {
+			//System.out.println("Goal object disappeared");
 			return true;
 		}
 		
 		// goal object died
 		if (!newGoalObj.isAlive()) {
+			//System.out.println("Goal object dead");
 			return true;
 		} 
 
 		// goal object moved
 		if (!newGoalObj.getPosition().equalsLocationOnly(originalGoalLocation)) {
+			//System.out.println("Goal object moved");
 			return true;
 		}
 		

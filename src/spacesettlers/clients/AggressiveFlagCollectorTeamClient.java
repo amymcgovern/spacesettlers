@@ -396,7 +396,7 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 		double minDistance = Double.MAX_VALUE;
 
 		for (Asteroid asteroid : asteroids) {
-			if (!asteroidToShipMap.containsKey(asteroid)) {
+			if (!asteroidToShipMap.containsKey(asteroid.getId())) {
 				if (asteroid.isMineable() && asteroid.getResources().getTotal() > bestMoney) {
 					double dist = space.findShortestDistance(asteroid.getPosition(), ship.getPosition());
 					if (dist < minDistance) {
@@ -443,14 +443,14 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 
 		for (UUID asteroidId : asteroidToShipMap.keySet()) {
 			Asteroid asteroid = (Asteroid) space.getObjectById(asteroidId);
-			if (asteroid == null || !asteroid.isAlive()) {
+			if (asteroid == null || !asteroid.isAlive() || asteroid.isMoveable()) {
  				finishedAsteroids.add(asteroid);
 				//System.out.println("Removing asteroid from map");
 			}
 		}
 
 		for (Asteroid asteroid : finishedAsteroids) {
-			asteroidToShipMap.remove(asteroid);
+			asteroidToShipMap.remove(asteroid.getId());
 		}
 
 

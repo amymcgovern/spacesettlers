@@ -115,7 +115,7 @@ public class AggressiveHeuristicAsteroidCollectorSingletonTeamClient extends Tea
 			Ship enemy = pickNearestEnemyShip(space, ship);
 			
 			// find the highest valued nearby asteroid
-			Asteroid asteroid = pickHighestValueFreeAsteroid(space, ship);
+			Asteroid asteroid = pickHighestValueNearestFreeAsteroid(space, ship);
 
 			AbstractAction newAction = null;
 
@@ -215,22 +215,29 @@ public class AggressiveHeuristicAsteroidCollectorSingletonTeamClient extends Tea
 	 * 
 	 * @return
 	 */
-	private Asteroid pickHighestValueFreeAsteroid(Toroidal2DPhysics space, Ship ship) {
+	private Asteroid pickHighestValueNearestFreeAsteroid(Toroidal2DPhysics space, Ship ship) {
 		Set<Asteroid> asteroids = space.getAsteroids();
 		int bestMoney = Integer.MIN_VALUE;
 		Asteroid bestAsteroid = null;
+		double minDistance = Double.MAX_VALUE;
 
 		for (Asteroid asteroid : asteroids) {
-			if (!asteroidToShipMap.containsKey(asteroid)) {
+			if (!asteroidToShipMap.containsKey(asteroid.getId())) {
 				if (asteroid.isMineable() && asteroid.getResources().getTotal() > bestMoney) {
-					bestMoney = asteroid.getResources().getTotal();
-					bestAsteroid = asteroid;
+					double dist = space.findShortestDistance(asteroid.getPosition(), ship.getPosition());
+					if (dist < minDistance) {
+						bestMoney = asteroid.getResources().getTotal();
+						//System.out.println("Considering asteroid " + asteroid.getId() + " as a best one");
+						bestAsteroid = asteroid;
+						minDistance = dist;
+					}
 				}
 			}
 		}
 		//System.out.println("Best asteroid has " + bestMoney);
 		return bestAsteroid;
 	}
+
 
 	/**
 	 * Find the nearest beacon to this ship
@@ -264,14 +271,14 @@ public class AggressiveHeuristicAsteroidCollectorSingletonTeamClient extends Tea
 
 		for (UUID asteroidId : asteroidToShipMap.keySet()) {
 			Asteroid asteroid = (Asteroid) space.getObjectById(asteroidId);
-			if (asteroid != null && !asteroid.isAlive()) {
+			if (asteroid == null || !asteroid.isAlive() || asteroid.isMoveable()) {
 				finishedAsteroids.add(asteroid);
 				//System.out.println("Removing asteroid from map");
 			}
 		}
 
 		for (Asteroid asteroid : finishedAsteroids) {
-			asteroidToShipMap.remove(asteroid);
+			asteroidToShipMap.remove(asteroid.getId());
 		}
 
 
