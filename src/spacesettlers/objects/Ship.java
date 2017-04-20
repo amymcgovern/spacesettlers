@@ -1,19 +1,15 @@
 package spacesettlers.objects;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.LinkedHashSet;
 
 import spacesettlers.actions.AbstractAction;
 import spacesettlers.graphics.ShipGraphics;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
 import spacesettlers.objects.resources.ResourcePile;
-import spacesettlers.objects.resources.ResourceTypes;
+import spacesettlers.objects.weapons.AbstractWeapon;
 import spacesettlers.objects.weapons.EMP;
 import spacesettlers.objects.weapons.Missile;
-import spacesettlers.objects.weapons.AbstractWeapon;
 import spacesettlers.utilities.Position;
 
 /**
@@ -116,7 +112,7 @@ public class Ship extends AbstractActionableObject {
 		newShip.numWeaponsInAir = numWeaponsInAir;
 		newShip.id = id;
 		newShip.maxEnergy = maxEnergy;
-		newShip.currentPowerups = new HashSet<SpaceSettlersPowerupEnum>(currentPowerups);
+		newShip.currentPowerups = new LinkedHashSet<SpaceSettlersPowerupEnum>(currentPowerups);
 		newShip.weaponCapacity = weaponCapacity;
 		newShip.hitsInflicted = hitsInflicted;
 		newShip.killsInflicted = killsInflicted;

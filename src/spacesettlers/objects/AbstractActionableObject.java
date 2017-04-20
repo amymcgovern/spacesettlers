@@ -1,6 +1,6 @@
 package spacesettlers.objects;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import spacesettlers.objects.powerups.SpaceSettlersPowerup;
@@ -65,7 +65,7 @@ abstract public class AbstractActionableObject extends AbstractObject {
 	 */
 	public AbstractActionableObject(int mass, int radius, Position position) {
 		super(mass, radius, position);
-		currentPowerups = new HashSet<SpaceSettlersPowerupEnum>();
+		currentPowerups = new LinkedHashSet<SpaceSettlersPowerupEnum>();
 		weaponCapacity = INITIAL_WEAPON_CAPACITY;
 		hitsInflicted = killsInflicted = damageInflicted = damageReceived = killsReceived = 0;
 	}
@@ -77,7 +77,7 @@ abstract public class AbstractActionableObject extends AbstractObject {
 	 */
 	public AbstractActionableObject(int mass, int radius) {
 		super(mass, radius);
-		currentPowerups = new HashSet<SpaceSettlersPowerupEnum>();
+		currentPowerups = new LinkedHashSet<SpaceSettlersPowerupEnum>();
 	}
 	
 	/**

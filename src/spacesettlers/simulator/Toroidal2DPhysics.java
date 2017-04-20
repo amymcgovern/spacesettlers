@@ -2,7 +2,7 @@ package spacesettlers.simulator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -125,19 +125,19 @@ public class Toroidal2DPhysics {
 		width = simConfig.getWidth();
 		halfHeight = height / 2.0f;
 		halfWidth = width / 2.0f;
-		allObjects = new HashSet<AbstractObject>();
+		allObjects = new LinkedHashSet<AbstractObject>();
 		timeStep = simConfig.getSimulationTimeStep();
 		collisionHandler = new CollisionHandler();
-		beacons = new HashSet<Beacon>();
-		asteroids = new HashSet<Asteroid>();
-		bases = new HashSet<Base>();
-		ships = new HashSet<Ship>();
-		flags = new HashSet<Flag>();
-		weapons = new HashSet<AbstractWeapon>();
+		beacons = new LinkedHashSet<Beacon>();
+		asteroids = new LinkedHashSet<Asteroid>();
+		bases = new LinkedHashSet<Base>();
+		ships = new LinkedHashSet<Ship>();
+		flags = new LinkedHashSet<Flag>();
+		weapons = new LinkedHashSet<AbstractWeapon>();
 		objectsById = new HashMap<UUID, AbstractObject>();
 		maxTime = simConfig.getSimulationSteps();
-		teamInfo = new HashSet<ImmutableTeamInfo>();
-	}
+		teamInfo = new LinkedHashSet<ImmutableTeamInfo>();
+	} 
 
 	/**
 	 * Constructor for unit tests
@@ -152,16 +152,16 @@ public class Toroidal2DPhysics {
 		this.timeStep = timeStep;
 		halfHeight = height / 2.0f;
 		halfWidth = width / 2.0f;
-		allObjects = new HashSet<AbstractObject>();
+		allObjects = new LinkedHashSet<AbstractObject>();
 		collisionHandler = new CollisionHandler();
-		beacons = new HashSet<Beacon>();
-		asteroids = new HashSet<Asteroid>();
-		bases = new HashSet<Base>();
-		ships = new HashSet<Ship>();
-		flags = new HashSet<Flag>();
-		weapons = new HashSet<AbstractWeapon>();
+		beacons = new LinkedHashSet<Beacon>();
+		asteroids = new LinkedHashSet<Asteroid>();
+		bases = new LinkedHashSet<Base>();
+		ships = new LinkedHashSet<Ship>();
+		flags = new LinkedHashSet<Flag>();
+		weapons = new LinkedHashSet<AbstractWeapon>();
 		objectsById = new HashMap<UUID, AbstractObject>();
-		teamInfo = new HashSet<ImmutableTeamInfo>();
+		teamInfo = new LinkedHashSet<ImmutableTeamInfo>();
 	}
 
 	/**
@@ -179,17 +179,17 @@ public class Toroidal2DPhysics {
 		this.currentTimeStep = other.currentTimeStep;
 		halfHeight = height / 2.0f;
 		halfWidth = width / 2.0f;
-		allObjects = new HashSet<AbstractObject>();
+		allObjects = new LinkedHashSet<AbstractObject>();
 		collisionHandler = new CollisionHandler();
-		beacons = new HashSet<Beacon>();
-		asteroids = new HashSet<Asteroid>();
-		bases = new HashSet<Base>();
-		ships = new HashSet<Ship>();
-		flags = new HashSet<Flag>();
-		weapons = new HashSet<AbstractWeapon>();
+		beacons = new LinkedHashSet<Beacon>();
+		asteroids = new LinkedHashSet<Asteroid>();
+		bases = new LinkedHashSet<Base>();
+		ships = new LinkedHashSet<Ship>();
+		flags = new LinkedHashSet<Flag>();
+		weapons = new LinkedHashSet<AbstractWeapon>();
 		objectsById = new HashMap<UUID, AbstractObject>();
 		maxTime = other.maxTime;
-		teamInfo = new HashSet<ImmutableTeamInfo>(other.teamInfo);
+		teamInfo = new LinkedHashSet<ImmutableTeamInfo>(other.teamInfo);
 	}
 	
 	
@@ -611,7 +611,7 @@ public class Toroidal2DPhysics {
 		}
 		
 		// go through and see if any bases have died
-		Set<Base> basesClone = new HashSet<Base>(bases);
+		Set<Base> basesClone = new LinkedHashSet<Base>(bases);
 		for (Base base : basesClone) {
 			// this isn't the most general fix but it will work for now (also has to be done for bases)
 			if (base.isShielded()) {

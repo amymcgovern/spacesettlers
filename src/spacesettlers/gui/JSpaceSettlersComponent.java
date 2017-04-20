@@ -11,7 +11,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.swing.JComponent;
@@ -88,7 +88,7 @@ public class JSpaceSettlersComponent extends JComponent {
         }
 
         // draw graphic for all the objects
-        Set<AbstractObject> allObjects = new HashSet<AbstractObject>(simulator.getAllObjects());
+        Set<AbstractObject> allObjects = new LinkedHashSet<AbstractObject>(simulator.getAllObjects());
 
         for (AbstractObject object : allObjects) {
         	SpacewarGraphics graphic = object.getGraphic();
