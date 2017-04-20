@@ -59,6 +59,9 @@
 	<!-- Each team needs a base.  Optionally, you can initialize the location of the base -->
 	<bases>
 		<BaseConfig>
+			<teamName>DoNothingTeam</teamName>
+		</BaseConfig>
+		<BaseConfig>
 			<teamName>RandomClient</teamName>
 		</BaseConfig>
 		<BaseConfig>
