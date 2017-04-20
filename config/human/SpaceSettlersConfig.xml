@@ -66,7 +66,7 @@
 	</bases>
 	
 	<!-- Specify the options for creating asteroids.  Their locations are random. -->
-	<asteroids>
+	<randomAsteroids>
 		<!-- The probability that a newly spawned asteroid will be mineable -->
 		<probabilityMineable>0.5</probabilityMineable>
 		
@@ -86,6 +86,6 @@
 		<probabilityFuelType>0.2</probabilityFuelType>
 		<probabilityWaterType>0.5</probabilityWaterType>
 		<probabilityMetalsType>0.3</probabilityMetalsType>
-	</asteroids>
+	</randomAsteroids>
 	
 </SpaceSettlersConfig>
