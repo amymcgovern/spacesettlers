@@ -14,24 +14,27 @@
 		<HighLevelTeamConfig>
 			<teamName>RandomTeam</teamName>
 			<configFile>random-clientinit.xml</configFile>
-			<initialRegionCenterX>0</initialRegionCenterX>
-			<initialRegionCenterY>0</initialRegionCenterY>
-			<initialRegionRadius>300</initialRegionRadius>
+			<initialRegionULX>0</initialRegionULX>
+			<initialRegionULY>0</initialRegionULY>
+			<initialRegionLRX>300</initialRegionLRX>
+			<initialRegionLRY>300</initialRegionLRY>
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
 			<teamName>BeaconCollectorTeam</teamName>
 			<configFile>beacon-clientinit.xml</configFile>
-			<initialRegionCenterX>724</initialRegionCenterX>
-			<initialRegionCenterY>300</initialRegionCenterY>
-			<initialRegionRadius>300</initialRegionRadius>
+			<initialRegionULX>724</initialRegionULX>
+			<initialRegionULY>300</initialRegionULY>
+			<initialRegionLRX>1024</initialRegionLRX>
+			<initialRegionLRY>600</initialRegionLRY>
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
 			<teamName>HeuristicMinerTeam</teamName>
 			<configFile>passive-heuristic-clientinit.xml</configFile>
-			<initialRegionCenterX>640</initialRegionCenterX>
-			<initialRegionCenterY>400</initialRegionCenterY>
-			<initialRegionRadius>300</initialRegionRadius>
-		</HighLevelTeamConfig>		
+			<initialRegionULX>640</initialRegionULX>
+			<initialRegionULY>400</initialRegionULY>
+			<initialRegionLRX>940</initialRegionLRX>
+			<initialRegionLRY>700</initialRegionLRY>
+		</HighLevelTeamConfig>
 	</staticTeams>
 
 	<!-- The list of variable clients/teams.  Each will participate in numRepeatMatches but against 
