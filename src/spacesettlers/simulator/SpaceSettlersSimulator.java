@@ -483,7 +483,7 @@ public final class SpaceSettlersSimulator {
 
 		for (int s = 0; s < numShips; s++) {
 			// put the ships in the initial region for the team
-			Position freeLocation = simulatedSpace.getRandomFreeLocationInRegion(random, Ship.SHIP_RADIUS, 
+			Position freeLocation = simulatedSpace.getRandomFreeLocationInRegion(random, Ship.SHIP_RADIUS * 2, 
 					teamConfig.getInitialRegionULX(), teamConfig.getInitialRegionULY(), 
 					teamConfig.getInitialRegionLRX(), teamConfig.getInitialRegionLRY());
 			System.out.println("Starting ship for team " + team.getTeamName() + " in location " + freeLocation);
