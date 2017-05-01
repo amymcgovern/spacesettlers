@@ -439,7 +439,9 @@ public class Toroidal2DPhysics {
 	 */
 	public boolean isLocationFree(Position location, int radius) {
 		for (AbstractObject object : allObjects) {
-			if (findShortestDistanceVector(object.getPosition(), location).getMagnitude() <= (radius + object.getRadius())) {
+			// fixed bug where it only checked radius and not diameter
+			if (findShortestDistanceVector(object.getPosition(), location).getMagnitude() <= 
+					(radius + (2 * object.getRadius()))) {
 				return false;
 			}
 		}
@@ -905,7 +907,7 @@ public class Toroidal2DPhysics {
 
 					// ensure their starting location is free (to handle the thought bug the class
 					// introduced of putting a ship or a base where the flag should spawn)
-					while (!this.isLocationFree(newPosition, flag.getRadius())) {
+					while (!this.isLocationFree(newPosition, flag.getRadius() * 2)) {
 						double offset = ((random.nextDouble() * 2.0) - 1.0) * (flag.getRadius() * 5.0);
 						newPosition.setX(newPosition.getX() + offset);
 						offset = ((random.nextDouble() * 2.0) - 1.0) * (flag.getRadius() * 5.0);
@@ -913,7 +915,9 @@ public class Toroidal2DPhysics {
 					}
 					
 				} else {
-					newPosition = getRandomFreeLocation(random, object.getRadius() * 2);
+					// note this is time 4 in order to ensure objects don't spawn touching (and just to get
+					// them a bit farther apart
+					newPosition = getRandomFreeLocation(random, object.getRadius() * 4);
 				}
 				
 				object.setPosition(newPosition);

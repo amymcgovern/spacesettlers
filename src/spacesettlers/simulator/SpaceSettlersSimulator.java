@@ -339,8 +339,8 @@ public final class SpaceSettlersSimulator {
 				baseLocation = new Position(baseConfig.getX(), baseConfig.getY());
 			} else {
 				// make the base in the region specified for this team
-				// ensure bases are not created right next to asteroids (free by 3 * base_radius for now)
-				baseLocation = simulatedSpace.getRandomFreeLocationInRegion(random, 3 * Base.BASE_RADIUS, 
+				// ensure bases are not created right next to asteroids (free by 4 * base_radius for now)
+				baseLocation = simulatedSpace.getRandomFreeLocationInRegion(random, 4 * Base.BASE_RADIUS, 
 						thisTeamConfig.getInitialRegionULX(), thisTeamConfig.getInitialRegionULY(), 
 						thisTeamConfig.getInitialRegionLRX(), thisTeamConfig.getInitialRegionLRY());
 			}
@@ -483,7 +483,8 @@ public final class SpaceSettlersSimulator {
 
 		for (int s = 0; s < numShips; s++) {
 			// put the ships in the initial region for the team
-			Position freeLocation = simulatedSpace.getRandomFreeLocationInRegion(random, Ship.SHIP_RADIUS * 2, 
+			// moved this to ship radius * 4 to keep ships away from each other initially
+			Position freeLocation = simulatedSpace.getRandomFreeLocationInRegion(random, Ship.SHIP_RADIUS * 4, 
 					teamConfig.getInitialRegionULX(), teamConfig.getInitialRegionULY(), 
 					teamConfig.getInitialRegionLRX(), teamConfig.getInitialRegionLRY());
 			System.out.println("Starting ship for team " + team.getTeamName() + " in location " + freeLocation);
