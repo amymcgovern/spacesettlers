@@ -759,7 +759,7 @@ public final class SpaceSettlersSimulator {
 					// set the base just away from the ship (to avoid a collision)
 					Position newPosition = simulatedSpace.getRandomFreeLocationInRegion(random, 
 							Base.BASE_RADIUS, (int) ship.getPosition().getX(), 
-							(int) ship.getPosition().getY(), (3 * (ship.getRadius() + Base.BASE_RADIUS)));
+							(int) ship.getPosition().getY(), (6 * (ship.getRadius() + Base.BASE_RADIUS)));
 
 					// make the new base and add it to the lists
 					Base base = new Base(newPosition, team.getTeamName(), team, false);
@@ -782,7 +782,7 @@ public final class SpaceSettlersSimulator {
 					// set the new ship just away from the base (to avoid a collision)
 					Position newPosition = simulatedSpace.getRandomFreeLocationInRegion(random, 
 							Ship.SHIP_RADIUS, (int) base.getPosition().getX(), 
-							(int) base.getPosition().getY(), (6 * (base.getRadius() + Ship.SHIP_RADIUS)));
+							(int) base.getPosition().getY(), (10 * (base.getRadius() + Ship.SHIP_RADIUS)));
 
 					// make the new ship and add it to the lists
 					Ship ship = new Ship(team.getTeamName(), team.getTeamColor(), newPosition);
