@@ -915,9 +915,9 @@ public class Toroidal2DPhysics {
 					}
 					
 				} else {
-					// note this is time 4 in order to ensure objects don't spawn touching (and just to get
+					// note this is time 2 in order to ensure objects don't spawn touching (and just to get
 					// them a bit farther apart
-					newPosition = getRandomFreeLocation(random, object.getRadius() * 4);
+					newPosition = getRandomFreeLocation(random, object.getRadius() * 2);
 				}
 				
 				object.setPosition(newPosition);
