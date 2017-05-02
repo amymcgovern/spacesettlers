@@ -907,7 +907,7 @@ public class Toroidal2DPhysics {
 
 					// ensure their starting location is free (to handle the thought bug the class
 					// introduced of putting a ship or a base where the flag should spawn)
-					while (!this.isLocationFree(newPosition, flag.getRadius() * 2)) {
+					while (!this.isLocationFree(newPosition, flag.getRadius())) {
 						double offset = ((random.nextDouble() * 2.0) - 1.0) * (flag.getRadius() * 5.0);
 						newPosition.setX(newPosition.getX() + offset);
 						offset = ((random.nextDouble() * 2.0) - 1.0) * (flag.getRadius() * 5.0);
