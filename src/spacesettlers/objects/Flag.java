@@ -69,7 +69,11 @@ public class Flag extends AbstractObject {
 		setAlive(true);
 		setDrawable(true);
 		this.isMoveable = true;
-		this.startingLocations = startingLocations;
+		// copy the locations to avoid exploits
+		this.startingLocations = new Position[startingLocations.length];
+		for (int i = 0; i < startingLocations.length; i++) { 
+			startingLocations[i] = startingLocations[i].deepCopy();
+		}
 		this.beingCarried = false;
 		this.carryingShip = null;
 	}
@@ -154,6 +158,17 @@ public class Flag extends AbstractObject {
 	public Position getNewStartingPosition(Random random) {
 		return startingLocations[random.nextInt(startingLocations.length)];
 	}
+
+	/**
+	 * Get the starting locations for the flag
+	 * 
+	 * @return
+	 */
+	public Position[] getStartingLocations() {
+		return startingLocations;
+	}
+	
+	
 	
 
 }
