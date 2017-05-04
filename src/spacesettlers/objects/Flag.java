@@ -72,7 +72,7 @@ public class Flag extends AbstractObject {
 		// copy the locations to avoid exploits
 		this.startingLocations = new Position[startingLocations.length];
 		for (int i = 0; i < startingLocations.length; i++) { 
-			startingLocations[i] = startingLocations[i].deepCopy();
+			this.startingLocations[i] = startingLocations[i].deepCopy();
 		}
 		this.beingCarried = false;
 		this.carryingShip = null;
