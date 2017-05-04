@@ -120,7 +120,7 @@ public class Ship extends AbstractActionableObject {
 		newShip.damageInflicted = damageInflicted;
 		newShip.carryingFlag = carryingFlag;
 		newShip.numFlags = numFlags;
-		if (newShip.flag != null){
+		if (this.flag != null){
 			newShip.flag = flag.deepClone();
 		}
 		return newShip;
