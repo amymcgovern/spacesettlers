@@ -156,7 +156,7 @@ public class Flag extends AbstractObject {
 	 * @return
 	 */
 	public Position getNewStartingPosition(Random random) {
-		return startingLocations[random.nextInt(startingLocations.length)];
+		return startingLocations[random.nextInt(startingLocations.length)].deepCopy();
 	}
 
 	/**
