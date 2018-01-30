@@ -39,7 +39,6 @@ public class HighLevelTeamConfig {
 		return configFile;
 	}
 
-	/*
 
 	public int getInitialRegionULX() {
 		return initialRegionULX;
@@ -72,7 +71,6 @@ public class HighLevelTeamConfig {
 	public void setInitialRegionLRY(int initialRegionLRY) {
 		this.initialRegionLRY = initialRegionLRY;
 	}
-	*/
 
 	/**
 	 * Nice printout for debugging
