@@ -112,6 +112,7 @@ public class Ladder {
 		
 		int numGames = clientsPerMatch.size() * ladderConfig.getNumRepeatMatches();
 		System.out.println("Ladder will run " + numGames + " games");
+		System.out.println("Teams are: " + ladderConfig.getVariableTeams());
 		int gameIndex = 0;
 
 		for (int repeat = 0; repeat < ladderConfig.getNumRepeatMatches(); repeat++) {
