@@ -72,7 +72,13 @@ public class HighLevelTeamConfig {
 		this.initialRegionLRY = initialRegionLRY;
 	}
 
-	
+	/**
+	 * Nice printout for debugging
+	 */
+	public String toString() {
+		String str = "Team name: " + this.teamName + " From file " + this.configFile;
+		return str;
+	}
 	
 	
 
