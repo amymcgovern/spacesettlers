@@ -343,12 +343,12 @@ public class Toroidal2DPhysics {
 	 * Return the timestep duration
 	 * @return
 	 */
-	public double getTimestep() {
+	public double getTimestepDuration() {
 		return timeStep;
 	}
 	
 	/**
-	 * Return the timestep duration
+	 * Return the timestep 
 	 * @return
 	 */
 	public int getCurrentTimestep() {
