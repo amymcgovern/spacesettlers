@@ -878,7 +878,7 @@ public class Toroidal2DPhysics {
 	 *  
 	 * @param position
 	 */
-	void toroidalWrap(Position position) {
+	public void toroidalWrap(Position position) {
 		while (position.getX() < 0) {
 			position.setX(position.getX() + width);
 		}
