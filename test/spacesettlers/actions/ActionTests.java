@@ -6,6 +6,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
   TestMoveAction.class,
+  TestMoveActionWithOrientation.class,
 })
 
 public class ActionTests {

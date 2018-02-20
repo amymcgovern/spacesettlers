@@ -7,16 +7,15 @@ import spacesettlers.utilities.Position;
 import spacesettlers.utilities.Vector2D;
 
 /**
- * A move action specifies the setpoint to move to and the desired velocity and orientation.
+ * A move action specifies the setpoint to move to and the desired velocity 
  * 
- * Note, the setpoint must be within a fixed radius
- * of the current location (of the ship) or it will throw an exception (and the ship won't move).
+ * Note this action IGNORES the orientation inside the targetLocation!  If you want to move one way
+ * with your ship but point in a different way, you should use MoveActionSeparateOrientation. 
  * 
  * The action uses PD control to move the ship.  It does this by:
  * 
  * 1) Orienting the ship to the target location
  * 2) Accelerating to the target location
- * 3) Orienting the ship to the target orientation (if it specified)
  * 
  * @author amy
  */
@@ -161,7 +160,7 @@ public class MoveAction extends AbstractAction {
 	 * @param positionError the error in position (can be orientation too) 
 	 * @param velocityError the error in the velocity between the current and target
 	 */
-	private double pdControlOrient(double positionError, double velocityError) {
+	protected double pdControlOrient(double positionError, double velocityError) {
 		// tunable parameters; should be in relationship to one another
 		// 2 sqrt(Kp) = Kv
 		//double Kv = 2.53;
