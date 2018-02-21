@@ -74,6 +74,7 @@ public class Base extends AbstractActionableObject {
 		newBase.resources = new ResourcePile();
 		newBase.resources.add(resources);
 		newBase.numFlags = numFlags;
+		newBase.isShielded = isShielded;
 		return newBase;
 	}
 
