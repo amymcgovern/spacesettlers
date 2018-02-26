@@ -264,6 +264,8 @@ public class MoveAction extends AbstractAction {
 		double yError = shortestDist.getYValue();
 		//System.out.println("xerror is " + xError + " yError is " + yError);
 		
+		//System.out.println("Goal velocity is " + goalVelocity);
+		//System.out.println("Current velocity is " + currentLoc.getTranslationalVelocity());
 		double velocityErrorX = (goalVelocity.getXValue() - currentLoc.getTranslationalVelocityX());
 		double velocityErrorY = (goalVelocity.getYValue() - currentLoc.getTranslationalVelocityY());
 		//System.out.println("Velocity error is " + velocityErrorX + " ," + velocityErrorY);
