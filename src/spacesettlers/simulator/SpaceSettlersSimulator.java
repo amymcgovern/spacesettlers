@@ -891,9 +891,9 @@ public final class SpaceSettlersSimulator {
 		} else if (simConfig.getScoringMethod().equalsIgnoreCase("DamageCorrected2018")) {
 			for (Team team : teams) {
 				// not subtracting damage received because it is a negative number (inflicted is positive)
-				team.setScore(1000* team.getTotalKillsInflicted() + team.getTotalDamageInflicted() + team.getTotalDamageReceived() - 
-						(1000 * ((team.getTotalKillsReceived() - 1) * team.getTotalKillsReceived()) / 2.0) + 
-						(team.getSummedTotalResources() / 2.0));
+				team.setScore(1000* team.getTotalKillsInflicted() + team.getTotalDamageInflicted() + team.getTotalDamageReceived() -
+						(1000 * ((team.getTotalKillsReceived() + 1) * team.getTotalKillsReceived()) / 2.0) + 
+						(team.getSummedTotalResources() / 2.0));				
 			}
 		} else if (simConfig.getScoringMethod().equalsIgnoreCase("Flags")) {
 			// this scores by the raw number of flags collected (competitive ladder)
