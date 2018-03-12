@@ -685,6 +685,9 @@ public final class SpaceSettlersSimulator {
 		// cleanup and remove dead weapons
 		simulatedSpace.cleanupDeadWeapons();
 
+		// cleanup and remove dead cores
+		simulatedSpace.cleanupDeadCores();
+
 		// respawn any objects that died (and that should respawn - this includes Flags)
 		final double asteroidMaxVelocity = simConfig.getRandomAsteroids().getMaxInitialVelocity();
 		simulatedSpace.respawnDeadObjects(random, asteroidMaxVelocity);
@@ -894,6 +897,10 @@ public final class SpaceSettlersSimulator {
 				team.setScore(1000* team.getTotalKillsInflicted() + team.getTotalDamageInflicted() + team.getTotalDamageReceived() -
 						(1000 * ((team.getTotalKillsReceived() + 1) * team.getTotalKillsReceived()) / 2.0) + 
 						(team.getSummedTotalResources() / 2.0));				
+			}
+		} else if (simConfig.getScoringMethod().equalsIgnoreCase("Cores")) {
+			for (Team team : teams) {
+				team.setScore(team.getTotalCoresCollected());				
 			}
 		} else if (simConfig.getScoringMethod().equalsIgnoreCase("Flags")) {
 			// this scores by the raw number of flags collected (competitive ladder)

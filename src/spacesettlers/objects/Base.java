@@ -24,7 +24,7 @@ public class Base extends AbstractActionableObject {
 	 * The color of this team
 	 */
 	Color teamColor;
-	
+
 	/**
 	 * The team that owns this base
 	 */
@@ -75,6 +75,7 @@ public class Base extends AbstractActionableObject {
 		newBase.resources.add(resources);
 		newBase.numFlags = numFlags;
 		newBase.isShielded = isShielded;
+		newBase.numCores = numCores;
 		return newBase;
 	}
 
@@ -85,7 +86,16 @@ public class Base extends AbstractActionableObject {
 	public Team getTeam() {
 		return team;
 	}
-
+	
+	/**
+	 * Increments the number of cores collected by this base by the number provided.
+	 * @param numCores
+	 */
+	public void incrementCores(int numCores) { 
+		super.incrementCores();
+		team.incrementCoresCollected(numCores);
+	}
+	
 	/**
 	 * Return half of the base's energy
 	 * @return the healingEnergy

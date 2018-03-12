@@ -53,6 +53,7 @@ public class RandomTeamClient extends TeamClient {
 			Set<AbstractActionableObject> actionableObjects) {
 		HashMap<UUID, AbstractAction> randomActions = new HashMap<UUID, AbstractAction>();
 		
+		
 		for (AbstractObject actionable :  actionableObjects) {
 			if (actionable instanceof Ship) {
 				Ship ship = (Ship) actionable;

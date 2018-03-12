@@ -113,6 +113,12 @@ public class ShipGraphics extends SpacewarGraphics {
         graphics.setPaint(BeaconGraphics.BEACON_COLOR);
         graphics.drawString(number, (int) drawLocation.getX() - 24, (int) drawLocation.getY() + 23);
 
+        // paint the number of cores currently held by the ship
+        number = Integer.toString(ship.getNumCores());
+        graphics.setPaint(this.shipColor);
+        graphics.drawString(number, (int) drawLocation.getX() + 24, (int) drawLocation.getY() + 23);
+        
+        
         // if the ship is shielded, show the shield around it
         if (ship.isShielded()) {
 	        double shieldRadius = ship.getRadius() + 4;

@@ -15,6 +15,7 @@ import spacesettlers.actions.PurchaseTypes;
 import spacesettlers.graphics.SpacewarGraphics;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.AbstractObject;
+import spacesettlers.objects.AiCore;
 import spacesettlers.objects.Asteroid;
 import spacesettlers.objects.Base;
 import spacesettlers.objects.Beacon;
@@ -92,7 +93,7 @@ public class AggressiveHeuristicAsteroidCollectorSingletonTeamClient extends Tea
 		}
 
 		// if the ship has enough resourcesAvailable, take it back to base
-		if (ship.getResources().getTotal() > 500) {
+		if (ship.getResources().getTotal() > 500 || ship.getNumCores() > 0) {
 			Base base = findNearestBase(space, ship);
 			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, base);
 			aimingForBase.put(ship.getId(), true);
@@ -107,6 +108,15 @@ public class AggressiveHeuristicAsteroidCollectorSingletonTeamClient extends Tea
 			shouldShoot = false;
 		}
 
+		// if there is a nearby core, go get it
+		AiCore nearbyCore = pickNearestCore(space, ship, 100);
+		if (nearbyCore != null) {
+			Position newGoal = nearbyCore.getPosition();
+			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, nearbyCore);
+			return newAction;
+		}
+		
+		
 		// otherwise either for an asteroid or an enemy ship (depending on who is closer and what we need)
 		if (current == null || current.isMovementFinished(space)) {
 			aimingForBase.put(ship.getId(), false);
@@ -161,6 +171,28 @@ public class AggressiveHeuristicAsteroidCollectorSingletonTeamClient extends Tea
 		return ship.getCurrentAction();
 	}
 
+	/**
+	 * Find the nearest core to this ship that falls within the specified minimum distance
+	 * @param space
+	 * @param ship
+	 * @return
+	 */
+	private AiCore pickNearestCore(Toroidal2DPhysics space, Ship ship, int minimumDistance) {
+		Set<AiCore> cores = space.getCores();
+
+		AiCore closestCore = null;
+		double bestDistance = minimumDistance;
+
+		for (AiCore core : cores) {
+			double dist = space.findShortestDistance(ship.getPosition(), core.getPosition());
+			if (dist < bestDistance) {
+				bestDistance = dist;
+				closestCore = core;
+			}
+		}
+
+		return closestCore;
+	}	
 
 	/**
 	 * Find the nearest ship on another team and aim for it

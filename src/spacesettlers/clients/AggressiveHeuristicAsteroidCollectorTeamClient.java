@@ -15,6 +15,7 @@ import spacesettlers.actions.PurchaseTypes;
 import spacesettlers.graphics.SpacewarGraphics;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.AbstractObject;
+import spacesettlers.objects.AiCore;
 import spacesettlers.objects.Asteroid;
 import spacesettlers.objects.Base;
 import spacesettlers.objects.Beacon;
@@ -100,7 +101,7 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		}
 
 		// if the ship has enough resourcesAvailable, take it back to base
-		if (ship.getResources().getTotal() > 500) {
+		if (ship.getResources().getTotal() > 500 || ship.getNumCores() > 0) {
 			Base base = findNearestBase(space, ship);
 			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, base);
 			aimingForBase.put(ship.getId(), true);
@@ -112,6 +113,15 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 			current = null;
 			aimingForBase.put(ship.getId(), false);
 		}
+
+		// if there is a nearby core, go get it
+		AiCore nearbyCore = pickNearestCore(space, ship, 100);
+		if (nearbyCore != null) {
+			Position newGoal = nearbyCore.getPosition();
+			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, nearbyCore);
+			return newAction;
+		}
+
 
 		// otherwise aim for the asteroid
 		if (current == null || current.isMovementFinished(space)) {
@@ -166,7 +176,7 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		}
 
 		// if the ship has enough resourcesAvailable, take it back to base
-		if (ship.getResources().getTotal() > 500) {
+		if (ship.getResources().getTotal() > 500 || ship.getNumCores() > 0) {
 			Base base = findNearestBase(space, ship);
 			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, base);
 			aimingForBase.put(ship.getId(), true);
@@ -177,6 +187,14 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		if (ship.getResources().getTotal() == 0 && ship.getEnergy() > 2000 && aimingForBase.containsKey(ship.getId()) && aimingForBase.get(ship.getId())) {
 			current = null;
 			aimingForBase.put(ship.getId(), false);
+		}
+		
+		// if there is a nearby core, go get it
+		AiCore nearbyCore = pickNearestCore(space, ship, 100);
+		if (nearbyCore != null) {
+			Position newGoal = nearbyCore.getPosition();
+			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, nearbyCore);
+			return newAction;
 		}
 
 		// otherwise aim for the nearest enemy ship
@@ -205,6 +223,29 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		}
 	}
 
+	/**
+	 * Find the nearest core to this ship that falls within the specified minimum distance
+	 * @param space
+	 * @param ship
+	 * @return
+	 */
+	private AiCore pickNearestCore(Toroidal2DPhysics space, Ship ship, int minimumDistance) {
+		Set<AiCore> cores = space.getCores();
+
+		AiCore closestCore = null;
+		double bestDistance = minimumDistance;
+
+		for (AiCore core : cores) {
+			double dist = space.findShortestDistance(ship.getPosition(), core.getPosition());
+			if (dist < bestDistance) {
+				bestDistance = dist;
+				closestCore = core;
+			}
+		}
+
+		return closestCore;
+	}	
+	
 
 	/**
 	 * Find the nearest ship on another team and aim for it

@@ -5,7 +5,11 @@ import spacesettlers.objects.Base;
 import spacesettlers.objects.Beacon;
 import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
+
+import java.util.concurrent.ThreadLocalRandom;
+
 import spacesettlers.objects.AbstractObject;
+import spacesettlers.objects.AiCore;
 import spacesettlers.objects.weapons.EMP;
 import spacesettlers.objects.weapons.Missile;
 import spacesettlers.utilities.Position;
@@ -89,6 +93,50 @@ public class CollisionHandler {
 				return;
 			}
 		}
+		
+		//Handle AiCore Collisions with ships (Destroy them if same team, collect them if different team) and don't elastically collide
+		if (object1 instanceof AiCore && object2 instanceof Ship) {
+			collectCore((AiCore)object1, (Ship)object2);
+			return;
+		} else if (object2 instanceof AiCore && object1 instanceof Ship) {
+			collectCore((AiCore)object2, (Ship)object1);
+			return;
+		}
+		
+		//Handle AiCore collisions with Beacons (Restoring the energy of the AiCore) and don't elastically collide
+		if (object1 instanceof AiCore && object2 instanceof Beacon) {
+			healAiCore((AiCore)object1, (Beacon)object2);
+			return;
+		} else if (object2 instanceof AiCore && object1 instanceof Beacon) {
+			healAiCore((AiCore)object2, (Beacon)object1);
+			return;
+		}
+		
+		//Handle AiCore collisions with bases (core is destroyed or collected) and don't elastically collide
+		if (object1 instanceof AiCore && object2 instanceof Base) {
+			baseCoreCollide((AiCore)object1, (Base)object2);
+			return;
+		} else if (object2 instanceof AiCore && object1 instanceof Base) {
+			baseCoreCollide((AiCore)object2, (Base)object1);
+			return;
+		}
+		
+		//Handle AiCore collisions with Asteroids (Damaging the energy of the AiCore)
+		if (object1 instanceof AiCore && object2 instanceof Asteroid) {
+			damageAiCore((AiCore)object1);
+			return;
+		} else if (object2 instanceof AiCore && object1 instanceof Asteroid) {
+			damageAiCore((AiCore)object2);
+			//no return because we still want to collide
+		}
+		
+		//Handle AiCore collisions with AiCores (Damaging the energy of the AiCore)
+		if (object1 instanceof AiCore && object2 instanceof AiCore) {
+			damageAiCore((AiCore)object1);
+			damageAiCore((AiCore)object2);
+			//no return because we still want to collide
+		}
+		
 
 		// only elastically collide if it isn't a beacon, missile, or other weapon
 		if (!object1.isMoveable()) {
@@ -217,6 +265,12 @@ public class CollisionHandler {
 			otherFiringShip.decrementWeaponCount();
 		}
 		
+		//Did the missile hit an AiCore? If so, damage the AiCore.
+		if(object2.getClass() == AiCore.class) {
+			AiCore core = (AiCore) object2;
+			core.updateEnergy(-missile.getDamage());
+		}
+		
 		// make the missile die
 		missile.setAlive(false);
 	}
@@ -268,8 +322,65 @@ public class CollisionHandler {
 			otherFiringShip.decrementWeaponCount();
 		}
 		
+		//Did the EMP hit an AiCore? If so, destroy the AiCore.
+		if(object2.getClass() == AiCore.class) {
+			AiCore core = (AiCore) object2;
+			core.setAlive(false); //Kill the core!
+		}
+		
 		emp.setAlive(false);
 		
+	}
+
+	/**
+	 * Collide with an AI Core
+	 * 
+	 * @param AiCore
+	 * @param Ship
+	 */
+	public void collectCore(AiCore core, Ship ship) {
+		
+		core.setAlive(false);
+		
+		//Bonus energy of random amount between 0 and the core's energy;		
+		ship.updateEnergy(ThreadLocalRandom.current().nextInt(core.getCoreEnergy()));
+		
+		ship.incrementCores();
+		ship.setMass(ship.getMass() + core.getMass());
+	}
+	
+	/**
+	 * If a base and core collide, the core is collected if it is an enemy core, destroyed if it is a friendly core.
+	 * @param core
+	 * @param base
+	 */
+	public void baseCoreCollide(AiCore core, Base base) {
+		if (base.getTeamName() == core.getTeamName()) {
+			core.setAlive(false); //Destroy your core to prevent it from being captured
+		} else {
+			core.setAlive(false);
+			base.incrementCores(); //Collect the core.
+		}
+		
+	}
+	
+	/**
+	 * If a beacon collides with an AiCore, the energy of the core is restored.
+	 * @param core
+	 * @param beacon
+	 */
+	public void healAiCore (AiCore core, Beacon beacon) {
+		core.resetCoreEnergy();
+		beacon.setAlive(false);
+	}
+	
+	/**
+	 * If something solid collides with an AiCore, it takes damage.
+	 * @param core
+	 */
+	public void damageAiCore(AiCore core) {
+		double penalty = -Math.abs(COLLISION_PENALTY * core.getPosition().getTotalTranslationalVelocity());
+		core.updateEnergy((int)(penalty));
 	}
 
 	
@@ -338,6 +449,10 @@ public class CollisionHandler {
 					base.addFlag(ship.getFlag());
 					ship.depositFlag();
 				}
+
+				// deposit any AI Cores
+				base.incrementCores(ship.getNumCores());
+				ship.resetAiCores();
 
 				// heal the ship 
 				double origEnergy = ship.getEnergy();

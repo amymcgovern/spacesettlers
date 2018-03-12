@@ -91,6 +91,7 @@ public class Ship extends AbstractActionableObject {
 		this.carryingFlag = false;
 		this.flag = null;
 		this.numFlags = 0;
+		this.numCores = 0;
 	}
 
 	/**
@@ -121,6 +122,8 @@ public class Ship extends AbstractActionableObject {
 		newShip.carryingFlag = carryingFlag;
 		newShip.numFlags = numFlags;
 		newShip.isShielded = isShielded;
+		newShip.numCores = numCores; 
+		
 		if (this.flag != null){
 			newShip.flag = flag.deepClone();
 		}
@@ -221,6 +224,8 @@ public class Ship extends AbstractActionableObject {
 			if (carryingFlag) {
 				dropFlag();
 			}
+			resetAiCores(); 
+			
 			
 		} else {
 			resetEnergy();
@@ -228,7 +233,30 @@ public class Ship extends AbstractActionableObject {
 
 		super.setAlive(value);
 	}
-
+	
+	/**
+	 * Drop all the cores by resetting to 0
+	 * Will also need code inside physics sim to drop all AiCores
+	 */
+	public void resetAiCores() {
+		//Just erase the core count, as we are not currently tracking the specific cores held by a ship.
+		numCores = 0;
+		/*
+		 * From Josiah: In the future the ship may drop any AiCores it is holding, however I don't currently
+		 * have a good strategy for releasing the cores of a ship holding a very large number of cores.
+		 * For example, if a ship is holding 8 cores and dies, spawning those cores leads to a bunch of
+		 * interesting collisions and several of the cores tend to end up destroyed.
+		 * Perhaps limit a ship to carrying a certain number of cores?
+		 */
+	}
+	
+	/**
+	 * A ship has collided with a core and collected it.
+	 */
+	public void incrementCores() {
+		super.incrementCores();
+	}
+	
 	/**
 	 * A ship drops the flag when it dies
 	 */

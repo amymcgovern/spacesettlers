@@ -56,6 +56,11 @@ abstract public class AbstractObject {
 	protected int numFlags;
 	
 	/**
+	 * Number of cores this ship or base has collected
+	 */
+	protected int numCores;
+	
+	/**
 	 * The graphics for this object in the GUI
 	 */
 	protected SpacewarGraphics graphic;
@@ -87,6 +92,7 @@ abstract public class AbstractObject {
 		resources = new ResourcePile();
 		this.numFlags = 0;
 		this.respawn = true;
+		this.numCores = 0;
 	}
 
 	/**
@@ -101,6 +107,7 @@ abstract public class AbstractObject {
 		resources = new ResourcePile();
 		this.numFlags = 0;
 		this.respawn = true;
+		this.numCores = 0;
 	}
 
 	
@@ -322,5 +329,20 @@ abstract public class AbstractObject {
 	public void incrementFlags() {
 		numFlags++;
 	}
+
+	/**
+	 * Get the total number of cores owned by this object (ship or base)
+	 * @return
+	 */
+	public int getNumCores() {
+		return numCores;
+	}
 	
+	/**
+	 * Increment the number of cores held by this object
+	 */
+	public void incrementCores() {
+		numCores++;
+	}
+
 }

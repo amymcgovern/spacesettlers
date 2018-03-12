@@ -89,6 +89,11 @@ public class BaseGraphics extends SpacewarGraphics {
 			graphics.drawString("H", (int) drawLocation.getX()-4, (int) drawLocation.getY() + 4);
 		}
 		
+        //Paint the number of cores held by the base.
+        number = Integer.toString(base.getNumCores()); //Merge this with number
+        graphics.setPaint(this.teamColor);
+        graphics.drawString(number, (int) drawLocation.getX() - 24, (int) drawLocation.getY() + 23);
+		
 		
 	}
 

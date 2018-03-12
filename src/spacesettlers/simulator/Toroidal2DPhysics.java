@@ -19,6 +19,7 @@ import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.AbstractObject;
+import spacesettlers.objects.AiCore;
 import spacesettlers.objects.powerups.PowerupDoubleHealingBaseEnergy;
 import spacesettlers.objects.powerups.PowerupDoubleMaxEnergy;
 import spacesettlers.objects.powerups.PowerupDoubleWeapon;
@@ -58,6 +59,11 @@ public class Toroidal2DPhysics {
 	 * The list of asteroids
 	 */
 	Set<Asteroid> asteroids;
+	
+	/**
+	 * The list of current AI Cores
+	 */
+	Set<AiCore> cores;
 	
 	/**
 	 * The list of bases
@@ -132,6 +138,7 @@ public class Toroidal2DPhysics {
 		asteroids = new LinkedHashSet<Asteroid>();
 		bases = new LinkedHashSet<Base>();
 		ships = new LinkedHashSet<Ship>();
+		cores = new LinkedHashSet<AiCore>(); 
 		flags = new LinkedHashSet<Flag>();
 		weapons = new LinkedHashSet<AbstractWeapon>();
 		objectsById = new HashMap<UUID, AbstractObject>();
@@ -159,6 +166,7 @@ public class Toroidal2DPhysics {
 		bases = new LinkedHashSet<Base>();
 		ships = new LinkedHashSet<Ship>();
 		flags = new LinkedHashSet<Flag>();
+		cores = new LinkedHashSet<AiCore>(); 
 		weapons = new LinkedHashSet<AbstractWeapon>();
 		objectsById = new HashMap<UUID, AbstractObject>();
 		teamInfo = new LinkedHashSet<ImmutableTeamInfo>();
@@ -186,6 +194,7 @@ public class Toroidal2DPhysics {
 		bases = new LinkedHashSet<Base>();
 		ships = new LinkedHashSet<Ship>();
 		flags = new LinkedHashSet<Flag>();
+		cores = new LinkedHashSet<AiCore>(); 
 		weapons = new LinkedHashSet<AbstractWeapon>();
 		objectsById = new HashMap<UUID, AbstractObject>();
 		maxTime = other.maxTime;
@@ -203,6 +212,10 @@ public class Toroidal2DPhysics {
 
 		if (obj instanceof Beacon) {
 			beacons.add((Beacon) obj);
+		}
+		
+		if (obj instanceof AiCore) {
+			cores.add((AiCore) obj);
 		}
 		
 		if (obj instanceof Asteroid) {
@@ -242,6 +255,10 @@ public class Toroidal2DPhysics {
 		
 		if (obj.getClass() == Asteroid.class) {
 			asteroids.remove((Asteroid) obj);
+		}
+		
+		if (obj.getClass() == AiCore.class) {
+			cores.remove((AiCore) obj);
 		}
 		
 		if (obj.getClass() == Base.class) {
@@ -305,6 +322,15 @@ public class Toroidal2DPhysics {
 	public Set<Ship> getShips() {
 		return ships;
 	}
+	
+	/**
+	 * Return the list of cores currently in play
+	 * @return Set of AiCores
+	 */
+	public Set<AiCore> getCores() {
+		return cores;
+	}
+	
 	
 	/**
 	 * Return a list of weapons currently in play
@@ -633,6 +659,15 @@ public class Toroidal2DPhysics {
 			if (ship.getEnergy() <= 0 && ship.isAlive() == true) {
 				// drop any resources that the ship was carrying
 				ResourcePile resources = ship.getResources();
+
+				//Spawn a new AiCore with the same velocity magnitude and direction as its parent ship.
+				// handle dropping the core if the ship died
+				Position corePosition = ship.getPosition();
+				corePosition.setTranslationalVelocity(ship.getPosition().getTranslationalVelocity());
+				corePosition.setAngularVelocity(ship.getPosition().getAngularVelocity());
+				AiCore shipCore = new AiCore(corePosition, ship.getTeamName(),ship.getTeamColor());
+				this.addObject(shipCore);
+				
 				if (resources.getTotal() > 0) {
 					//Position newPosition = ship.getPosition();
 					//newPosition.setTranslationalVelocity(new Vector2D(0,0));
@@ -970,7 +1005,26 @@ public class Toroidal2DPhysics {
 		}
 		
 	}
-	
+
+	/**
+	 * Loop through all cores and remove any dead ones
+	 */
+	public void cleanupDeadCores() {
+		ArrayList<AbstractObject> deadObjects = new ArrayList<AbstractObject>();
+
+		for (AiCore core : cores) {
+			if (!core.isAlive()){
+				deadObjects.add(core);
+			}
+		}
+		
+		for (AbstractObject deadObject : deadObjects) {
+			removeObject(deadObject);
+		}
+
+		
+	}
+
 	/**
 	 * Return the maximum number of time steps for the simulation
 	 * @return

@@ -80,6 +80,11 @@ public class Team {
 	 * The number of flags collected by this team
 	 */
 	int totalFlagsCollected;
+
+	/**
+	 * The number of AiCores collected by this team
+	 */
+	int totalCoresCollected;
 	
 	/**
 	 * available (unspent) resourcesAvailable from the asteroids and the total resourcesAvailable earned
@@ -154,6 +159,7 @@ public class Team {
 		this.totalDamageInflicted = 0;
 		this.totalDamageReceived = 0;
 		this.totalFlagsCollected = 0;
+		this.totalCoresCollected = 0; 
 		executor = null;
 	}
 	
@@ -186,6 +192,7 @@ public class Team {
 		newTeam.totalDamageInflicted = this.totalDamageInflicted;
 		newTeam.totalDamageReceived = this.totalDamageReceived;
 		newTeam.totalFlagsCollected = this.totalFlagsCollected;
+		newTeam.totalCoresCollected = this.totalCoresCollected; 
 		return newTeam;
 	}
 	
@@ -715,6 +722,22 @@ public class Team {
 	
 	
 	/**
+	 * Increases the amount of cores collected by the team by the specified amount.
+	 * @param numCores
+	 */
+	public void incrementCoresCollected (int numCores) {
+		this.totalCoresCollected += numCores;
+	}
+	
+	/**
+	 * This returns the amount of cores that the team has collected as an integer.
+	 * @return int
+	 */
+	public int getTotalCoresCollected() { 
+		return this.totalCoresCollected;
+	}
+	
+	/**
 	 * Return the currently available resources
 	 * 
 	 * @return
@@ -847,6 +870,5 @@ public class Team {
 		this.totalFlagsCollected++;
 	}
 
-	
 	
 }

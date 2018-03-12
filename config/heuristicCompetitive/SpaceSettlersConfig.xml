@@ -15,13 +15,13 @@
 	<randomSeed>0</randomSeed>
 
 	<!-- Scoring mechanism used for this game: Can be Resources, Beacons, ... (more as we add them) -->
-	<scoringMethod>DamageCorrected2018</scoringMethod>
+	<scoringMethod>Cores</scoringMethod>
 
 	<!-- Specify the number of the beacons.  The locations are initialized randomly -->
 	<numBeacons>6</numBeacons>
 	
 	<!-- Specify the maximum number of ships in a team -->
-	<maximumShipsPerTeam>1</maximumShipsPerTeam>
+	<maximumShipsPerTeam>3</maximumShipsPerTeam>
 	<maximumInitialShipsPerTeam>1</maximumInitialShipsPerTeam>
 	
 	<!-- Specify any controllable clients in the simulator (this can include heuristics).  
@@ -47,6 +47,10 @@
 			<teamName>DoNothingTeam</teamName>
 			<configFile>donothing-clientinit.xml</configFile>
 		</HighLevelTeamConfig>		
+		<HighLevelTeamConfig>
+			<teamName>CoreCollectorTeam</teamName>
+			<configFile>core-clientinit.xml</configFile>
+		</HighLevelTeamConfig>		
 	</teams>
 
 	<!-- Each team needs a base.  Optionally, you can initialize the location of the base -->
@@ -62,6 +66,9 @@
 		</BaseConfig>
 		<BaseConfig>
 			<teamName>DoNothingTeam</teamName>
+		</BaseConfig>
+		<BaseConfig>
+			<teamName>CoreCollectorTeam</teamName>
 		</BaseConfig>
 	</bases>
 	

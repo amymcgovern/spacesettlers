@@ -20,8 +20,8 @@
 			<initialRegionLRY>300</initialRegionLRY>
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
-			<teamName>BeaconCollectorTeam</teamName>
-			<configFile>beacon-clientinit.xml</configFile>
+			<teamName>CoreCollectorTeam</teamName>
+			<configFile>core-clientinit.xml</configFile>
 			<initialRegionULX>724</initialRegionULX>
 			<initialRegionULY>300</initialRegionULY>
 			<initialRegionLRX>1024</initialRegionLRX>
@@ -43,6 +43,10 @@
 		<HighLevelTeamConfig>
 			<teamName>DoNothingTeam</teamName>
 			<configFile>donothing-clientinit.xml</configFile>
+		</HighLevelTeamConfig>
+		<HighLevelTeamConfig>
+			<teamName>AmyTeam</teamName>
+			<configFile>amy-spacesettlersinit.xml</configFile>
 		</HighLevelTeamConfig>
 	</variableTeams>
 
