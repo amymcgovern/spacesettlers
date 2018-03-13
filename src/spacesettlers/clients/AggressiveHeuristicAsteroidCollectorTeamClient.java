@@ -36,6 +36,7 @@ import spacesettlers.utilities.Position;
 public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 	HashMap <UUID, Ship> asteroidToShipMap;
 	HashMap <UUID, Boolean> aimingForBase;
+	HashMap <UUID, Boolean> goingForCore;
 	UUID asteroidCollectorID;
 	double weaponsProbability = 1;
 
@@ -97,6 +98,7 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 				newAction = new MoveToObjectAction(space, currentPosition, beacon);
 			}
 			aimingForBase.put(ship.getId(), false);
+			goingForCore.put(ship.getId(), false);
 			return newAction;
 		}
 
@@ -105,6 +107,7 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 			Base base = findNearestBase(space, ship);
 			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, base);
 			aimingForBase.put(ship.getId(), true);
+			goingForCore.put(ship.getId(), false);
 			return newAction;
 		}
 
@@ -112,6 +115,7 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		if (ship.getResources().getTotal() == 0 && ship.getEnergy() > 2000 && aimingForBase.containsKey(ship.getId()) && aimingForBase.get(ship.getId())) {
 			current = null;
 			aimingForBase.put(ship.getId(), false);
+			goingForCore.put(ship.getId(), false);
 		}
 
 		// if there is a nearby core, go get it
@@ -119,6 +123,8 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		if (nearbyCore != null) {
 			Position newGoal = nearbyCore.getPosition();
 			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, nearbyCore);
+			aimingForBase.put(ship.getId(), false);
+			goingForCore.put(ship.getId(), true);
 			return newAction;
 		}
 
@@ -126,6 +132,7 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		// otherwise aim for the asteroid
 		if (current == null || current.isMovementFinished(space)) {
 			aimingForBase.put(ship.getId(), false);
+			goingForCore.put(ship.getId(), false);
 			Asteroid asteroid = pickHighestValueNearestFreeAsteroid(space, ship);
 
 			AbstractAction newAction = null;
@@ -172,6 +179,7 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 				newAction = new MoveToObjectAction(space, currentPosition, beacon);
 			}
 			aimingForBase.put(ship.getId(), false);
+			goingForCore.put(ship.getId(), false);
 			return newAction;
 		}
 
@@ -180,12 +188,14 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 			Base base = findNearestBase(space, ship);
 			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, base);
 			aimingForBase.put(ship.getId(), true);
+			goingForCore.put(ship.getId(), false);
 			return newAction;
 		}
 
 		// did we bounce off the base?
 		if (ship.getResources().getTotal() == 0 && ship.getEnergy() > 2000 && aimingForBase.containsKey(ship.getId()) && aimingForBase.get(ship.getId())) {
 			current = null;
+			goingForCore.put(ship.getId(), false);
 			aimingForBase.put(ship.getId(), false);
 		}
 		
@@ -194,12 +204,15 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		if (nearbyCore != null) {
 			Position newGoal = nearbyCore.getPosition();
 			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, nearbyCore);
+			goingForCore.put(ship.getId(), true);
+			aimingForBase.put(ship.getId(), false);
 			return newAction;
 		}
 
 		// otherwise aim for the nearest enemy ship
 		if (current == null || current.isMovementFinished(space)) {
 			aimingForBase.put(ship.getId(), false);
+			goingForCore.put(ship.getId(), false);
 			Ship enemy = pickNearestEnemyShip(space, ship);
 
 			AbstractAction newAction = null;
@@ -373,6 +386,7 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		asteroidToShipMap = new HashMap<UUID, Ship>();
 		asteroidCollectorID = null;
 		aimingForBase = new HashMap<UUID, Boolean>();
+		goingForCore = new HashMap<UUID, Boolean>();
 	}
 
 	@Override
@@ -473,7 +487,14 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 
 		for (AbstractActionableObject actionableObject : actionableObjects){
 			SpaceSettlersPowerupEnum powerup = SpaceSettlersPowerupEnum.values()[random.nextInt(SpaceSettlersPowerupEnum.values().length)];
-			if (!actionableObject.getId().equals(asteroidCollectorID) && actionableObject.isValidPowerup(powerup) && random.nextDouble() < weaponsProbability){
+			
+			Boolean gettingCore = false;
+			if (goingForCore.containsKey(actionableObject.getId())) {
+				gettingCore = goingForCore.get(actionableObject.getId());
+			}
+			if (!actionableObject.getId().equals(asteroidCollectorID) &&
+					!gettingCore && 
+					actionableObject.isValidPowerup(powerup) && random.nextDouble() < weaponsProbability){
 				powerUps.put(actionableObject.getId(), powerup);
 			}
 		}

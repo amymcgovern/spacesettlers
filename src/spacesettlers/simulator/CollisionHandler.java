@@ -112,19 +112,16 @@ public class CollisionHandler {
 			return;
 		}
 		
-		//Handle AiCore collisions with bases (core is destroyed or collected) and don't elastically collide
+		//Handle AiCore collisions with bases (core is collected) and then collides if it is an enemy
 		if (object1 instanceof AiCore && object2 instanceof Base) {
 			baseCoreCollide((AiCore)object1, (Base)object2);
-			return;
 		} else if (object2 instanceof AiCore && object1 instanceof Base) {
 			baseCoreCollide((AiCore)object2, (Base)object1);
-			return;
 		}
 		
 		//Handle AiCore collisions with Asteroids (Damaging the energy of the AiCore)
 		if (object1 instanceof AiCore && object2 instanceof Asteroid) {
 			damageAiCore((AiCore)object1);
-			return;
 		} else if (object2 instanceof AiCore && object1 instanceof Asteroid) {
 			damageAiCore((AiCore)object2);
 			//no return because we still want to collide
@@ -350,7 +347,8 @@ public class CollisionHandler {
 	}
 	
 	/**
-	 * If a base and core collide, the core is collected if it is an enemy core, destroyed if it is a friendly core.
+	 * If a base and core collide, the core destroyed if it is a friendly core 
+	 * and elastically collides if it is an enemy.  Collision is handled higher up in the function
 	 * @param core
 	 * @param base
 	 */
@@ -358,8 +356,10 @@ public class CollisionHandler {
 		if (base.getTeamName() == core.getTeamName()) {
 			core.setAlive(false); //Destroy your core to prevent it from being captured
 		} else {
-			core.setAlive(false);
-			base.incrementCores(); //Collect the core.
+			//core.setAlive(false);
+			//base.incrementCores(); //Collect the core.
+			
+			damageAiCore(core);
 		}
 		
 	}
