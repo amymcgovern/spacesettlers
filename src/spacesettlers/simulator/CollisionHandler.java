@@ -658,6 +658,7 @@ public class CollisionHandler {
 		
 		//determine which solution is correct
 		//t must lie between 0 and the length of a simulator time step
+		// Amy McGovern: added 2.0 * duration instead of just duration because of double precision issues
 		double time = 0;
 		//System.out.println("Time adjustment solutions tplus = " + tPlus + " tminus = " + tMinus);
 		if(Math.abs(tPlus) < (2.0 * space.getTimestepDuration()))
