@@ -659,9 +659,10 @@ public class CollisionHandler {
 		//determine which solution is correct
 		//t must lie between 0 and the length of a simulator time step
 		double time = 0;
-		if(Math.abs(tPlus) < space.getTimestepDuration())
+		//System.out.println("Time adjustment solutions tplus = " + tPlus + " tminus = " + tMinus);
+		if(Math.abs(tPlus) < (2.0 * space.getTimestepDuration()))
 			time = tPlus;
-		else if(Math.abs(tMinus) < space.getTimestepDuration())
+		else if(Math.abs(tMinus) < (2.0* space.getTimestepDuration()))
 			time = tMinus;
 		
 		//System.out.println("time adjustment is " + time);
