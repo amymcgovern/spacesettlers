@@ -112,11 +112,19 @@ public class CollisionHandler {
 			return;
 		}
 		
-		//Handle AiCore collisions with bases (core is collected) and then collides if it is an enemy
+		//Handle AiCore collisions with bases 
 		if (object1 instanceof AiCore && object2 instanceof Base) {
 			baseCoreCollide((AiCore)object1, (Base)object2);
+			// return if the core died
+			if (!object1.isAlive()) {
+				return;
+			}
 		} else if (object2 instanceof AiCore && object1 instanceof Base) {
 			baseCoreCollide((AiCore)object2, (Base)object1);
+			// return if the core died
+			if (!object2.isAlive()) {
+				return;
+			}
 		}
 		
 		//Handle AiCore collisions with Asteroids (Damaging the energy of the AiCore)
@@ -353,7 +361,7 @@ public class CollisionHandler {
 	 * @param base
 	 */
 	public void baseCoreCollide(AiCore core, Base base) {
-		if (base.getTeamName() == core.getTeamName()) {
+		if (base.getTeamName().equalsIgnoreCase(core.getTeamName())) {
 			core.setAlive(false); //Destroy your core to prevent it from being captured
 		} else {
 			//core.setAlive(false);
