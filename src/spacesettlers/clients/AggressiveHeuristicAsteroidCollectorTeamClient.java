@@ -37,6 +37,8 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 	HashMap <UUID, Ship> asteroidToShipMap;
 	HashMap <UUID, Boolean> aimingForBase;
 	HashMap <UUID, Boolean> goingForCore;
+	HashMap <UUID, Boolean> justHitBase;
+	
 	UUID asteroidCollectorID;
 	double weaponsProbability = 1;
 
@@ -111,15 +113,8 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 			return newAction;
 		}
 
-		// did we bounce off the base?
-		if (ship.getResources().getTotal() == 0 && ship.getEnergy() > 2000 && aimingForBase.containsKey(ship.getId()) && aimingForBase.get(ship.getId())) {
-			current = null;
-			aimingForBase.put(ship.getId(), false);
-			goingForCore.put(ship.getId(), false);
-		}
-
 		// if there is a nearby core, go get it
-		AiCore nearbyCore = pickNearestCore(space, ship, 100);
+		AiCore nearbyCore = pickNearestCore(space, ship, 200);
 		if (nearbyCore != null) {
 			Position newGoal = nearbyCore.getPosition();
 			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, nearbyCore);
@@ -130,9 +125,11 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 
 
 		// otherwise aim for the asteroid
-		if (current == null || current.isMovementFinished(space)) {
+		if (current == null || current.isMovementFinished(space) ||
+				(justHitBase.containsKey(ship.getId()) && justHitBase.get(ship.getId()))) {
 			aimingForBase.put(ship.getId(), false);
 			goingForCore.put(ship.getId(), false);
+			justHitBase.put(ship.getId(), false);			
 			Asteroid asteroid = pickHighestValueNearestFreeAsteroid(space, ship);
 
 			AbstractAction newAction = null;
@@ -192,15 +189,8 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 			return newAction;
 		}
 
-		// did we bounce off the base?
-		if (ship.getResources().getTotal() == 0 && ship.getEnergy() > 2000 && aimingForBase.containsKey(ship.getId()) && aimingForBase.get(ship.getId())) {
-			current = null;
-			goingForCore.put(ship.getId(), false);
-			aimingForBase.put(ship.getId(), false);
-		}
-		
 		// if there is a nearby core, go get it
-		AiCore nearbyCore = pickNearestCore(space, ship, 100);
+		AiCore nearbyCore = pickNearestCore(space, ship, 200);
 		if (nearbyCore != null) {
 			Position newGoal = nearbyCore.getPosition();
 			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, nearbyCore);
@@ -210,9 +200,12 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		}
 
 		// otherwise aim for the nearest enemy ship
-		if (current == null || current.isMovementFinished(space)) {
+		if (current == null || current.isMovementFinished(space) || 
+				(justHitBase.containsKey(ship.getId()) && justHitBase.get(ship.getId()))) {
 			aimingForBase.put(ship.getId(), false);
 			goingForCore.put(ship.getId(), false);
+			justHitBase.put(ship.getId(), false);			
+
 			Ship enemy = pickNearestEnemyShip(space, ship);
 
 			AbstractAction newAction = null;
@@ -377,6 +370,21 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		for (Asteroid asteroid : finishedAsteroids) {
 			asteroidToShipMap.remove(asteroid.getId());
 		}
+		
+		// check to see who bounced off bases
+		for (UUID shipId : aimingForBase.keySet()) {
+			if (aimingForBase.get(shipId)) {
+				Ship ship = (Ship) space.getObjectById(shipId);
+				if (ship.getResources().getTotal() == 0 ) {
+					// we hit the base (or died, either way, we are not aiming for base now)
+					System.out.println("Hit the base and dropped off resources");
+					aimingForBase.put(shipId, false);
+					justHitBase.put(shipId, true);
+					goingForCore.put(ship.getId(), false);
+				}
+			}
+		}
+		
 
 
 	}
@@ -387,6 +395,7 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		asteroidCollectorID = null;
 		aimingForBase = new HashMap<UUID, Boolean>();
 		goingForCore = new HashMap<UUID, Boolean>();
+		justHitBase = new HashMap<UUID, Boolean>();
 	}
 
 	@Override
