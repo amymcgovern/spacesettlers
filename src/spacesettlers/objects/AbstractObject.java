@@ -341,8 +341,8 @@ abstract public class AbstractObject {
 	/**
 	 * Increment the number of cores held by this object
 	 */
-	public void incrementCores() {
-		numCores++;
+	public void incrementCores(int number) {
+		numCores += number;
 	}
 
 }

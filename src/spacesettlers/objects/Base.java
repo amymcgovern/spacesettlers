@@ -92,7 +92,7 @@ public class Base extends AbstractActionableObject {
 	 * @param numCores
 	 */
 	public void incrementCores(int numCores) { 
-		super.incrementCores();
+		super.incrementCores(numCores);
 		team.incrementCoresCollected(numCores);
 	}
 	

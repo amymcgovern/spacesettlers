@@ -31,6 +31,12 @@ public class ImmutableTeamInfo {
 	int totalBeaconsCollected;
 	
 	/**
+	 * Keep track of the total AiCores collected 
+	 * herr0861 Edit
+	 */
+	int totalCoresCollected;
+	
+	/**
 	 * Keep track of the total killsInflicted for the team (for the ladder, if used)
 	 */
 	int totalKillsInflicted;
@@ -67,6 +73,8 @@ public class ImmutableTeamInfo {
 		this.totalDamageReceived = team.totalDamageReceived;
 		this.totalHitsInflicted = team.totalHitsInflicted;
 		this.totalKillsInflicted = team.totalKillsInflicted;
+		this.totalCoresCollected = team.totalCoresCollected;//herr0861 edit
+		
 	}
 
 	public double getScore() {
@@ -96,6 +104,10 @@ public class ImmutableTeamInfo {
 	public int getTotalBeaconsCollected() {
 		return totalBeaconsCollected;
 	}
+	
+	public int getTotalCoresCollected() {
+		return totalCoresCollected;
+	} //herr0861 edit
 
 	public int getTotalKillsInflicted() {
 		return totalKillsInflicted;

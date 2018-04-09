@@ -254,7 +254,7 @@ public class Ship extends AbstractActionableObject {
 	 * A ship has collided with a core and collected it.
 	 */
 	public void incrementCores() {
-		super.incrementCores();
+		super.incrementCores(1);
 	}
 	
 	/**
