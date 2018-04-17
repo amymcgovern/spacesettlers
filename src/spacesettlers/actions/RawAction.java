@@ -1,5 +1,6 @@
 package spacesettlers.actions;
 
+import spacesettlers.objects.Drone;
 import spacesettlers.objects.Ship;
 import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Movement;
@@ -65,6 +66,17 @@ public class RawAction extends AbstractAction {
 	@Override
 	public boolean isMovementFinished(Toroidal2DPhysics space) {
 		return true;
+	}
+
+	/**
+	 * Set the raw translational accelerations
+	 */
+	@Override
+	public Movement getMovement(Toroidal2DPhysics space, Drone drone) {
+		Movement movement = new Movement();
+		movement.setAngularAccleration(angularAcceleration);
+		movement.setTranslationalAcceleration(translationalAcceleration);
+		return movement;
 	}
 
 }
