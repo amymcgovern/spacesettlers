@@ -427,7 +427,7 @@ public class CollisionHandler {
 	 * @param base
 	 */
 	public void baseCoreCollide(AiCore core, Base base) {
-		if (base.getTeamName() == core.getTeamName()) {
+		if (base.getTeamName().equalsIgnoreCase(core.getTeamName())) {
 			core.setAlive(false); //Destroy your core to prevent it from being captured
 		} else {
 			//core.setAlive(false);
