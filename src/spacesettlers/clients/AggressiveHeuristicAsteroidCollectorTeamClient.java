@@ -19,7 +19,6 @@ import spacesettlers.objects.AiCore;
 import spacesettlers.objects.Asteroid;
 import spacesettlers.objects.Base;
 import spacesettlers.objects.Beacon;
-import spacesettlers.objects.Drone;
 import spacesettlers.objects.Ship;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
 import spacesettlers.objects.resources.ResourcePile;
@@ -38,10 +37,10 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 	HashMap <UUID, Ship> asteroidToShipMap;
 	HashMap <UUID, Boolean> aimingForBase;
 	HashMap <UUID, Boolean> goingForCore;
+	HashMap <UUID, Boolean> justHitBase;
+	
 	UUID asteroidCollectorID;
 	double weaponsProbability = 1;
-	boolean boughtDrone = false;
-	boolean boughtCore = false;
 
 	/**
 	 * Assigns ships to asteroids and beacons, as described above
@@ -71,19 +70,7 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 				
 				actions.put(ship.getId(), action);
 				
-			}
-			else if(actionable instanceof Drone) { //herr0861DELETE
-				//Put in the default drone action
-				Drone drone = (Drone) actionable;
-				AbstractAction action;
-				
-				//We could put a custom drone behavior here, but if we do nothing, it defaults to the built in action.
-				action = drone.getDroneAction(space);
-				//action = new DoNothingAction();
-				//actions.put(drone.getId(), action);
-
-			}
-			else {
+			} else {
 				// it is a base.  Heuristically decide when to use the shield (TODO)
 				actions.put(actionable.getId(), new DoNothingAction());
 			}
@@ -102,11 +89,6 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		AbstractAction current = ship.getCurrentAction();
 		Position currentPosition = ship.getPosition();
 
-		if (getNearestDrone(space, ship) == null) {
-			boughtDrone = false;
-			boughtCore = false;
-		}
-		
 		// aim for a beacon if there isn't enough energy
 		if (ship.getEnergy() < 2000) {
 			Beacon beacon = pickNearestBeacon(space, ship);
@@ -131,15 +113,8 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 			return newAction;
 		}
 
-		// did we bounce off the base?
-		if (ship.getResources().getTotal() == 0 && ship.getEnergy() > 2000 && aimingForBase.containsKey(ship.getId()) && aimingForBase.get(ship.getId())) {
-			current = null;
-			aimingForBase.put(ship.getId(), false);
-			goingForCore.put(ship.getId(), false);
-		}
-
 		// if there is a nearby core, go get it
-		AiCore nearbyCore = pickNearestCore(space, ship, 100);
+		AiCore nearbyCore = pickNearestCore(space, ship, 200);
 		if (nearbyCore != null) {
 			Position newGoal = nearbyCore.getPosition();
 			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, nearbyCore);
@@ -150,9 +125,11 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 
 
 		// otherwise aim for the asteroid
-		if (current == null || current.isMovementFinished(space)) {
+		if (current == null || current.isMovementFinished(space) ||
+				(justHitBase.containsKey(ship.getId()) && justHitBase.get(ship.getId()))) {
 			aimingForBase.put(ship.getId(), false);
 			goingForCore.put(ship.getId(), false);
+			justHitBase.put(ship.getId(), false);			
 			Asteroid asteroid = pickHighestValueNearestFreeAsteroid(space, ship);
 
 			AbstractAction newAction = null;
@@ -175,19 +152,6 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		} else {
 			return ship.getCurrentAction();
 		}
-	}
-	
-	private Drone getNearestDrone(Toroidal2DPhysics space, Ship ship) {
-		Drone newDrone = null;
-		double distance = Double.POSITIVE_INFINITY;
-		for (Drone drone : space.getDrones()) {
-			if(distance > space.findShortestDistance(drone.getPosition(), ship.getPosition())) {
-				distance = space.findShortestDistance(drone.getPosition(), ship.getPosition());
-				newDrone = drone;
-			}
-		}
-		
-		return newDrone;
 	}
 
 	/**
@@ -225,15 +189,8 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 			return newAction;
 		}
 
-		// did we bounce off the base?
-		if (ship.getResources().getTotal() == 0 && ship.getEnergy() > 2000 && aimingForBase.containsKey(ship.getId()) && aimingForBase.get(ship.getId())) {
-			current = null;
-			goingForCore.put(ship.getId(), false);
-			aimingForBase.put(ship.getId(), false);
-		}
-		
 		// if there is a nearby core, go get it
-		AiCore nearbyCore = pickNearestCore(space, ship, 100);
+		AiCore nearbyCore = pickNearestCore(space, ship, 200);
 		if (nearbyCore != null) {
 			Position newGoal = nearbyCore.getPosition();
 			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, nearbyCore);
@@ -243,9 +200,12 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		}
 
 		// otherwise aim for the nearest enemy ship
-		if (current == null || current.isMovementFinished(space)) {
+		if (current == null || current.isMovementFinished(space) || 
+				(justHitBase.containsKey(ship.getId()) && justHitBase.get(ship.getId()))) {
 			aimingForBase.put(ship.getId(), false);
 			goingForCore.put(ship.getId(), false);
+			justHitBase.put(ship.getId(), false);			
+
 			Ship enemy = pickNearestEnemyShip(space, ship);
 
 			AbstractAction newAction = null;
@@ -410,6 +370,21 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		for (Asteroid asteroid : finishedAsteroids) {
 			asteroidToShipMap.remove(asteroid.getId());
 		}
+		
+		// check to see who bounced off bases
+		for (UUID shipId : aimingForBase.keySet()) {
+			if (aimingForBase.get(shipId)) {
+				Ship ship = (Ship) space.getObjectById(shipId);
+				if (ship.getResources().getTotal() == 0 ) {
+					// we hit the base (or died, either way, we are not aiming for base now)
+					System.out.println("Hit the base and dropped off resources");
+					aimingForBase.put(shipId, false);
+					justHitBase.put(shipId, true);
+					goingForCore.put(ship.getId(), false);
+				}
+			}
+		}
+		
 
 
 	}
@@ -420,6 +395,7 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		asteroidCollectorID = null;
 		aimingForBase = new HashMap<UUID, Boolean>();
 		goingForCore = new HashMap<UUID, Boolean>();
+		justHitBase = new HashMap<UUID, Boolean>();
 	}
 
 	@Override
@@ -448,41 +424,32 @@ public class AggressiveHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		double BASE_BUYING_DISTANCE = 200;
 		boolean bought_base = false;
 
-		// see if you can buy a core and drone
-		if (purchaseCosts.canAfford(PurchaseTypes.DRONE, resourcesAvailable)) {
+		if (purchaseCosts.canAfford(PurchaseTypes.BASE, resourcesAvailable)) {
 			for (AbstractActionableObject actionableObject : actionableObjects) {
 				if (actionableObject instanceof Ship) {
 					Ship ship = (Ship) actionableObject;
-					
-					if (!boughtDrone && ship.getNumCores() > 0) { // && ship.getResources().getTotal() > 0
-						purchases.put(ship.getId(), PurchaseTypes.DRONE);
-						boughtDrone = true;
-						//System.out.println("Bought a drone!");
-					} else {
-						//System.out.println("Drone was too expensive!");
+					Set<Base> bases = space.getBases();
+
+					// how far away is this ship to a base of my team?
+					double maxDistance = Double.MIN_VALUE;
+					for (Base base : bases) {
+						if (base.getTeamName().equalsIgnoreCase(getTeamName())) {
+							double distance = space.findShortestDistance(ship.getPosition(), base.getPosition());
+							if (distance > maxDistance) {
+								maxDistance = distance;
+							}
+						}
+					}
+
+					if (maxDistance > BASE_BUYING_DISTANCE) {
+						purchases.put(ship.getId(), PurchaseTypes.BASE);
+						bought_base = true;
+						//System.out.println("Buying a base!!");
+						break;
 					}
 				}
 			}		
 		} 
-		
-		// see if you can buy a core and drone HERR0861REMOVE
-				if (purchaseCosts.canAfford(PurchaseTypes.CORE, resourcesAvailable)) {
-					for (AbstractActionableObject actionableObject : actionableObjects) {
-						if (actionableObject instanceof Ship) {
-							Ship ship = (Ship) actionableObject;
-							
-							if (!boughtCore && ship.getNumCores() == 0) {
-								purchases.put(ship.getId(), PurchaseTypes.CORE);
-								//System.out.println("Bought a core!!");
-								boughtCore = true;
-							} else {
-								//System.out.println("Core was too expensive!");
-							}
-						}
-					}		
-				} 
-				
-
 		
 		// see if you can buy EMPs
 		if (purchaseCosts.canAfford(PurchaseTypes.POWERUP_EMP_LAUNCHER, resourcesAvailable)) {
