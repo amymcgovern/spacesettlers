@@ -9,12 +9,14 @@ import java.util.Set;
 import java.util.UUID;
 
 import spacesettlers.actions.DoNothingAction;
+import spacesettlers.actions.MoveToObjectAction;
 import spacesettlers.actions.AbstractAction;
 import spacesettlers.clients.ImmutableTeamInfo;
 import spacesettlers.configs.SpaceSettlersConfig;
 import spacesettlers.objects.Asteroid;
 import spacesettlers.objects.Base;
 import spacesettlers.objects.Beacon;
+import spacesettlers.objects.Drone;
 import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
 import spacesettlers.objects.AbstractActionableObject;
@@ -74,6 +76,11 @@ public class Toroidal2DPhysics {
 	 * The list of ships
 	 */
 	Set<Ship> ships;
+	
+	/**
+	 * The list of drones
+	 */
+	Set<Drone> drones;
 	
 	/**
 	 * The ets of flags
@@ -138,6 +145,7 @@ public class Toroidal2DPhysics {
 		asteroids = new LinkedHashSet<Asteroid>();
 		bases = new LinkedHashSet<Base>();
 		ships = new LinkedHashSet<Ship>();
+		drones = new LinkedHashSet<Drone>(); //herr0861 edit
 		cores = new LinkedHashSet<AiCore>(); 
 		flags = new LinkedHashSet<Flag>();
 		weapons = new LinkedHashSet<AbstractWeapon>();
@@ -165,6 +173,7 @@ public class Toroidal2DPhysics {
 		asteroids = new LinkedHashSet<Asteroid>();
 		bases = new LinkedHashSet<Base>();
 		ships = new LinkedHashSet<Ship>();
+		drones = new LinkedHashSet<Drone>(); //herr0861 edit
 		flags = new LinkedHashSet<Flag>();
 		cores = new LinkedHashSet<AiCore>(); 
 		weapons = new LinkedHashSet<AbstractWeapon>();
@@ -193,6 +202,7 @@ public class Toroidal2DPhysics {
 		asteroids = new LinkedHashSet<Asteroid>();
 		bases = new LinkedHashSet<Base>();
 		ships = new LinkedHashSet<Ship>();
+		drones = new LinkedHashSet<Drone>(); //herr0861 edit
 		flags = new LinkedHashSet<Flag>();
 		cores = new LinkedHashSet<AiCore>(); 
 		weapons = new LinkedHashSet<AbstractWeapon>();
@@ -234,6 +244,10 @@ public class Toroidal2DPhysics {
 			weapons.add((AbstractWeapon)obj);
 		}
 		
+		if (obj instanceof Drone) { //herr0861 edit
+			drones.add((Drone)obj);
+		}
+		
 		if (obj instanceof Flag) {
 			flags.add((Flag) obj);
 		}
@@ -271,6 +285,10 @@ public class Toroidal2DPhysics {
 		
 		if (obj instanceof AbstractWeapon) {
 			weapons.remove((AbstractWeapon)obj);
+		}
+		
+		if (obj instanceof Drone) {//herr0861 edit
+			drones.remove((Drone)obj);
 		}
 		
 		if (obj instanceof Flag) {
@@ -338,6 +356,14 @@ public class Toroidal2DPhysics {
 	 */
 	public Set<AbstractWeapon> getWeapons() {
 		return weapons;
+	}
+	
+	/**
+	 * Return a list of drones currently in play
+	 * @return
+	 */
+	public Set<Drone> getDrones() { //herr0861 edit
+		return drones;
 	}
 	
 	
@@ -564,8 +590,8 @@ public class Toroidal2DPhysics {
 		// get the power ups and create any objects (weapons) as necessary
 		for (UUID key : powerups.keySet()) {
 			AbstractObject swobject = getObjectById(key);
-			// if the object is not alive or it is not actionable, then ignore this
-			if (!swobject.isAlive() || (!(swobject instanceof AbstractActionableObject))) {
+			// if the object is not alive or it is not actionable or is a drone, then ignore this
+			if (!swobject.isAlive() || (!(swobject instanceof AbstractActionableObject)) || (swobject instanceof Drone)) {//herr0861 edit
 				continue;
 			}
 
@@ -581,9 +607,58 @@ public class Toroidal2DPhysics {
 			}
 			
 			Position currentPosition = object.getPosition();
+			
+			if (object instanceof Drone) { //herr0861 edit
+				Drone drone = (Drone) object;
+				if (drone.getCurrentAction() == null) {
+					drone.setCurrentAction(this.deepClone());
+				}
+				
+				AbstractAction action = drone.getCurrentAction();
+				
+				//AbstractAction action = drone.getDroneAction(this.deepClone());
+				
+				if (action == null) {
+					action = new DoNothingAction(); //This should never happen, but I'll keep it just in case.						
+						System.out.println("Drone doing nothing!");
 
-			// is it a ship that can be controlled?
-			if (object.isControllable()) {
+				}
+				
+				/* Don't actually need to clone this since the user can't modify it, but might as well to be consistent
+				 * because maybe in the future people will be allowed to specify behavior for the drone.
+				 */
+				
+				
+				Movement actionMovement = action.getMovement(this.deepClone(), drone.deepClone());
+				
+				
+				//System.out.println("Applying movement to drone [" + drone.toString() + "]"); //herr0861REMOVE
+				Position newPosition = applyMovement(currentPosition, actionMovement, timeStep);
+				//System.out.println("The old position is: [" + currentPosition + "] and the new position is: [" + newPosition);
+				
+				if (newPosition.isValid()) {
+					drone.setPosition(newPosition);
+					//System.out.println("Position is:" + object.getPosition());
+					//System.out.println("Valid position"); //herr0861REMOVE
+				} else {
+					//System.out.println("Invalid position"); //herr0861REMOVE
+					drone.setPosition(currentPosition);
+				}
+				
+				// spend drone energy proportional to its acceleration and mass
+				double angularAccel = Math.abs(actionMovement.getAngularAccleration());
+				double angularInertia = (3.0 * drone.getMass() * drone.getRadius() * angularAccel) / 2.0; 
+				double linearAccel = actionMovement.getTranslationalAcceleration().getMagnitude();
+				double linearInertia = drone.getMass() * linearAccel;
+				//I made drones slightly efficient at moving on account of being a drone and not needing to carry a bunch of systems around like a ship!
+				int penalty = (int) Math.floor(0.7*(ENERGY_PENALTY * (angularInertia + linearInertia)));
+				drone.updateEnergy(-penalty);
+				
+				
+				
+				
+			}else 			// is it a ship that can be controlled?
+			if (object.isControllable() && !(object instanceof Drone)) { //herr0861 edit
 
 				Ship ship = (Ship) object;
 				AbstractAction action = ship.getCurrentAction();
@@ -598,6 +673,7 @@ public class Toroidal2DPhysics {
 				Movement actionMovement = action.getMovement(this.deepClone(), ship.deepClone());
 
 				Position newPosition = applyMovement(currentPosition, actionMovement, timeStep);
+				//System.out.println("The old position is: [" + currentPosition + "] and the new position is: [" + newPosition);
 				if (newPosition.isValid()) {
 					ship.setPosition(newPosition);
 				} else {
@@ -650,6 +726,14 @@ public class Toroidal2DPhysics {
 				base.setAlive(false);
 				removeObject(base);
 				base.getTeam().removeBase(base);
+			}
+		}
+		
+		for (Drone drone : drones) {
+			if (drone.getEnergy() <= 0 && drone.isAlive() == true) {//drone has died
+				drone.setAlive(false); //kill the drone dropping the flag and all resources, but no core. Should we make it have a chance to drop an AiCore? Probably not.
+				removeObject(drone);
+				drone.getTeam().removeDrone(drone);
 			}
 		}
 		
@@ -1023,6 +1107,24 @@ public class Toroidal2DPhysics {
 		}
 
 		
+	}
+	
+	/**
+	 * Loop through all drones and remove any dead ones.
+	 * herr0861 edit
+	 */
+	public void cleanupDeadDrones() {
+		ArrayList<AbstractObject> deadObjects = new ArrayList<AbstractObject>();
+		
+		for (Drone drone : drones) {
+			if (!drone.isAlive()) {
+				deadObjects.add(drone);
+			}
+		}
+		
+		for (AbstractObject deadObject : deadObjects) {
+			removeObject(deadObject);
+		}
 	}
 
 	/**

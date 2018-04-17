@@ -15,4 +15,6 @@ public enum SpaceSettlersPowerupEnum {
 	DOUBLE_BASE_HEALING_SPEED,
 	DOUBLE_MAX_ENERGY,
 	DOUBLE_WEAPON_CAPACITY,
+	DRONE, //herr0861 edit
+	CORE,
 }
