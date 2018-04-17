@@ -53,6 +53,11 @@ public class Flag extends AbstractObject {
 	Ship carryingShip;
 	
 	/**
+	 * Reference to the drone carrying the flag (if it is being carried)
+	 */
+	Drone carryingDrone;
+	
+	/**
 	 * Create a new flag
 	 * 
 	 * @param position
@@ -113,6 +118,23 @@ public class Flag extends AbstractObject {
 	}
 	
 	/**
+	 * Set the flag to being carried by this drone
+	 * Doing so removes it from any ship that may be carrying it.
+	 * 
+	 * @param ship
+	 */
+	public void pickupFlag(Drone drone) {
+		this.beingCarried = true;
+		this.carryingDrone = drone;
+		this.carryingShip = null;
+		setPosition(drone.getPosition().deepCopy());
+		this.setDrawable(false);
+		this.setRespawn(false);
+		this.setAlive(false);
+		
+	}
+	
+	/**
 	 * Set the flag to being carried by this ship
 	 * 
 	 * @param ship
@@ -120,6 +142,7 @@ public class Flag extends AbstractObject {
 	public void pickupFlag(Ship ship) {
 		this.beingCarried = true;
 		this.carryingShip = ship;
+		this.carryingDrone = null;//herr0861 edit
 		setPosition(ship.getPosition().deepCopy());
 		this.setDrawable(false);
 		this.setRespawn(false);

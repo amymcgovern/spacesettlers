@@ -28,12 +28,19 @@ public class PurchaseCosts {
 	public void reset() {
 		costs.put(PurchaseTypes.BASE, new ResourcePile(250, 300, 450));
 		costs.put(PurchaseTypes.SHIP, new ResourcePile(500, 1000, 500));
+		costs.put(PurchaseTypes.CORE, new ResourcePile(400, 850, 400));//herr0861 edit (see below comment)
+		costs.put(PurchaseTypes.DRONE, new ResourcePile(100,100,100));
 		costs.put(PurchaseTypes.NOTHING, new ResourcePile(0,0,0));
 		costs.put(PurchaseTypes.POWERUP_DOUBLE_BASE_HEALING_SPEED, new ResourcePile(1000,1000,500));
 		costs.put(PurchaseTypes.POWERUP_DOUBLE_MAX_ENERGY, new ResourcePile(750, 1000, 500));
 		costs.put(PurchaseTypes.POWERUP_DOUBLE_WEAPON_CAPACITY, new ResourcePile(250, 1000, 1000));
 		costs.put(PurchaseTypes.POWERUP_EMP_LAUNCHER, new ResourcePile(0, 750, 250));
 		costs.put(PurchaseTypes.POWERUP_SHIELD, new ResourcePile(0,1500,500));
+		
+		/*
+		 * The major expense of the drone should be the core. Compete gets lots of cores, but this serves little purpose there.
+		 * The Core plus the drone costs about as much as a ship. I honestly think it might be too expensive, but we can play with the value.
+		 */
 	}
 	
 	/**
