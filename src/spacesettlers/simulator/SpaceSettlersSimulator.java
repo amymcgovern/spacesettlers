@@ -31,6 +31,7 @@ import spacesettlers.objects.AbstractObject;
 import spacesettlers.objects.Asteroid;
 import spacesettlers.objects.Base;
 import spacesettlers.objects.Beacon;
+import spacesettlers.objects.Drone;
 import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
@@ -619,9 +620,11 @@ public final class SpaceSettlersSimulator {
 			try {
 				teamActions = clientActionFutures.get(team).get();
 			} catch (InterruptedException e) {
+				//System.out.println("interruptedException, empty map");
 				//something went wrong...return empty map
 				teamActions = new HashMap<UUID, AbstractAction>();
 			} catch (ExecutionException e) {
+				//System.out.println("execution exception");
 				//something went wrong...return empty map
 				teamActions = new HashMap<UUID, AbstractAction>();
 			} 
@@ -635,9 +638,30 @@ public final class SpaceSettlersSimulator {
 				}
 				ship.setCurrentAction(teamActions.get(ship.getId()));
 			}
-
-
-		}
+			
+			
+			
+			/*
+			 * herr0861
+			 * Loop through the drones and assign them their actions from the team. 
+			 */
+			for (UUID droneID : team.getDrones()) {
+				Drone drone = (Drone)simulatedSpace.getObjectById(droneID);
+				
+				
+				if (teamActions == null || !teamActions.containsKey(droneID)) {
+					drone.setCurrentAction(simulatedSpace.deepClone());
+					teamActions.put(droneID, drone.getCurrentAction());
+				}
+				
+				/*
+				 * herr0861
+				 * TODO: Check if this does everything
+				 * This allows the use to set in actions for the drones and have them be followed!
+				 */
+				drone.setCurrentAction(teamActions.get(drone.getId()));
+			}
+		} //End for loop through teams
 
 		teamExecutor.shutdown();
 
@@ -654,7 +678,7 @@ public final class SpaceSettlersSimulator {
 
 					// get the object and ensure it can have a power up on it
 					AbstractObject swObject = simulatedSpace.getObjectById(key);
-					if (!(swObject instanceof AbstractActionableObject)) {
+					if (!(swObject instanceof AbstractActionableObject) || (swObject instanceof Drone)) {
 						continue;
 					}
 
@@ -687,8 +711,11 @@ public final class SpaceSettlersSimulator {
 
 		// cleanup and remove dead cores
 		simulatedSpace.cleanupDeadCores();
+		
+		//cleanup and remove dead drones - herr0861 edit
+		simulatedSpace.cleanupDeadDrones();
 
-		// respawn any objects that died (and that should respawn - this includes Flags)
+		// respawn any objects that  (and that should respawn - this includes Flags)
 		final double asteroidMaxVelocity = simConfig.getRandomAsteroids().getMaxInitialVelocity();
 		simulatedSpace.respawnDeadObjects(random, asteroidMaxVelocity);
 
@@ -796,6 +823,63 @@ public final class SpaceSettlersSimulator {
 					team.updateCost(purchase);
 				}
 
+				break;
+				
+			case CORE: //herr0861 edit
+				if (purchasingObject instanceof Ship) { //only a ship can buy cores
+					Ship ship = (Ship) purchasingObject;
+					//Give the ship a core.
+					ship.incrementCores(1);
+					
+					//Charge the team
+					team.decrementAvailableResources(team.getCurrentCost(purchase));
+					System.out.println("Buying an AiCore");
+				}
+				break;
+				
+			case DRONE: //herr0861 edit
+				if (purchasingObject instanceof Ship) { //only a ship can buy drones
+					Ship ship = (Ship) purchasingObject;
+					if (ship.getNumCores() > 0) { //can only purchase a drone if you have cores
+						ship.incrementCores(-1);//use the parent class's increment cores method with int parameter to charge the ship an AiCore since costs only use ResourcePiles
+						
+						//herr0861return
+						//Add the drone
+						// make the new drone and add it to the lists
+						
+						Position newPosition = simulatedSpace.getRandomFreeLocationInRegion(random, 
+								Drone.DRONE_RADIUS, (int) ship.getPosition().getX(), 
+								(int) ship.getPosition().getY(), (10 * (ship.getRadius() + Drone.DRONE_RADIUS)));
+						//Makes a new resource pile using the ship's, so we don't have to import ResourcePile here. Cleaner that way.
+						Drone drone = new Drone(team.getTeamName(), team.getTeamColor(), team, newPosition, ship.getResources());
+						drone.incrementCores(ship.getNumCores()); //add cores to the drone.
+						
+						//remove the cores and resources from the ship that have been added to the drone
+						ship.resetAiCores();
+						ship.resetResources();
+						
+						//Transfer the flag if the ship has it
+						if (ship.isCarryingFlag()) {
+							drone.addFlag(ship.getFlag());
+							ship.depositFlag(); //make the ship drop the flag
+							drone.getFlag().pickupFlag(drone); //the pickup method in the flag will automatically cause it to not be carried by the ship when the drone has it
+						}
+						
+						//add the drone to the space and team list
+						//drone.setCurrentAction(simulatedSpace);
+						drone.setCurrentAction(drone.getDroneAction(simulatedSpace));
+						simulatedSpace.addObject(drone);
+						//System.out.println("Adding the following drone to space: [" + drone.toString() + "]");
+						team.addDrone(drone);
+						
+
+						//Charge the team (This comes from the turned in resources, so shouldn't effect resources on the ship, but it would be interesting to be able to make up the difference with what you hold)
+						team.decrementAvailableResources(team.getCurrentCost(purchase));
+						System.out.println("Buying a Drone");
+					}
+					
+					
+				}
 				break;
 
 			case POWERUP_SHIELD:
