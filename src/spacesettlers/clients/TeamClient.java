@@ -123,7 +123,6 @@ abstract public class TeamClient {
 	 * 
 	 * @param space physics
 	 * @param actionableObjects the ships and bases for this team
-	 * @param random random number generator
 	 * @return
 	 */
 	abstract public Map<UUID, AbstractAction> getMovementStart(Toroidal2DPhysics space, 
@@ -145,7 +144,6 @@ abstract public class TeamClient {
 	 * 
 	 * @param space physics
 	 * @param actionableObjects the ships and bases for this team
-	 * @param random random number generator
 	 * @return
 	 */
 	abstract public Map<UUID, SpaceSettlersPowerupEnum> getPowerups(Toroidal2DPhysics space, 

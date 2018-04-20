@@ -410,14 +410,18 @@ public class CollisionHandler {
 	 * @param Ship
 	 */
 	public void collectCore(AiCore core, Ship ship) {
-		
-		core.setAlive(false);
-		
-		//Bonus energy of random amount between 0 and the core's energy;		
-		ship.updateEnergy(ThreadLocalRandom.current().nextInt(core.getCoreEnergy()));
-		
-		ship.incrementCores();
-		ship.setMass(ship.getMass() + core.getMass());
+		if (ship.getTeamName().equalsIgnoreCase(core.getTeamName())) {
+			core.setAlive(false); //Destroy your own core to prevent it from being captured
+		} else {
+			// someone else's core so collect it
+			core.setAlive(false);
+			
+			//Bonus energy of random amount between 0 and the core's energy;		
+			ship.updateEnergy(ThreadLocalRandom.current().nextInt(core.getCoreEnergy()));
+			
+			ship.incrementCores();
+			ship.setMass(ship.getMass() + core.getMass());
+		}
 	}
 	
 	/**
@@ -453,7 +457,8 @@ public class CollisionHandler {
 	 * @param core
 	 */
 	public void damageAiCore(AiCore core) {
-		double penalty = -Math.abs(COLLISION_PENALTY * core.getPosition().getTotalTranslationalVelocity());
+		//double penalty = -Math.abs(COLLISION_PENALTY * core.getPosition().getTotalTranslationalVelocity());
+		double penalty = -AiCore.CORE_MAX_ENERGY * 0.2;
 		core.updateEnergy((int)(penalty));
 	}
 

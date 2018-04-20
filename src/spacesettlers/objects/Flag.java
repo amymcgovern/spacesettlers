@@ -6,6 +6,7 @@ import java.util.Random;
 import spacesettlers.clients.Team;
 import spacesettlers.graphics.BaseGraphics;
 import spacesettlers.graphics.FlagGraphics;
+import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Position;
 
 /**
@@ -153,12 +154,18 @@ public class Flag extends AbstractObject {
 	/**
 	 * Drop the flag (likely the ship died)
 	 */
-	public void dropFlag() {
+	public void dropFlag(Random rand, Toroidal2DPhysics space) {
+		//System.out.println("Flag being dropped at " + carryingShip.getPosition());
 		this.beingCarried = false;
 		this.setDrawable(true);
 		this.setAlive(true);
 		this.setRespawn(false);
-		this.setPosition(carryingShip.getPosition());
+		Position newPosition = space.getRandomFreeLocationInRegion(rand, this.getRadius(), 
+				(int) carryingShip.getPosition().getX(), 
+				(int) carryingShip.getPosition().getY(), 200);
+		newPosition.setAngularVelocity(carryingShip.getPosition().getAngularVelocity());
+		newPosition.setTranslationalVelocity(carryingShip.getPosition().getTranslationalVelocity());
+		this.setPosition(newPosition);
 		this.carryingShip = null;
 	}
 

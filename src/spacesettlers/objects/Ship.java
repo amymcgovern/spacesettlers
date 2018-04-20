@@ -2,6 +2,7 @@ package spacesettlers.objects;
 
 import java.awt.Color;
 import java.util.LinkedHashSet;
+import java.util.Random;
 
 import spacesettlers.actions.AbstractAction;
 import spacesettlers.graphics.ShipGraphics;
@@ -10,6 +11,7 @@ import spacesettlers.objects.resources.ResourcePile;
 import spacesettlers.objects.weapons.AbstractWeapon;
 import spacesettlers.objects.weapons.EMP;
 import spacesettlers.objects.weapons.Missile;
+import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Position;
 
 /**
@@ -209,6 +211,22 @@ public class Ship extends AbstractActionableObject {
 		numWeaponsInAir--;
 	}
 
+	/**
+	 * Set to dead and drop flags and cores in a random location near the ship
+	 * 
+	 * @param space
+	 */
+	public void setDeadAndDropObjects(Random rand, Toroidal2DPhysics space) {
+		respawnCounter = Math.min(lastRespawnCounter + RESPAWN_INCREMENT, MAX_RESPAWN_INTERVAL);
+		lastRespawnCounter = respawnCounter; 
+		resetResources();
+		resetPowerups();
+		if (carryingFlag) {
+			dropFlag(rand, space);
+		}
+		resetAiCores(); 
+		super.setAlive(false);
+	}
 
 
 	/**
@@ -221,12 +239,7 @@ public class Ship extends AbstractActionableObject {
 			lastRespawnCounter = respawnCounter; 
 			resetResources();
 			resetPowerups();
-			if (carryingFlag) {
-				dropFlag();
-			}
 			resetAiCores(); 
-			
-			
 		} else {
 			resetEnergy();
 		}
@@ -260,9 +273,10 @@ public class Ship extends AbstractActionableObject {
 	/**
 	 * A ship drops the flag when it dies
 	 */
-	private void dropFlag() {
+	private void dropFlag(Random rand, Toroidal2DPhysics space) {
+		//System.out.println("Dropping flag from ship");
 		carryingFlag = false;
-		flag.dropFlag();
+		flag.dropFlag(rand, space);
 		flag = null;
 	}
 	

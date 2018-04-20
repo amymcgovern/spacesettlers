@@ -692,7 +692,7 @@ public final class SpaceSettlersSimulator {
 		}
 
 		// now update the physics on all objects
-		simulatedSpace.advanceTime(this.getTimestep(), allPowerups);
+		simulatedSpace.advanceTime(random, this.getTimestep(), allPowerups);
 
 		// and end any actions inside the team
 		for (Team team : teams) {
@@ -994,6 +994,18 @@ public final class SpaceSettlersSimulator {
 			// this scores by the raw number of flags collected (competitive ladder)
 			for (Team team : teams) {
 				team.setScore(team.getTotalFlagsCollected());
+			}
+		} else if (simConfig.getScoringMethod().equalsIgnoreCase("TotalFlagsMinusKills")) {
+			// this scores by the raw number of flags collected (competitive ladder) minus any kills from either team
+			int totalFlags = 0;
+			int totalKills = 0;
+			for (Team team : teams) {
+				totalFlags += team.getTotalFlagsCollected();
+				totalKills += team.getTotalKillsInflicted();
+			}
+			
+			for (Team team : teams) {
+				team.setScore(totalFlags - totalKills);
 			}
 		} else if (simConfig.getScoringMethod().equalsIgnoreCase("TotalFlags")) {
 			// this score sums the flags for the two sides (cooperative ladder)

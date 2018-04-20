@@ -2,6 +2,7 @@ package spacesettlers.objects;
 
 import java.awt.Color;
 import java.util.LinkedHashSet;
+import java.util.Random;
 
 import spacesettlers.actions.AbstractAction;
 import spacesettlers.actions.DoNothingAction;
@@ -172,7 +173,24 @@ public class Drone extends AbstractActionableObject {
 		return team;
 	}
 
+	/**
+	 * Set the drone to dead and properly handle dropping the flag
+	 * 
+	 * @param rand
+	 * @param space
+	 */
+	public void setDeadAndDropObjects(Random rand, Toroidal2DPhysics space) {
+		resetResources();
+		resetPowerups();
+		resetAiCores(); 
+		if (carryingFlag) {
+			dropFlag(rand, space);
+		}
+		super.setAlive(false);
 
+	}
+	
+	
 	/**
 	 * Drones need to behave slightly differently when set to dead or respawned 
 	 * so this is an override of the abstract class.
@@ -181,9 +199,6 @@ public class Drone extends AbstractActionableObject {
 		if (value == false) {
 			resetResources();
 			resetPowerups();
-			if (carryingFlag) {
-				dropFlag();
-			}
 			resetAiCores(); 
 
 		} else {
@@ -220,9 +235,9 @@ public class Drone extends AbstractActionableObject {
 	/**
 	 * A drone drops the flag when it dies
 	 */
-	private void dropFlag() {
+	private void dropFlag(Random rand, Toroidal2DPhysics space) {
 		carryingFlag = false;
-		flag.dropFlag();
+		flag.dropFlag(rand, space);
 		flag = null;
 	}
 	

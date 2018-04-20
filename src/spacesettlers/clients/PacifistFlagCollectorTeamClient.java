@@ -23,9 +23,11 @@ import spacesettlers.graphics.SpacewarGraphics;
 import spacesettlers.graphics.StarGraphics;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.AbstractObject;
+import spacesettlers.objects.AiCore;
 import spacesettlers.objects.Asteroid;
 import spacesettlers.objects.Base;
 import spacesettlers.objects.Beacon;
+import spacesettlers.objects.Drone;
 import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
@@ -48,7 +50,9 @@ import spacesettlers.utilities.Position;
 public class PacifistFlagCollectorTeamClient extends TeamClient {
 	HashMap <UUID, Ship> asteroidToShipMap;
 	HashMap <UUID, Boolean> aimingForBase;
-	
+	HashMap <UUID, Boolean> justHitBase;
+	HashMap <UUID, Boolean> goingForCore;
+
 	/**
 	 * Assigns ships to asteroids and beacons, as described above
 	 */
@@ -59,7 +63,7 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 
 		// get the flag carrier, if we have one
 		flagShip = getFlagCarrier(space, actionableObjects);
-		
+
 		// we don't have a ship carrying a flag, so find the best choice (if it exists)
 		if (flagShip == null) {
 			flagShip = findHealthiestShipNearFlag(space, actionableObjects);
@@ -93,6 +97,12 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 
 				// save the action for this ship
 				actions.put(ship.getId(), action);
+			} else if(actionable instanceof Drone) {
+				Drone drone = (Drone) actionable;
+				AbstractAction action;
+
+				action = drone.getDroneAction(space); //Or make up some action of your own! This just adds the default action back to the drone.
+				actions.put(drone.getId(), action);
 			} else {
 				// bases do nothing
 				actions.put(actionable.getId(), new DoNothingAction());
@@ -113,7 +123,7 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 		for (AbstractObject actionable :  actionableObjects) {
 			if (actionable instanceof Ship) {
 				Ship ship = (Ship) actionable;
-				
+
 				if (ship.isCarryingFlag()) {
 					return ship;
 				}
@@ -121,7 +131,7 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Finds and returns the enemy flag
 	 * @param space
@@ -138,8 +148,8 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 		}
 		return enemyFlag;
 	}
-	
-	
+
+
 	/**
 	 * Finds the ship with the highest health and nearest the flag
 	 * 
@@ -162,7 +172,7 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 		for (AbstractObject actionable :  actionableObjects) {
 			if (actionable instanceof Ship) {
 				Ship ship = (Ship) actionable;
-				
+
 				double dist = space.findShortestDistance(ship.getPosition(), enemyFlag.getPosition());
 				if (dist < minDistance && ship.getEnergy() > minHealth) {
 					if (ship.getEnergy() > maxHealth) {
@@ -173,12 +183,12 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 				}
 			}
 		}
-		
+
 		return bestShip;
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Gets the action for the asteroid collecting ship
 	 * @param space
@@ -190,8 +200,17 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 		AbstractAction current = ship.getCurrentAction();
 		Position currentPosition = ship.getPosition();
 
+		// if the ship has enough resourcesAvailable, take it back to base
+		if (ship.getResources().getTotal() > 500  || ship.getNumCores() > 0) {
+			Base base = findNearestBase(space, ship);
+			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, base);
+			aimingForBase.put(ship.getId(), true);
+			goingForCore.put(ship.getId(), false);
+			return newAction;
+		}
+
 		// aim for a beacon if there isn't enough energy
-		if (ship.getEnergy() < 2000) {
+		if (ship.getEnergy() < 1000) {
 			Beacon beacon = pickNearestBeacon(space, ship);
 			AbstractAction newAction = null;
 			// if there is no beacon, then just skip a turn
@@ -201,26 +220,34 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 				newAction = new MoveToObjectAction(space, currentPosition, beacon);
 			}
 			aimingForBase.put(ship.getId(), false);
+			goingForCore.put(ship.getId(), false);
 			return newAction;
 		}
 
-		// if the ship has enough resourcesAvailable, take it back to base
-		if (ship.getResources().getTotal() > 500) {
-			Base base = findNearestBase(space, ship);
-			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, base);
-			aimingForBase.put(ship.getId(), true);
+		// if there is a nearby core, go get it
+		AiCore nearbyCore = pickNearestCore(space, ship, 200);
+		if (nearbyCore != null) {
+			Position newGoal = nearbyCore.getPosition();
+			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, nearbyCore);
+			goingForCore.put(ship.getId(), true);
+			aimingForBase.put(ship.getId(), false);
 			return newAction;
 		}
+
 
 		// did we bounce off the base?
-		if (ship.getResources().getTotal() == 0 && ship.getEnergy() > 2000 && aimingForBase.containsKey(ship.getId()) && aimingForBase.get(ship.getId())) {
-			current = null;
+		if (current == null || current.isMovementFinished(space) ||
+				(justHitBase.containsKey(ship.getId()) && justHitBase.get(ship.getId()))) {
 			aimingForBase.put(ship.getId(), false);
+			justHitBase.put(ship.getId(), false);			
+			goingForCore.put(ship.getId(), false);
+			current = null;
 		}
 
 		// otherwise aim for the asteroid
 		if (current == null || current.isMovementFinished(space)) {
 			aimingForBase.put(ship.getId(), false);
+			goingForCore.put(ship.getId(), false);
 			Asteroid asteroid = pickHighestValueNearestFreeAsteroid(space, ship);
 
 			AbstractAction newAction = null;
@@ -230,12 +257,36 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 				newAction = new MoveToObjectAction(space, currentPosition, asteroid, 
 						asteroid.getPosition().getTranslationalVelocity());
 			}
-			
+
 			return newAction;
 		} 
-		
+
 		return ship.getCurrentAction();
 	}
+
+
+	/**
+	 * Find the nearest core to this ship that falls within the specified minimum distance
+	 * @param space
+	 * @param ship
+	 * @return
+	 */
+	private AiCore pickNearestCore(Toroidal2DPhysics space, Ship ship, int minimumDistance) {
+		Set<AiCore> cores = space.getCores();
+
+		AiCore closestCore = null;
+		double bestDistance = minimumDistance;
+
+		for (AiCore core : cores) {
+			double dist = space.findShortestDistance(ship.getPosition(), core.getPosition());
+			if (dist < bestDistance) {
+				bestDistance = dist;
+				closestCore = core;
+			}
+		}
+
+		return closestCore;
+	}	
 
 
 	/**
@@ -323,7 +374,7 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 		for (UUID asteroidId : asteroidToShipMap.keySet()) {
 			Asteroid asteroid = (Asteroid) space.getObjectById(asteroidId);
 			if (asteroid == null || !asteroid.isAlive() || asteroid.isMoveable()) {
- 				finishedAsteroids.add(asteroid);
+				finishedAsteroids.add(asteroid);
 				//System.out.println("Removing asteroid from map");
 			}
 		}
@@ -332,6 +383,19 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 			asteroidToShipMap.remove(asteroid.getId());
 		}
 
+		// check to see who bounced off bases
+		for (UUID shipId : aimingForBase.keySet()) {
+			if (aimingForBase.get(shipId)) {
+				Ship ship = (Ship) space.getObjectById(shipId);
+				if (ship.getResources().getTotal() == 0 && ship.getNumFlags() == 0 && ship.getNumCores() == 0) {
+					// we hit the base (or died, either way, we are not aiming for base now)
+					//System.out.println("Hit the base and dropped off resources");
+					aimingForBase.put(shipId, false);
+					justHitBase.put(shipId, true);
+					goingForCore.put(ship.getId(), false);
+				}
+			}
+		}
 
 	}
 
@@ -342,7 +406,8 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 	public void initialize(Toroidal2DPhysics space) {
 		asteroidToShipMap = new HashMap<UUID, Ship>();
 		aimingForBase = new HashMap<UUID, Boolean>();
-		
+		justHitBase = new HashMap<UUID, Boolean>();
+		goingForCore = new HashMap<UUID, Boolean>();
 	}
 
 	/**
@@ -381,7 +446,7 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 				numShips++;
 			}
 		}
-		
+
 		// now see if we can afford a base or a ship.  We want a base but we also really want a 3rd ship
 		// try to balance
 		if (purchaseCosts.canAfford(PurchaseTypes.BASE, resourcesAvailable)) {
@@ -389,7 +454,23 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 				if (actionableObject instanceof Ship) {
 					Ship ship = (Ship) actionableObject;
 					Set<Base> bases = space.getBases();
+					boolean boughtDrone = false;
+					boolean boughtCore = false;
 
+					if (!boughtDrone && ship.getNumCores() > 0 &&
+							purchaseCosts.canAfford(PurchaseTypes.DRONE, resourcesAvailable)) { // Or some other criteria for buying a drone, depending on what user wants
+						purchases.put(ship.getId(), PurchaseTypes.DRONE); //This spawns a drone within a certain radius of your ship
+						boughtDrone = true;
+						//System.out.println("Bought a drone!");
+					}
+
+					if (!boughtCore && ship.getNumCores() == 0 && 
+							purchaseCosts.canAfford(PurchaseTypes.CORE, resourcesAvailable)) { //Or some other criteria for buying a core
+						purchases.put(ship.getId(), PurchaseTypes.CORE); //This places a core in your ship’s inventory
+						//System.out.println("Bought a core!!");
+						boughtCore = true;
+					}
+					
 					// how far away is this ship to a base of my team?
 					boolean buyBase = true;
 					numBases = 0;
@@ -411,13 +492,13 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 				}
 			}		
 		} 
-		
+
 		// can I buy a ship?
 		if (purchaseCosts.canAfford(PurchaseTypes.SHIP, resourcesAvailable) && bought_base == false) {
 			for (AbstractActionableObject actionableObject : actionableObjects) {
 				if (actionableObject instanceof Base) {
 					Base base = (Base) actionableObject;
-					
+
 					purchases.put(base.getId(), PurchaseTypes.SHIP);
 					System.out.println("Pacifist Flag Collector is buying a ship!");
 					break;
@@ -426,7 +507,6 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 			}
 
 		}
-
 
 		return purchases;
 	}
@@ -442,7 +522,7 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 			Set<AbstractActionableObject> actionableObjects) {
 		HashMap<UUID, SpaceSettlersPowerupEnum> powerUps = new HashMap<UUID, SpaceSettlersPowerupEnum>();
 
-		
+
 		return powerUps;
 	}
 

@@ -56,17 +56,17 @@ public class Toroidal2DPhysics {
 	 * The list of beacons
 	 */
 	Set<Beacon> beacons;
-	
+
 	/**
 	 * The list of asteroids
 	 */
 	Set<Asteroid> asteroids;
-	
+
 	/**
 	 * The list of current AI Cores
 	 */
 	Set<AiCore> cores;
-	
+
 	/**
 	 * The list of bases
 	 */
@@ -76,37 +76,37 @@ public class Toroidal2DPhysics {
 	 * The list of ships
 	 */
 	Set<Ship> ships;
-	
+
 	/**
 	 * The list of drones
 	 */
 	Set<Drone> drones;
-	
+
 	/**
 	 * The ets of flags
 	 */
 	Set<Flag> flags;
-	
+
 	/**
 	 * List of all weapons currently in play
 	 */
 	Set<AbstractWeapon> weapons;
-	
+
 	/**
 	 * A hashmap of objects by their ID
 	 */
 	HashMap <UUID, AbstractObject> objectsById;
-	
+
 	/**
 	 * The timestep used for simulation of physics
 	 */
 	double timeStep;
-	
+
 	/**
 	 * The current timestep iteration
 	 */
 	int currentTimeStep;
-	
+
 	/**
 	 * Maximum velocities (to keep things from going nuts)
 	 */
@@ -118,12 +118,12 @@ public class Toroidal2DPhysics {
 	 * Handles collisions between spacewar objects
 	 */
 	CollisionHandler collisionHandler;
-	
+
 	/**
 	 * Maximum time step
 	 */
 	int maxTime;
-	
+
 	/**
 	 * Information on all of the teams for sharing (set each time step)
 	 */
@@ -210,8 +210,8 @@ public class Toroidal2DPhysics {
 		maxTime = other.maxTime;
 		teamInfo = new LinkedHashSet<ImmutableTeamInfo>(other.teamInfo);
 	}
-	
-	
+
+
 
 	/**
 	 * Add an object to the physics simulation
@@ -223,35 +223,35 @@ public class Toroidal2DPhysics {
 		if (obj instanceof Beacon) {
 			beacons.add((Beacon) obj);
 		}
-		
+
 		if (obj instanceof AiCore) {
 			cores.add((AiCore) obj);
 		}
-		
+
 		if (obj instanceof Asteroid) {
 			asteroids.add((Asteroid) obj);
 		}
-		
+
 		if (obj instanceof Base) {
 			bases.add((Base) obj);
 		}
-		
+
 		if (obj instanceof Ship) {
 			ships.add((Ship) obj);
 		}
-		
+
 		if (obj instanceof AbstractWeapon) {
 			weapons.add((AbstractWeapon)obj);
 		}
-		
+
 		if (obj instanceof Drone) { //herr0861 edit
 			drones.add((Drone)obj);
 		}
-		
+
 		if (obj instanceof Flag) {
 			flags.add((Flag) obj);
 		}
-		
+
 		objectsById.put(obj.getId(), obj);
 	}
 
@@ -266,35 +266,35 @@ public class Toroidal2DPhysics {
 		if (obj.getClass() == Beacon.class) {
 			beacons.remove((Beacon) obj);
 		}
-		
+
 		if (obj.getClass() == Asteroid.class) {
 			asteroids.remove((Asteroid) obj);
 		}
-		
+
 		if (obj.getClass() == AiCore.class) {
 			cores.remove((AiCore) obj);
 		}
-		
+
 		if (obj.getClass() == Base.class) {
 			bases.remove((Base) obj);
 		}
-		
+
 		if (obj.getClass() == Ship.class) {
 			ships.remove((Ship) obj);
 		}
-		
+
 		if (obj instanceof AbstractWeapon) {
 			weapons.remove((AbstractWeapon)obj);
 		}
-		
+
 		if (obj instanceof Drone) {//herr0861 edit
 			drones.remove((Drone)obj);
 		}
-		
+
 		if (obj instanceof Flag) {
 			flags.remove((Flag) obj);
 		}
-		
+
 		objectsById.remove(obj.getId());
 	}
 
@@ -314,7 +314,7 @@ public class Toroidal2DPhysics {
 	public Set<Asteroid> getAsteroids() {
 		return asteroids;
 	}
-	
+
 	/**
 	 * Return the list of beacons
 	 * 
@@ -323,7 +323,7 @@ public class Toroidal2DPhysics {
 	public Set<Beacon> getBeacons() {
 		return beacons;
 	}
-	
+
 	/**
 	 * Return the list of bases
 	 * 
@@ -340,7 +340,7 @@ public class Toroidal2DPhysics {
 	public Set<Ship> getShips() {
 		return ships;
 	}
-	
+
 	/**
 	 * Return the list of cores currently in play
 	 * @return Set of AiCores
@@ -348,8 +348,8 @@ public class Toroidal2DPhysics {
 	public Set<AiCore> getCores() {
 		return cores;
 	}
-	
-	
+
+
 	/**
 	 * Return a list of weapons currently in play
 	 * @return
@@ -357,7 +357,7 @@ public class Toroidal2DPhysics {
 	public Set<AbstractWeapon> getWeapons() {
 		return weapons;
 	}
-	
+
 	/**
 	 * Return a list of drones currently in play
 	 * @return
@@ -365,8 +365,8 @@ public class Toroidal2DPhysics {
 	public Set<Drone> getDrones() { //herr0861 edit
 		return drones;
 	}
-	
-	
+
+
 	/**
 	 * Return the list of flags currently in play
 	 * @return
@@ -398,7 +398,7 @@ public class Toroidal2DPhysics {
 	public double getTimestepDuration() {
 		return timeStep;
 	}
-	
+
 	/**
 	 * Return the timestep 
 	 * @return
@@ -406,7 +406,7 @@ public class Toroidal2DPhysics {
 	public int getCurrentTimestep() {
 		return currentTimeStep;
 	}
-	
+
 	/**
 	 * Returns a new random free location in space
 	 * 
@@ -439,7 +439,8 @@ public class Toroidal2DPhysics {
 		Position randLocation = new Position(newX, newY);
 		toroidalWrap(randLocation);
 
-		while (!isLocationFree(randLocation, freeRadius) || findShortestDistance(centerPosition, randLocation) > maxDistance) {
+		while (!isLocationFree(randLocation, freeRadius) || 
+				findShortestDistance(centerPosition, randLocation) > maxDistance) {
 			newX = ((2 * rand.nextDouble()) - 1) * maxDistance + centerX;
 			newY = ((2 * rand.nextDouble()) - 1) * maxDistance + centerY;
 			randLocation = new Position(newX, newY);
@@ -459,10 +460,10 @@ public class Toroidal2DPhysics {
 			int ULX, int ULY, int LRX, int LRY) {
 		int boxWidth = LRX - ULX;
 		int boxHeight = LRY - ULY;
-		
+
 		//System.out.println("Making a random location inside UL (x,y) " + ULX + ", " + ULY + 
 		//		" to LR (x,y) " + LRY + ", " + LRY);
-		
+
 		Position centerPosition = new Position(boxWidth / 2 + ULX, boxHeight / 2 + ULY);
 		//System.out.println("Center position is " + centerPosition);
 		double newX = ((2 * rand.nextDouble()) - 1) * (boxWidth / 2.0) + centerPosition.getX();
@@ -575,15 +576,15 @@ public class Toroidal2DPhysics {
 	/**
 	 * Move all moveable objects and handle power ups.
 	 */
-	public void advanceTime(int currentTimeStep, Map<UUID, SpaceSettlersPowerupEnum> powerups) {
-		
+	public void advanceTime(Random rand, int currentTimeStep, Map<UUID, SpaceSettlersPowerupEnum> powerups) {
+
 		this.currentTimeStep = currentTimeStep;
-		
+
 		// heal any base injuries
 		for (Base base : bases) {
 			base.updateEnergy(base.getHealingIncrement());
 		}
-		
+
 		// detect collisions across all objects
 		detectCollisions();
 
@@ -605,37 +606,37 @@ public class Toroidal2DPhysics {
 			if (!object.isMoveable() || !object.isAlive()) {
 				continue;
 			}
-			
+
 			Position currentPosition = object.getPosition();
-			
+
 			if (object instanceof Drone) { //herr0861 edit
 				Drone drone = (Drone) object;
 				if (drone.getCurrentAction() == null) {
 					drone.setCurrentAction(this.deepClone());
 				}
-				
+
 				AbstractAction action = drone.getCurrentAction();
-				
+
 				//AbstractAction action = drone.getDroneAction(this.deepClone());
-				
+
 				if (action == null) {
 					action = new DoNothingAction(); //This should never happen, but I'll keep it just in case.						
-						System.out.println("Drone doing nothing!");
+					System.out.println("Drone doing nothing!");
 
 				}
-				
+
 				/* Don't actually need to clone this since the user can't modify it, but might as well to be consistent
 				 * because maybe in the future people will be allowed to specify behavior for the drone.
 				 */
-				
-				
+
+
 				Movement actionMovement = action.getMovement(this.deepClone(), drone.deepClone());
-				
-				
+
+
 				//System.out.println("Applying movement to drone [" + drone.toString() + "]"); //herr0861REMOVE
 				Position newPosition = applyMovement(currentPosition, actionMovement, timeStep);
 				//System.out.println("The old position is: [" + currentPosition + "] and the new position is: [" + newPosition);
-				
+
 				if (newPosition.isValid()) {
 					drone.setPosition(newPosition);
 					//System.out.println("Position is:" + object.getPosition());
@@ -644,7 +645,7 @@ public class Toroidal2DPhysics {
 					//System.out.println("Invalid position"); //herr0861REMOVE
 					drone.setPosition(currentPosition);
 				}
-				
+
 				// spend drone energy proportional to its acceleration and mass
 				double angularAccel = Math.abs(actionMovement.getAngularAccleration());
 				double angularInertia = (3.0 * drone.getMass() * drone.getRadius() * angularAccel) / 2.0; 
@@ -653,16 +654,11 @@ public class Toroidal2DPhysics {
 				//I made drones slightly efficient at moving on account of being a drone and not needing to carry a bunch of systems around like a ship!
 				int penalty = (int) Math.floor(0.7*(ENERGY_PENALTY * (angularInertia + linearInertia)));
 				drone.updateEnergy(-penalty);
-				
-				
-				
-				
-			}else 			// is it a ship that can be controlled?
-			if (object.isControllable() && !(object instanceof Drone)) { //herr0861 edit
+			} else if (object.isControllable() && !(object instanceof Drone)) { 
 
 				Ship ship = (Ship) object;
 				AbstractAction action = ship.getCurrentAction();
-				
+
 				// handle a null action
 				if (action == null) {
 					action = new DoNothingAction();
@@ -679,7 +675,7 @@ public class Toroidal2DPhysics {
 				} else {
 					ship.setPosition(currentPosition);
 				}
-				
+
 				// spend ship energy proportional to its acceleration (old formula used velocity) and mass (new for space settlers
 				// since resources cost mass)
 				//double penalty = ENERGY_PENALTY * -Math.abs(ship.getPosition().getTotalTranslationalVelocity());
@@ -689,21 +685,25 @@ public class Toroidal2DPhysics {
 				double linearInertia = ship.getMass() * linearAccel;
 				int penalty = (int) Math.floor(ENERGY_PENALTY * (angularInertia + linearInertia));
 				ship.updateEnergy(-penalty);
-				
+
 				// this isn't the most general fix but it will work for now (also has to be done for bases)
 				if (ship.isShielded()) {
 					ship.updateEnergy(-PowerupToggleShield.SHIELD_STEP_COST);
 				}
-				
-				
-//				if (!ship.isAlive()) {
-//					System.out.println("Ship " + ship.getTeamName() + ship.getId() + " is dead");
-//				}
-				
+
+
+				//				if (!ship.isAlive()) {
+				//					System.out.println("Ship " + ship.getTeamName() + ship.getId() + " is dead");
+				//				}
+
 			} else {
 				// move all other types of objects
 				Position newPosition = moveOneTimestep(currentPosition);
 				object.setPosition(newPosition);
+				if (object instanceof Flag && Double.isNaN(newPosition.getX())) {
+					System.out.println("alive: " + object.isAlive() + " draw: " + object.isDrawable() + " old pos is " + currentPosition + " new position is " + newPosition);
+					System.exit(-1);
+				}
 			}
 
 			// if any ships or bases are frozen, decrement their frozen count
@@ -713,7 +713,7 @@ public class Toroidal2DPhysics {
 			}
 
 		}
-		
+
 		// go through and see if any bases have died
 		Set<Base> basesClone = new LinkedHashSet<Base>(bases);
 		for (Base base : basesClone) {
@@ -721,52 +721,56 @@ public class Toroidal2DPhysics {
 			if (base.isShielded()) {
 				base.updateEnergy(-PowerupToggleShield.SHIELD_STEP_COST);
 			}
-			
+
 			if (!base.isAlive()) {
 				base.setAlive(false);
 				removeObject(base);
 				base.getTeam().removeBase(base);
 			}
 		}
-		
+
 		for (Drone drone : drones) {
 			if (drone.getEnergy() <= 0 && drone.isAlive() == true) {//drone has died
-				drone.setAlive(false); //kill the drone dropping the flag and all resources, but no core. Should we make it have a chance to drop an AiCore? Probably not.
+				drone.setDeadAndDropObjects(rand, this); //kill the drone dropping the flag and all resources, but no core. Should we make it have a chance to drop an AiCore? Probably not.
 				removeObject(drone);
 				drone.getTeam().removeDrone(drone);
 			}
 		}
-		
+
 		// and see if any ships have died. Doing this here removes unintential side effects
 		// from when it was called inside updateEnergy
 		for (Ship ship : ships){
 			if (ship.getEnergy() <= 0 && ship.isAlive() == true) {
-				// drop any resources that the ship was carrying
-				ResourcePile resources = ship.getResources();
-
 				//Spawn a new AiCore with the same velocity magnitude and direction as its parent ship.
 				// handle dropping the core if the ship died
-				Position corePosition = ship.getPosition();
+				Position corePosition = this.getRandomFreeLocationInRegion(rand, AiCore.CORE_RADIUS, 
+						(int) ship.getPosition().getX(), 
+						(int) ship.getPosition().getY(), 200);
 				corePosition.setTranslationalVelocity(ship.getPosition().getTranslationalVelocity());
 				corePosition.setAngularVelocity(ship.getPosition().getAngularVelocity());
 				AiCore shipCore = new AiCore(corePosition, ship.getTeamName(),ship.getTeamColor());
 				this.addObject(shipCore);
-				
+
+				// drop any resources that the ship was carrying - this was commented out due to 
+				// creating giant piles of resources
+				ResourcePile resources = ship.getResources();
+
 				if (resources.getTotal() > 0) {
 					//Position newPosition = ship.getPosition();
 					//newPosition.setTranslationalVelocity(new Vector2D(0,0));
 					//newPosition.setAngularVelocity(0.0);
 					//Asteroid newAsteroid = new Asteroid(newPosition, true, ship.getRadius(), true, resources);
 					//this.addObject(newAsteroid);
-					
+
 					//distributeResourcesToNearbyAsteroids(ship.getPosition(), resources);
 					//System.out.println("Adding a new asteroid with resources " + newAsteroid.getResources().getTotal() +
 					//		" due to death, total is " + asteroids.size());
 					//System.out.println("Ship died and " + resources.getTotal() + " has been added to an asteroid");
 				}
-				
+
 				// set the ship to dead last (so we can grab its resources first)
-				ship.setAlive(false);
+				// this drops the flag
+				ship.setDeadAndDropObjects(rand, this);
 			}
 		}
 	}
@@ -782,7 +786,7 @@ public class Toroidal2DPhysics {
 	private void distributeResourcesToNearbyAsteroids(Position position, ResourcePile resources) {
 		double nearestDistance = Double.MAX_VALUE;
 		Asteroid nearestAsteroid = null;
-		
+
 		// first find the nearest asteroid
 		for (Asteroid asteroid : asteroids) {
 			double dist = findShortestDistance(position, asteroid.getPosition());
@@ -791,17 +795,17 @@ public class Toroidal2DPhysics {
 				nearestAsteroid = asteroid;
 			}
 		}
-		
+
 		// if it is mineable, just add the resources
 		nearestAsteroid.addResources(resources);
 		if (!nearestAsteroid.isMineable()) {
 			// transform it to mineable
 			nearestAsteroid.setMineable(true);
 		}
-			
+
 	}
-	
-	
+
+
 	/**
 	 * Handle power ups for the specified object
 	 * @param swobject
@@ -819,7 +823,7 @@ public class Toroidal2DPhysics {
 				weapon.applyPowerup(ship);
 			}
 			break;
-			
+
 		case FIRE_EMP:
 			ship = (Ship) swobject;
 			weapon = ship.getNewWeapon(SpaceSettlersPowerupEnum.FIRE_EMP);
@@ -834,36 +838,36 @@ public class Toroidal2DPhysics {
 			PowerupToggleShield toggle = new PowerupToggleShield();
 			toggle.applyPowerup(swobject);
 			break;
-			
+
 		case DOUBLE_WEAPON_CAPACITY:
 			PowerupDoubleWeapon weaponDoubler = new PowerupDoubleWeapon();
 			weaponDoubler.applyPowerup(swobject);
 			break;
-			
+
 		case DOUBLE_BASE_HEALING_SPEED:
 			PowerupDoubleHealingBaseEnergy baseDoubler = new PowerupDoubleHealingBaseEnergy();
 			baseDoubler.applyPowerup(swobject);
 			break;
-			
+
 		case DOUBLE_MAX_ENERGY:
 			PowerupDoubleMaxEnergy maxEnergyDoubler = new PowerupDoubleMaxEnergy();
 			maxEnergyDoubler.applyPowerup(swobject);
 			break;
-			
+
 		case FIRE_HEAT_SEEKING_MISSILE:
 			break;
-			
+
 		case FIRE_TURRET:
 			break;
-			
+
 		case LAY_MINE:
 			break;
-			
+
 		default:
 			break;
-			
+
 		}
-		
+
 	}
 
 	/**
@@ -874,6 +878,9 @@ public class Toroidal2DPhysics {
 	private Position moveOneTimestep(Position position) {
 		double angularVelocity = position.getAngularVelocity();
 		double orientation =  position.getOrientation() + (angularVelocity * timeStep);
+		if (Double.isNaN(angularVelocity) || Double.isNaN(position.getTotalTranslationalVelocity())) {
+			System.out.println("Help: velocity got set to Nan " + position);
+		}
 
 		// make sure orientation wraps correctly (-pi to pi)
 		if (orientation > Math.PI) {
@@ -910,19 +917,19 @@ public class Toroidal2DPhysics {
 			if (!object1.isAlive()) {
 				continue;
 			}
-			
+
 			for (int j = i + 1; j < allObjectsArray.length; j++) {
 				AbstractObject object2 = allObjectsArray[j];
 
 				if (!object2.isAlive()) {
 					continue;
 				}
-				
+
 				// skip them if they are the same object
 				if (object1.equals(object2)) {
 					continue;
 				}
-				
+
 				double distance = findShortestDistance(object1.getPosition(), object2.getPosition());
 
 				if (distance < (object1.getRadius() + object2.getRadius())) {
@@ -1018,7 +1025,7 @@ public class Toroidal2DPhysics {
 		for (AbstractObject object : allObjects) {
 			if (!object.isAlive() && object.canRespawn()) {
 				Position newPosition = null;
-				
+
 				// flags should re-spawn at a randomly chosen starting location
 				if (object instanceof Flag) {
 					Flag flag = (Flag) object;
@@ -1028,13 +1035,13 @@ public class Toroidal2DPhysics {
 					// introduced of putting a ship or a base where the flag should spawn)
 					newPosition = getRandomFreeLocationInRegion(random, flag.getRadius() * 2, 
 							(int) newPosition.getX(), (int) newPosition.getY(), 75);
-					
+
 				} else {
 					// note this is time 2 in order to ensure objects don't spawn touching (and just to get
 					// them a bit farther apart
 					newPosition = getRandomFreeLocation(random, object.getRadius() * 2);
 				}
-				
+
 				object.setPosition(newPosition);
 				object.setAlive(true);
 				object.setDrawable(true);
@@ -1045,14 +1052,14 @@ public class Toroidal2DPhysics {
 				}
 
 				// make moveable asteroids move again when they respawn
-                if (object.isMoveable() && !(object instanceof Flag)) {
-                    Vector2D randomMotion = Vector2D.getRandom(random, asteroidMaxVelocity);
-                    object.getPosition().setTranslationalVelocity(randomMotion);
-                }
+				if (object.isMoveable() && !(object instanceof Flag)) {
+					Vector2D randomMotion = Vector2D.getRandom(random, asteroidMaxVelocity);
+					object.getPosition().setTranslationalVelocity(randomMotion);
+				}
 
 			}
 		}
-		
+
 
 	}
 
@@ -1066,10 +1073,10 @@ public class Toroidal2DPhysics {
 
 		for (AbstractObject swObject : allObjects) {
 			AbstractObject newObject = swObject.deepClone();
-			
+
 			newSpace.addObject(newObject);
 		}
-		
+
 		return newSpace;
 	}
 
@@ -1083,11 +1090,11 @@ public class Toroidal2DPhysics {
 				deadObjects.add(object);
 			}
 		}
-		
+
 		for (AbstractObject deadObject : deadObjects) {
 			removeObject(deadObject);
 		}
-		
+
 	}
 
 	/**
@@ -1101,27 +1108,27 @@ public class Toroidal2DPhysics {
 				deadObjects.add(core);
 			}
 		}
-		
+
 		for (AbstractObject deadObject : deadObjects) {
 			removeObject(deadObject);
 		}
 
-		
+
 	}
-	
+
 	/**
 	 * Loop through all drones and remove any dead ones.
 	 * herr0861 edit
 	 */
 	public void cleanupDeadDrones() {
 		ArrayList<AbstractObject> deadObjects = new ArrayList<AbstractObject>();
-		
+
 		for (Drone drone : drones) {
 			if (!drone.isAlive()) {
 				deadObjects.add(drone);
 			}
 		}
-		
+
 		for (AbstractObject deadObject : deadObjects) {
 			removeObject(deadObject);
 		}
@@ -1160,20 +1167,20 @@ public class Toroidal2DPhysics {
 		double distanceToGoal = pathToGoal.getMagnitude();										// Distance of straight line path
 
 		boolean pathIsClear = true; // Boolean showing whether or not the path is clear
-		
+
 		// Calculate distance between obstruction center and path (including buffer for ship movement)
 		// Uses hypotenuse * sin(theta) = opposite (on a right hand triangle)
 		Vector2D pathToObstruction; // Vector from start position to obstruction
 		double angleBetween; 		// Angle between vector from start position to obstruction
-		
+
 		// Loop through obstructions
 		for (AbstractObject obstruction: obstructions) {
 			// If the distance to the obstruction is greater than the distance to the end goal, ignore the obstruction
 			pathToObstruction = findShortestDistanceVector(startPosition, obstruction.getPosition());
-		    if (pathToObstruction.getMagnitude() > distanceToGoal) {
+			if (pathToObstruction.getMagnitude() > distanceToGoal) {
 				continue;
 			}
-		    
+
 			// Ignore angles > 90 degrees
 			angleBetween = Math.abs(pathToObstruction.angleBetween(pathToGoal));
 			if (angleBetween > Math.PI/2) {
@@ -1186,9 +1193,9 @@ public class Toroidal2DPhysics {
 				break;
 			}
 		}
-		
+
 		return pathIsClear;
-		
+
 	}
 
 	/**
@@ -1209,6 +1216,6 @@ public class Toroidal2DPhysics {
 
 
 
-	
+
 
 }
