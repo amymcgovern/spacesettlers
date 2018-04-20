@@ -42,7 +42,7 @@
 	<variableTeams>
 		<HighLevelTeamConfig>
 			<teamName>GATeam</teamName>
-			<configFile>example-ga-clientinit.xml</configFile>
+			<configFile>hirs5742-spacesettlersinit.xml</configFile>
 		</HighLevelTeamConfig>
 	</variableTeams>
 

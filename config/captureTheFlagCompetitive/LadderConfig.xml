@@ -21,25 +21,10 @@
 		 each other and the static teams. -->
 	<variableTeams>
 		<HighLevelTeamConfig>
-			<teamName>RandomTeam</teamName>
-			<configFile>random-flag-clientinit.xml</configFile>
+			<teamName>MyTeam</teamName>
+			<configFile>amy-spacesettlersinit.xml</configFile>
 		</HighLevelTeamConfig>
-		<HighLevelTeamConfig>
-			<teamName>2ShipPassiveFlag</teamName>
-			<configFile>passive-flag2ships-clientinit.xml</configFile>
-		</HighLevelTeamConfig>
-		<HighLevelTeamConfig>
-			<teamName>3ShipPassiveFlag</teamName>
-			<configFile>passive-flag3ships-clientinit.xml</configFile>
-		</HighLevelTeamConfig>
-		<HighLevelTeamConfig>
-			<teamName>2ShipAggressiveFlag</teamName>
-			<configFile>aggressive-flag2ships-clientinit.xml</configFile>
-		</HighLevelTeamConfig>
-		<HighLevelTeamConfig>
-			<teamName>3ShipAggressiveFlag</teamName>
-			<configFile>aggressive-flag3ships-clientinit.xml</configFile>
-		</HighLevelTeamConfig>
+		
 	</variableTeams>
 
 </LadderConfig>

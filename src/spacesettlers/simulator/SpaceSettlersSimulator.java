@@ -995,6 +995,11 @@ public final class SpaceSettlersSimulator {
 			for (Team team : teams) {
 				team.setScore(team.getTotalFlagsCollected());
 			}
+		} else if (simConfig.getScoringMethod().equalsIgnoreCase("FlagsPlusCores")) {
+			// this scores by the raw number of flags collected (competitive ladder)
+			for (Team team : teams) {
+				team.setScore(team.getTotalFlagsCollected() + team.getTotalCoresCollected());
+			}
 		} else if (simConfig.getScoringMethod().equalsIgnoreCase("TotalFlagsMinusKills")) {
 			// this scores by the raw number of flags collected (competitive ladder) minus any kills from either team
 			int totalFlags = 0;

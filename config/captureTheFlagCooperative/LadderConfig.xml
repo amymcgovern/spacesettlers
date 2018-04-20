@@ -24,10 +24,6 @@
 			<teamName>SecondSimpleFlag2</teamName>
 			<configFile>passive-flag3ships-clientinit.xml</configFile>
 		</HighLevelTeamConfig>
-		<HighLevelTeamConfig>
-			<teamName>RandomTeam</teamName>
-			<configFile>random-flag-clientinit.xml</configFile>
-		</HighLevelTeamConfig>
 	</variableTeams>
 
 </LadderConfig>

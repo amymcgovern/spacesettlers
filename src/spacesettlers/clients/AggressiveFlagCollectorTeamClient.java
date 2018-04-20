@@ -23,9 +23,11 @@ import spacesettlers.graphics.SpacewarGraphics;
 import spacesettlers.graphics.StarGraphics;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.AbstractObject;
+import spacesettlers.objects.AiCore;
 import spacesettlers.objects.Asteroid;
 import spacesettlers.objects.Base;
 import spacesettlers.objects.Beacon;
+import spacesettlers.objects.Drone;
 import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
@@ -48,6 +50,8 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 	HashMap <UUID, Ship> asteroidToShipMap;
 	HashMap <UUID, Boolean> aimingForBase;
 	HashMap <UUID, Boolean> huntingShip;
+	HashMap <UUID, Boolean> justHitBase;
+	HashMap <UUID, Boolean> goingForCore;
 	double shootProb = 0.2;
 	
 	/**
@@ -125,6 +129,12 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 
 				// save the action for this ship
 				actions.put(ship.getId(), action);
+			} else if(actionable instanceof Drone) {
+				Drone drone = (Drone) actionable;
+				AbstractAction action;
+
+				action = drone.getDroneAction(space); //Or make up some action of your own! This just adds the default action back to the drone.
+				actions.put(drone.getId(), action);
 			} else {
 				// bases do nothing
 				actions.put(actionable.getId(), new DoNothingAction());
@@ -313,8 +323,16 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 		AbstractAction current = ship.getCurrentAction();
 		Position currentPosition = ship.getPosition();
 
+		// if the ship has enough resourcesAvailable, take it back to base
+		if (ship.getResources().getTotal() > 500  || ship.getNumCores() > 0) {
+			Base base = findNearestBase(space, ship);
+			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, base);
+			aimingForBase.put(ship.getId(), true);
+			return newAction;
+		}
+		
 		// aim for a beacon if there isn't enough energy
-		if (ship.getEnergy() < 2000) {
+		if (ship.getEnergy() < 1000) {
 			Beacon beacon = pickNearestBeacon(space, ship);
 			AbstractAction newAction = null;
 			// if there is no beacon, then just skip a turn
@@ -327,23 +345,30 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 			return newAction;
 		}
 
-		// if the ship has enough resourcesAvailable, take it back to base
-		if (ship.getResources().getTotal() > 500) {
-			Base base = findNearestBase(space, ship);
-			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, base);
-			aimingForBase.put(ship.getId(), true);
+		// if there is a nearby core, go get it
+		AiCore nearbyCore = pickNearestCore(space, ship, 200);
+		if (nearbyCore != null) {
+			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, nearbyCore);
+			goingForCore.put(ship.getId(), true);
+			aimingForBase.put(ship.getId(), false);
 			return newAction;
 		}
 
+
 		// did we bounce off the base?
-		if (ship.getResources().getTotal() == 0 && ship.getEnergy() > 2000 && aimingForBase.containsKey(ship.getId()) && aimingForBase.get(ship.getId())) {
-			current = null;
+		if (current == null || current.isMovementFinished(space) ||
+				(justHitBase.containsKey(ship.getId()) && justHitBase.get(ship.getId()))) {
 			aimingForBase.put(ship.getId(), false);
+			justHitBase.put(ship.getId(), false);			
+			goingForCore.put(ship.getId(), false);
+			current = null;
 		}
 
 		// otherwise aim for the asteroid
 		if (current == null || current.isMovementFinished(space)) {
 			aimingForBase.put(ship.getId(), false);
+			justHitBase.put(ship.getId(), false);			
+			goingForCore.put(ship.getId(), false);
 			Asteroid asteroid = pickHighestValueNearestFreeAsteroid(space, ship);
 
 			AbstractAction newAction = null;
@@ -360,6 +385,28 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 		return ship.getCurrentAction();
 	}
 
+	/**
+	 * Find the nearest core to this ship that falls within the specified minimum distance
+	 * @param space
+	 * @param ship
+	 * @return
+	 */
+	private AiCore pickNearestCore(Toroidal2DPhysics space, Ship ship, int minimumDistance) {
+		Set<AiCore> cores = space.getCores();
+
+		AiCore closestCore = null;
+		double bestDistance = minimumDistance;
+
+		for (AiCore core : cores) {
+			double dist = space.findShortestDistance(ship.getPosition(), core.getPosition());
+			if (dist < bestDistance) {
+				bestDistance = dist;
+				closestCore = core;
+			}
+		}
+
+		return closestCore;
+	}	
 
 	/**
 	 * Find the base for this team nearest to this ship
@@ -453,7 +500,19 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 			asteroidToShipMap.remove(asteroid.getId());
 		}
 
-
+		// check to see who bounced off bases
+		for (UUID shipId : aimingForBase.keySet()) {
+			if (aimingForBase.get(shipId)) {
+				Ship ship = (Ship) space.getObjectById(shipId);
+				if (ship.getResources().getTotal() == 0 && ship.getNumFlags() == 0 && ship.getNumCores() == 0) {
+					// we hit the base (or died, either way, we are not aiming for base now)
+					//System.out.println("Hit the base and dropped off resources");
+					aimingForBase.put(shipId, false);
+					justHitBase.put(shipId, true);
+					goingForCore.put(ship.getId(), false);
+				}
+			}
+		}
 	}
 
 	/**
@@ -464,6 +523,8 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 		asteroidToShipMap = new HashMap<UUID, Ship>();
 		aimingForBase = new HashMap<UUID, Boolean>();
 		huntingShip = new HashMap<UUID, Boolean>();
+		justHitBase = new HashMap<UUID, Boolean>();
+		goingForCore = new HashMap<UUID, Boolean>();
 		
 	}
 
@@ -511,6 +572,24 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 				if (actionableObject instanceof Ship) {
 					Ship ship = (Ship) actionableObject;
 					Set<Base> bases = space.getBases();
+
+					boolean boughtDrone = false;
+					boolean boughtCore = false;
+
+					if (!boughtDrone && ship.getNumCores() > 0 &&
+							purchaseCosts.canAfford(PurchaseTypes.DRONE, resourcesAvailable)) { // Or some other criteria for buying a drone, depending on what user wants
+						purchases.put(ship.getId(), PurchaseTypes.DRONE); //This spawns a drone within a certain radius of your ship
+						boughtDrone = true;
+						//System.out.println("Bought a drone!");
+					}
+
+					if (!boughtCore && ship.getNumCores() == 0 && 
+							purchaseCosts.canAfford(PurchaseTypes.CORE, resourcesAvailable)) { //Or some other criteria for buying a core
+						purchases.put(ship.getId(), PurchaseTypes.CORE); //This places a core in your ship’s inventory
+						//System.out.println("Bought a core!!");
+						boughtCore = true;
+					}
+					
 
 					// how far away is this ship to a base of my team?
 					boolean buyBase = true;
@@ -578,7 +657,13 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 						}
 					}
 				}
-
+				
+				// launch the drone with the flag
+				if (ship.isCarryingFlag()) {
+					if (ship.isValidPowerup(SpaceSettlersPowerupEnum.DRONE)) {
+						powerUps.put(ship.getId(), SpaceSettlersPowerupEnum.DRONE);
+					}
+				}
 			}
 		}
 		

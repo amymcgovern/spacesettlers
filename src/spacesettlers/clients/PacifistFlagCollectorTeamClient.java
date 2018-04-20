@@ -227,7 +227,6 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 		// if there is a nearby core, go get it
 		AiCore nearbyCore = pickNearestCore(space, ship, 200);
 		if (nearbyCore != null) {
-			Position newGoal = nearbyCore.getPosition();
 			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, nearbyCore);
 			goingForCore.put(ship.getId(), true);
 			aimingForBase.put(ship.getId(), false);
@@ -522,7 +521,19 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 			Set<AbstractActionableObject> actionableObjects) {
 		HashMap<UUID, SpaceSettlersPowerupEnum> powerUps = new HashMap<UUID, SpaceSettlersPowerupEnum>();
 
-
+		for (AbstractObject actionable :  actionableObjects) {
+			if (actionable instanceof Ship) {
+				Ship ship = (Ship) actionable;
+				
+				// launch the drone with the flag
+				if (ship.isCarryingFlag()) {
+					if (ship.isValidPowerup(SpaceSettlersPowerupEnum.DRONE)) {
+						powerUps.put(ship.getId(), SpaceSettlersPowerupEnum.DRONE);
+					}
+				}
+			}
+		}
+		
 		return powerUps;
 	}
 

@@ -15,7 +15,7 @@
 	<randomSeed>0</randomSeed>
 
 	<!-- Scoring mechanism used for this game: Can be Resources, Beacons, ... (more as we add them) -->
-	<scoringMethod>Flags</scoringMethod>
+	<scoringMethod>FlagsPlusCores</scoringMethod>
 
 	<!-- Specify the number of the beacons.  The locations are initialized randomly -->
 	<numBeacons>5</numBeacons>
@@ -37,7 +37,7 @@
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
 			<teamName>Team2</teamName>
-			<configFile>passive-flag3ships-clientinit.xml</configFile>
+			<configFile>aggressive-flag2ships-clientinit.xml</configFile>
 		</HighLevelTeamConfig>		
 	</teams>
 
