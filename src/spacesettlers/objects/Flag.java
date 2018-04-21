@@ -49,14 +49,9 @@ public class Flag extends AbstractObject {
 	boolean beingCarried;
 	
 	/**
-	 * Reference to the ship carrying the flag (if it is being carried)
+	 * Reference to the ship/drone carrying the flag (if it is being carried)
 	 */
-	Ship carryingShip;
-	
-	/**
-	 * Reference to the drone carrying the flag (if it is being carried)
-	 */
-	Drone carryingDrone;
+	AbstractObject carryingShipOrDrone;
 	
 	/**
 	 * Create a new flag
@@ -81,7 +76,7 @@ public class Flag extends AbstractObject {
 			this.startingLocations[i] = startingLocations[i].deepCopy();
 		}
 		this.beingCarried = false;
-		this.carryingShip = null;
+		this.carryingShipOrDrone = null;
 	}
 
 	@Override
@@ -93,8 +88,8 @@ public class Flag extends AbstractObject {
 		newFlag.setAlive(isAlive);
 		newFlag.setDrawable(isDrawable);
 		newFlag.beingCarried = this.beingCarried;
-		if (newFlag.carryingShip != null) {
-			newFlag.carryingShip = this.carryingShip.deepClone();
+		if (newFlag.carryingShipOrDrone != null) {
+			newFlag.carryingShipOrDrone = this.carryingShipOrDrone.deepClone();
 		}
 		newFlag.id = id;
 		return newFlag;
@@ -126,8 +121,7 @@ public class Flag extends AbstractObject {
 	 */
 	public void pickupFlag(Drone drone) {
 		this.beingCarried = true;
-		this.carryingDrone = drone;
-		this.carryingShip = null;
+		this.carryingShipOrDrone = drone;
 		setPosition(drone.getPosition().deepCopy());
 		this.setDrawable(false);
 		this.setRespawn(false);
@@ -142,8 +136,7 @@ public class Flag extends AbstractObject {
 	 */
 	public void pickupFlag(Ship ship) {
 		this.beingCarried = true;
-		this.carryingShip = ship;
-		this.carryingDrone = null;//herr0861 edit
+		this.carryingShipOrDrone = ship;
 		setPosition(ship.getPosition().deepCopy());
 		this.setDrawable(false);
 		this.setRespawn(false);
@@ -160,13 +153,14 @@ public class Flag extends AbstractObject {
 		this.setDrawable(true);
 		this.setAlive(true);
 		this.setRespawn(false);
+		
 		Position newPosition = space.getRandomFreeLocationInRegion(rand, this.getRadius(), 
-				(int) carryingShip.getPosition().getX(), 
-				(int) carryingShip.getPosition().getY(), 200);
-		newPosition.setAngularVelocity(carryingShip.getPosition().getAngularVelocity());
-		newPosition.setTranslationalVelocity(carryingShip.getPosition().getTranslationalVelocity());
+				(int) carryingShipOrDrone.getPosition().getX(), 
+				(int) carryingShipOrDrone.getPosition().getY(), 200);
+		newPosition.setAngularVelocity(carryingShipOrDrone.getPosition().getAngularVelocity());
+		newPosition.setTranslationalVelocity(carryingShipOrDrone.getPosition().getTranslationalVelocity());
 		this.setPosition(newPosition);
-		this.carryingShip = null;
+		this.carryingShipOrDrone = null;
 	}
 
 	/**

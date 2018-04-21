@@ -729,7 +729,9 @@ public class Toroidal2DPhysics {
 			}
 		}
 
-		for (Drone drone : drones) {
+		
+		Set<Drone> dronesClone = new LinkedHashSet<Drone>(drones);
+		for (Drone drone : dronesClone) {
 			if (drone.getEnergy() <= 0 && drone.isAlive() == true) {//drone has died
 				drone.setDeadAndDropObjects(rand, this); //kill the drone dropping the flag and all resources, but no core. Should we make it have a chance to drop an AiCore? Probably not.
 				removeObject(drone);

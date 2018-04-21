@@ -372,7 +372,7 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 
 		for (UUID asteroidId : asteroidToShipMap.keySet()) {
 			Asteroid asteroid = (Asteroid) space.getObjectById(asteroidId);
-			if (asteroid == null || !asteroid.isAlive() || asteroid.isMoveable()) {
+			if (asteroid != null && (!asteroid.isAlive() || asteroid.isMoveable())) {
 				finishedAsteroids.add(asteroid);
 				//System.out.println("Removing asteroid from map");
 			}
@@ -446,6 +446,30 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 			}
 		}
 
+		boolean boughtDrone = false;
+		boolean boughtCore = false;
+
+		for (AbstractActionableObject actionableObject : actionableObjects) {
+			if (actionableObject instanceof Ship) {
+				Ship ship = (Ship) actionableObject;
+
+				if (!boughtDrone && ship.getNumCores() > 0 &&
+						purchaseCosts.canAfford(PurchaseTypes.DRONE, resourcesAvailable)) { // Or some other criteria for buying a drone, depending on what user wants
+					purchases.put(ship.getId(), PurchaseTypes.DRONE); //This spawns a drone within a certain radius of your ship
+					boughtDrone = true;
+					//System.out.println("Bought a drone!");
+				}
+
+				if (!boughtCore && ship.getNumCores() == 0 && 
+						purchaseCosts.canAfford(PurchaseTypes.CORE, resourcesAvailable)) { //Or some other criteria for buying a core
+					purchases.put(ship.getId(), PurchaseTypes.CORE); //This places a core in your ship’s inventory
+					//System.out.println("Bought a core!!");
+					boughtCore = true;
+				}
+				
+			}
+		}
+		
 		// now see if we can afford a base or a ship.  We want a base but we also really want a 3rd ship
 		// try to balance
 		if (purchaseCosts.canAfford(PurchaseTypes.BASE, resourcesAvailable)) {
@@ -453,23 +477,6 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 				if (actionableObject instanceof Ship) {
 					Ship ship = (Ship) actionableObject;
 					Set<Base> bases = space.getBases();
-					boolean boughtDrone = false;
-					boolean boughtCore = false;
-
-					if (!boughtDrone && ship.getNumCores() > 0 &&
-							purchaseCosts.canAfford(PurchaseTypes.DRONE, resourcesAvailable)) { // Or some other criteria for buying a drone, depending on what user wants
-						purchases.put(ship.getId(), PurchaseTypes.DRONE); //This spawns a drone within a certain radius of your ship
-						boughtDrone = true;
-						//System.out.println("Bought a drone!");
-					}
-
-					if (!boughtCore && ship.getNumCores() == 0 && 
-							purchaseCosts.canAfford(PurchaseTypes.CORE, resourcesAvailable)) { //Or some other criteria for buying a core
-						purchases.put(ship.getId(), PurchaseTypes.CORE); //This places a core in your ship’s inventory
-						//System.out.println("Bought a core!!");
-						boughtCore = true;
-					}
-					
 					// how far away is this ship to a base of my team?
 					boolean buyBase = true;
 					numBases = 0;
@@ -511,7 +518,7 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 	}
 
 	/**
-	 * The pacifist flag collector doesn't use power ups 
+	 * The pacifist flag collector only uses the drone if it is available and no other powerups 
 	 * @param space
 	 * @param actionableObjects
 	 * @return
