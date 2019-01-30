@@ -42,11 +42,6 @@
 			<teamName>DoNothingTeam</teamName>
 			<configFile>donothing-clientinit.xml</configFile>
 		</HighLevelTeamConfig>		
-		<!-- you can uncomment the human team if you want to play against them in this environment.  Make sure to add their base below also. -->
-		<HighLevelTeamConfig>
-			<teamName>HumanTeam</teamName>
-			<configFile>hirs5742-spacesettlersinit.xml</configFile>
-		</HighLevelTeamConfig> 
 		<HighLevelTeamConfig>
 			<teamName>HeuristicMinerTeam</teamName>
 			<!-- Pick the one you intend to play against (self versus other) -->
