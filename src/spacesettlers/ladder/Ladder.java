@@ -415,7 +415,7 @@ public class Ladder {
 		String str = "<ul>";
 		
 		for (String gameString : ladderOutputString) {
-			str += "<li>" + gameString + "\n";
+			str += "<li>" + gameString.replaceAll("<", "&lt;").replaceAll(">", "&gt;") + "\n";
 		}
 		
 		str += "</ul>";
