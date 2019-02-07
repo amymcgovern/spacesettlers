@@ -40,7 +40,7 @@
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
 			<teamName>HumanTeam</teamName>
-			<configFile>human-clientinit.xml</configFile>
+			<configFile>random-clientinit.xml</configFile>
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
 			<teamName>HeuristicMinerTeam</teamName>

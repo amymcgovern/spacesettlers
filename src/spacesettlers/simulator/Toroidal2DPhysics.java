@@ -212,7 +212,6 @@ public class Toroidal2DPhysics {
 	}
 
 
-
 	/**
 	 * Add an object to the physics simulation
 	 * @param obj
@@ -959,8 +958,15 @@ public class Toroidal2DPhysics {
 		double angularVelocity = position.getAngularVelocity() + (angularAccel * timeStep);
 
 		// ensure the max/mins are respected
-		translationalVelocityX = checkTranslationalVelocity(translationalVelocityX);
-		translationalVelocityY = checkTranslationalVelocity(translationalVelocityY);
+		if ( position.getTranslationalVelocity().getMagnitude() > MAX_TRANSLATIONAL_VELOCITY ){
+			double ratio = position.getTranslationalVelocity().getMagnitude() / MAX_TRANSLATIONAL_VELOCITY;
+			position.setTranslationalVelocity(position.getTranslationalVelocity().multiply(1/ratio));
+		}
+		if ( position.getTranslationalVelocity().getMagnitude() < -MAX_TRANSLATIONAL_VELOCITY ){
+			double ratio = position.getTranslationalVelocity().getMagnitude() / -MAX_TRANSLATIONAL_VELOCITY;
+			position.setTranslationalVelocity(position.getTranslationalVelocity().multiply(1/ratio));
+		}
+
 		angularVelocity = checkAngularVelocity(angularVelocity);
 
 		Position newPosition = new Position(position.getX(), position.getY(), position.getOrientation());
@@ -983,22 +989,6 @@ public class Toroidal2DPhysics {
 		} else {
 			return angularVelocity;
 		}
-	}
-
-	/**
-	 * Ensure the translational velocity doesn't get too large
-	 * @param translationalVelocity
-	 * @return
-	 */
-	private double checkTranslationalVelocity(double translationalVelocity) {
-		if (translationalVelocity > MAX_TRANSLATIONAL_VELOCITY) {
-			return MAX_TRANSLATIONAL_VELOCITY;
-		} else if (translationalVelocity < -MAX_TRANSLATIONAL_VELOCITY) {
-			return -MAX_TRANSLATIONAL_VELOCITY;
-		} else {
-			return translationalVelocity;
-		}
-
 	}
 
 	/**
@@ -1215,9 +1205,5 @@ public class Toroidal2DPhysics {
 	public Set<ImmutableTeamInfo> getTeamInfo() {
 		return teamInfo;
 	}
-
-
-
-
 
 }

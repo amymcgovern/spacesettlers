@@ -80,7 +80,6 @@ public class Position {
 		this.velocity = newVel;
 	}
 	
-
 	public double getAngularVelocity() {
 		return angularVelocity;
 	}
@@ -93,16 +92,8 @@ public class Position {
 		return velocity.getXValue();
 	}
 
-	public void setxVelocity(double xVelocity) {
-		velocity.setX(xVelocity);
-	}
-
 	public double getyVelocity() {
 		return velocity.getYValue();
-	}
-
-	public void setyVelocity(double yVelocity) {
-		velocity.setY(yVelocity);
 	}
 
 	public void setAngularVelocity(double angularVelocity) {
@@ -113,8 +104,7 @@ public class Position {
 		String str = "(" + x + " , " + y + ", " + orientation + ") velocity: " + velocity + ", " + angularVelocity;
 		return str;
 	}
-
-
+	
 	/**
 	 * Compares positions on location (x,y) only and ignores orientation and velocities
 	 * 
@@ -142,6 +132,5 @@ public class Position {
 			return false;
 		}
 	}
-	
 	
 }

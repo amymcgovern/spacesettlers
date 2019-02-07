@@ -12,6 +12,7 @@ import spacesettlers.actions.DoNothingAction;
 import spacesettlers.actions.MoveAction;
 import spacesettlers.actions.PurchaseCosts;
 import spacesettlers.actions.PurchaseTypes;
+import spacesettlers.actions.RawAction;
 import spacesettlers.graphics.CircleGraphics;
 import spacesettlers.graphics.SpacewarGraphics;
 import spacesettlers.objects.AbstractActionableObject;
@@ -22,6 +23,7 @@ import spacesettlers.objects.resources.ResourcePile;
 import spacesettlers.objects.weapons.AbstractWeapon;
 import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Position;
+import spacesettlers.utilities.Vector2D;
 /**
  * A team of random agents
  * 
@@ -64,8 +66,10 @@ public class RandomTeamClient extends TeamClient {
 					Position currentPosition = ship.getPosition();
 					Position newGoal = space.getRandomFreeLocationInRegion(random, Ship.SHIP_RADIUS, (int) currentPosition.getX(), 
 							(int) currentPosition.getY(), RANDOM_MOVE_RADIUS);
-					MoveAction newAction = null;
-					newAction = new MoveAction(space, currentPosition, newGoal);
+					//MoveAction newAction = null;
+					AbstractAction newAction = null;
+					//newAction = new MoveAction(space, currentPosition, newGoal);
+					newAction = new RawAction(new Vector2D(600,0), 0);
 					//System.out.println("Ship is at " + currentPosition + " and goal is " + newGoal);
 					SpacewarGraphics graphic = new CircleGraphics(1, getTeamColor(), newGoal);
 					graphics.add(graphic);
