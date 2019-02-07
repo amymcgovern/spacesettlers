@@ -24,20 +24,23 @@ import spacesettlers.objects.weapons.AbstractWeapon;
 import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Position;
 import spacesettlers.utilities.Vector2D;
+
 /**
  * A team of random agents
  * 
- * The agents pick a random location in space and aim for it.  They shoot somewhat randomly also.
+ * The agents pick a random location in space and aim for it. They shoot
+ * somewhat randomly also.
+ * 
  * @author amy
  *
  */
 public class RandomTeamClient extends TeamClient {
 	HashSet<SpacewarGraphics> graphics;
 	boolean fired = false;
-	
+
 	public static int RANDOM_MOVE_RADIUS = 200;
 	public static double SHOOT_PROBABILITY = 0.1;
-	
+
 	@Override
 	public void initialize(Toroidal2DPhysics space) {
 		graphics = new HashSet<SpacewarGraphics>();
@@ -49,50 +52,48 @@ public class RandomTeamClient extends TeamClient {
 
 	}
 
-
 	@Override
 	public Map<UUID, AbstractAction> getMovementStart(Toroidal2DPhysics space,
 			Set<AbstractActionableObject> actionableObjects) {
 		HashMap<UUID, AbstractAction> randomActions = new HashMap<UUID, AbstractAction>();
-		
-		
-		for (AbstractObject actionable :  actionableObjects) {
+
+		for (AbstractObject actionable : actionableObjects) {
 			if (actionable instanceof Ship) {
 				Ship ship = (Ship) actionable;
 				AbstractAction current = ship.getCurrentAction();
-				
+
 				// if we finished, make a new spot in space to aim for
 				if (current == null || current.isMovementFinished(space)) {
 					Position currentPosition = ship.getPosition();
-					Position newGoal = space.getRandomFreeLocationInRegion(random, Ship.SHIP_RADIUS, (int) currentPosition.getX(), 
-							(int) currentPosition.getY(), RANDOM_MOVE_RADIUS);
-					//MoveAction newAction = null;
+					Position newGoal = space.getRandomFreeLocationInRegion(random, Ship.SHIP_RADIUS,
+							(int) currentPosition.getX(), (int) currentPosition.getY(), RANDOM_MOVE_RADIUS);
+					// MoveAction newAction = null;
 					AbstractAction newAction = null;
-					//newAction = new MoveAction(space, currentPosition, newGoal);
-					newAction = new RawAction(new Vector2D(600,0), 0);
-					//System.out.println("Ship is at " + currentPosition + " and goal is " + newGoal);
-					SpacewarGraphics graphic = new CircleGraphics(1, getTeamColor(), newGoal);
-					graphics.add(graphic);
-					//Vector2D shortVec = space.findShortestDistanceVector(currentPosition, newGoal);
-					//LineShadow lineShadow = new LineShadow(currentPosition, newGoal, shortVec);
-					//newShadows.add(lineShadow);
+					// newAction = new MoveAction(space, currentPosition, newGoal);
+					newAction = new RawAction(new Vector2D(600, 0), 0);
+					// System.out.println("Ship is at " + currentPosition + " and goal is " +
+					// newGoal);
+					// SpacewarGraphics graphic = new CircleGraphics(1, getTeamColor(), newGoal);
+					// graphics.add(graphic);
+					// Vector2D shortVec = space.findShortestDistanceVector(currentPosition,
+					// newGoal);
+					// LineShadow lineShadow = new LineShadow(currentPosition, newGoal, shortVec);
+					// newShadows.add(lineShadow);
 					randomActions.put(ship.getId(), newAction);
 				} else {
 					randomActions.put(ship.getId(), ship.getCurrentAction());
 				}
-				
+
 			} else {
 				// it is a base and random doesn't do anything to bases
 				randomActions.put(actionable.getId(), new DoNothingAction());
-		}
-			
+			}
 
 		}
-	
+
 		return randomActions;
-	
-	}
 
+	}
 
 	@Override
 	public void getMovementEnd(Toroidal2DPhysics space, Set<AbstractActionableObject> actionableObjects) {
@@ -100,21 +101,19 @@ public class RandomTeamClient extends TeamClient {
 
 	@Override
 	public Set<SpacewarGraphics> getGraphics() {
-		HashSet<SpacewarGraphics> newGraphics = new HashSet<SpacewarGraphics>(graphics);  
+		HashSet<SpacewarGraphics> newGraphics = new HashSet<SpacewarGraphics>(graphics);
 		graphics.clear();
 		return newGraphics;
 	}
 
-
 	@Override
 	/**
-	 * Random never purchases 
+	 * Random never purchases
 	 */
 	public Map<UUID, PurchaseTypes> getTeamPurchases(Toroidal2DPhysics space,
-			Set<AbstractActionableObject> actionableObjects, 
-			ResourcePile resourcesAvailable, 
+			Set<AbstractActionableObject> actionableObjects, ResourcePile resourcesAvailable,
 			PurchaseCosts purchaseCosts) {
-		return new HashMap<UUID,PurchaseTypes>();
+		return new HashMap<UUID, PurchaseTypes>();
 
 	}
 
@@ -123,23 +122,22 @@ public class RandomTeamClient extends TeamClient {
 	 */
 	public Map<UUID, SpaceSettlersPowerupEnum> getPowerups(Toroidal2DPhysics space,
 			Set<AbstractActionableObject> actionableObjects) {
-		
+
 		HashMap<UUID, SpaceSettlersPowerupEnum> powerupMap = new HashMap<UUID, SpaceSettlersPowerupEnum>();
-		
-		for (AbstractObject actionable :  actionableObjects) {
+
+		for (AbstractObject actionable : actionableObjects) {
 			if (actionable instanceof Ship) {
 				Ship ship = (Ship) actionable;
 				if (random.nextDouble() < SHOOT_PROBABILITY) {
 					AbstractWeapon newBullet = ship.getNewWeapon(SpaceSettlersPowerupEnum.FIRE_MISSILE);
 					if (newBullet != null) {
 						powerupMap.put(ship.getId(), SpaceSettlersPowerupEnum.FIRE_MISSILE);
-						//System.out.println("Firing!");
+						// System.out.println("Firing!");
 					}
 				}
 			}
 		}
 		return powerupMap;
 	}
-
 
 }
