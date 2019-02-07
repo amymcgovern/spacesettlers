@@ -644,30 +644,29 @@ public class Toroidal2DPhysics {
 
 				Movement actionMovement = action.getMovement(this.deepClone(), drone.deepClone());
 
-				// System.out.println("Applying movement to drone [" + drone.toString() + "]");
-				// //herr0861REMOVE
 				Position newPosition = applyMovement(currentPosition, actionMovement, timeStep);
-				// System.out.println("The old position is: [" + currentPosition + "] and the
-				// new position is: [" + newPosition);
 
 				if (newPosition.isValid()) {
 					drone.setPosition(newPosition);
-					// System.out.println("Position is:" + object.getPosition());
-					// System.out.println("Valid position"); //herr0861REMOVE
 				} else {
-					// System.out.println("Invalid position"); //herr0861REMOVE
-					drone.setPosition(currentPosition);
+					newPosition = currentPosition;
 				}
 
-				// spend drone energy proportional to its acceleration and mass
-				double angularAccel = Math.abs(actionMovement.getAngularAccleration());
+				// spend ship energy proportional to its acceleration (old formula used
+				// velocity) and mass (new for space settlers
+				// since resources cost mass) based on update to position (used
+				// to be based on movement command, no result)
+				// double penalty = ENERGY_PENALTY *
+				// -Math.abs(ship.getPosition().getTotalTranslationalVelocity());
+				double angularAccel = Math.abs(currentPosition.getAngularVelocity() - newPosition.getAngularVelocity())
+						/ timeStep;
 				double angularInertia = (3.0 * drone.getMass() * drone.getRadius() * angularAccel) / 2.0;
-				double linearAccel = actionMovement.getTranslationalAcceleration().getMagnitude();
+				double linearAccel = Math.abs(currentPosition.getTranslationalVelocity().getMagnitude()
+						- newPosition.getTranslationalVelocity().getMagnitude()) / timeStep;
 				double linearInertia = drone.getMass() * linearAccel;
-				// I made drones slightly efficient at moving on account of being a drone and
-				// not needing to carry a bunch of systems around like a ship!
-				int penalty = (int) Math.floor(0.7 * (ENERGY_PENALTY * (angularInertia + linearInertia)));
+				int penalty = (int) Math.floor(0.7 * ENERGY_PENALTY * (angularInertia + linearInertia));
 				drone.updateEnergy(-penalty);
+
 			} else if (object.isControllable() && !(object instanceof Drone)) {
 
 				Ship ship = (Ship) object;
