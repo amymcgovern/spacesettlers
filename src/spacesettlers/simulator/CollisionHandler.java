@@ -685,7 +685,7 @@ public class CollisionHandler {
 	 */
 	public void resetMovement(AbstractObject object) {
 		object.getPosition().setAngularVelocity(0);
-		object.getPosition().getTranslationalVelocity().reset();
+		object.getPosition().setTranslationalVelocity(Vector2D.ZERO_VECTOR);
 	}
 	
 	

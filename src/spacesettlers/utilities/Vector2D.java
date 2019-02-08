@@ -11,7 +11,7 @@ import java.util.Random;
  */
 @SuppressWarnings("serial")
 public final class Vector2D implements Serializable, Cloneable {
-    double x, y;
+    private final double x, y;
 
     public static final Vector2D ZERO_VECTOR = new Vector2D();
     public static final Vector2D X_UNIT_VECTOR = new Vector2D(1, 0);
@@ -116,23 +116,6 @@ public final class Vector2D implements Serializable, Cloneable {
         return y;
     }
     
-    
-    /**
-     * Set the x value
-     * @param x
-     */
-    public void setX(double x) {
-    	this.x = x;
-    }
-    
-    /**
-     * Set the y value
-     * @param y
-     */
-    public void setY(double y) {
-    	this.y = y;
-    }
-    
     /**
      * return the unit vector
      * @return
@@ -146,10 +129,7 @@ public final class Vector2D implements Serializable, Cloneable {
      * @return The magnitude of the vector.
      */
     public double getMagnitude() {
-    	if (Double.isNaN(magnitude)) {
-    		magnitude = Math.sqrt(x*x + y*y);
-    	}
-    	
+    	magnitude = Math.sqrt(x*x + y*y);
     	return magnitude;
     }
 
@@ -159,14 +139,6 @@ public final class Vector2D implements Serializable, Cloneable {
      */
     public double getTotal() {
     	return x + y;
-    }
-    
-    /**
-     * Reset the vector to 0
-     */
-    public void reset() {
-    	x = 0;
-    	y = 0;
     }
     
     /**
@@ -364,8 +336,6 @@ public final class Vector2D implements Serializable, Cloneable {
 
     	return a2;
     }
-
-    
 
     /**
      * Determine if two vectors are equal (have the same components)

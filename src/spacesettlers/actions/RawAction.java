@@ -30,9 +30,7 @@ public class RawAction extends AbstractAction {
 	public RawAction(double translationalAcceleration,
 			double rotationalAcceleration) {
 		super();
-		Vector2D translation = new Vector2D();
-		translation.setX(translationalAcceleration);
-		translation.setY(translationalAcceleration);
+		Vector2D translation = new Vector2D(translationalAcceleration, translationalAcceleration);
 		this.translationalAcceleration = translation;
 		this.angularAcceleration = rotationalAcceleration;
 	}
