@@ -21,8 +21,8 @@
 	<numBeacons>6</numBeacons>
 	
 	<!-- Specify the maximum number of ships in a team -->
-	<maximumShipsPerTeam>3</maximumShipsPerTeam>
-	<maximumInitialShipsPerTeam>2</maximumInitialShipsPerTeam>
+	<maximumShipsPerTeam>1</maximumShipsPerTeam>
+	<maximumInitialShipsPerTeam>1</maximumInitialShipsPerTeam>
 	
 	<!-- Specify any controllable clients in the simulator (this can include heuristics).  
 	     Note, all clients are teams since eventually all clients can make new ships. -->
