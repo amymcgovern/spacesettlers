@@ -1037,9 +1037,9 @@ public class Toroidal2DPhysics {
 
 	/**
 	 * Respawns any dead objects in new random locations. Ships have a delay before
-	 * they can respawn.
+	 * they can respawn.  Asteroids do not respawn (they are re-created later randomly)
 	 */
-	public void respawnDeadObjects(Random random, double asteroidMaxVelocity) {
+	public void respawnDeadObjects(Random random) {
 		for (AbstractObject object : allObjects) {
 			if (!object.isAlive() && object.canRespawn()) {
 				Position newPosition = null;
@@ -1055,9 +1055,8 @@ public class Toroidal2DPhysics {
 							(int) newPosition.getY(), 75);
 
 				} else {
-					// note this is time 2 in order to ensure objects don't spawn touching (and just
-					// to get
-					// them a bit farther apart
+					// note this is times 2 in order to ensure objects don't spawn touching (and just
+					// to get them a bit farther apart
 					newPosition = getRandomFreeLocation(random, object.getRadius() * 2);
 				}
 
@@ -1065,17 +1064,10 @@ public class Toroidal2DPhysics {
 				object.setAlive(true);
 				object.setDrawable(true);
 
-				// reset the UUID if it is a asteroid or beacon
-				if (object instanceof Asteroid || object instanceof Beacon) {
+				// reset the UUID if it is a beacon
+				if (object instanceof Beacon) {
 					object.resetId();
 				}
-
-				// make moveable asteroids move again when they respawn
-				if (object.isMoveable() && !(object instanceof Flag)) {
-					Vector2D randomMotion = Vector2D.getRandom(random, asteroidMaxVelocity);
-					object.getPosition().setTranslationalVelocity(randomMotion);
-				}
-
 			}
 		}
 

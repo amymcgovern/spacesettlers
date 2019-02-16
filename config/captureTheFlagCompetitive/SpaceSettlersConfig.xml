@@ -33,7 +33,7 @@
  		<!-- The there are only two teams for CTF and the heuristic is a Flag Collector team (similar to beacons) -->
 		<HighLevelTeamConfig>
 			<teamName>Team1</teamName>
-			<configFile>aggressive-flag3ships-clientinit.xml</configFile>
+			<configFile>amy-spacesettlersinit.xml</configFile>
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
 			<teamName>Team2</teamName>

@@ -45,7 +45,7 @@
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
 			<teamName>DoNothingTeam</teamName>
-			<configFile>donothing-clientinit.xml</configFile>
+			<configFile>amy-spacesettlersinit.xml</configFile>
 		</HighLevelTeamConfig>		
 		<HighLevelTeamConfig>
 			<teamName>CoreCollectorTeam</teamName>
