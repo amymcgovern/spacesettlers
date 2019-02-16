@@ -23,8 +23,8 @@ public class Ship extends AbstractActionableObject {
 	public static final int SHIP_RADIUS = 15;
 	public static final int SHIP_MASS = 200;
 	public static final int SHIP_INITIAL_ENERGY = 5000;
-	public static final int RESPAWN_INCREMENT = 10;
-	public static final int MAX_RESPAWN_INTERVAL = 500;
+	public static final int RESPAWN_INCREMENT = 2;
+	public static final int MAX_RESPAWN_INTERVAL = 1000;
 	public static final int SHIP_MAX_ENERGY = 5000;
 
 	/**
@@ -84,7 +84,7 @@ public class Ship extends AbstractActionableObject {
 		respawnCounter = 0;
 		numBeacons = 0;
 		energy = SHIP_INITIAL_ENERGY;
-		lastRespawnCounter = 0;
+		lastRespawnCounter = 16;
 		resources = new ResourcePile();
 		this.teamColor = teamColor;
 		numWeaponsInAir = 0;
@@ -217,7 +217,7 @@ public class Ship extends AbstractActionableObject {
 	 * @param space
 	 */
 	public void setDeadAndDropObjects(Random rand, Toroidal2DPhysics space) {
-		respawnCounter = Math.min(lastRespawnCounter + RESPAWN_INCREMENT, MAX_RESPAWN_INTERVAL);
+		respawnCounter = Math.min(lastRespawnCounter * RESPAWN_INCREMENT, MAX_RESPAWN_INTERVAL);
 		lastRespawnCounter = respawnCounter; 
 		resetResources();
 		resetPowerups();
@@ -235,7 +235,7 @@ public class Ship extends AbstractActionableObject {
 	 */
 	public void setAlive(boolean value) {
 		if (value == false) {
-			respawnCounter = Math.min(lastRespawnCounter + RESPAWN_INCREMENT, MAX_RESPAWN_INTERVAL);
+			respawnCounter = Math.min(lastRespawnCounter * RESPAWN_INCREMENT, MAX_RESPAWN_INTERVAL);
 			lastRespawnCounter = respawnCounter; 
 			resetResources();
 			resetPowerups();
