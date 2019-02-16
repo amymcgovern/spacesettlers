@@ -47,6 +47,9 @@ public class Asteroid extends AbstractObject {
 		this.waterProportion = water;
 		this.metalsProportion = metals;
 		
+		// asteroids do not respawn
+		super.setRespawn(false);
+		
 		if (isMineable) {
 			resetResources();
 		} 
@@ -82,6 +85,9 @@ public class Asteroid extends AbstractObject {
 		this.fuelProportion = initialResources.getResourceQuantity(ResourceTypes.FUEL) / normalize;
 		this.waterProportion = initialResources.getResourceQuantity(ResourceTypes.WATER) / normalize;
 		this.metalsProportion = initialResources.getResourceQuantity(ResourceTypes.METALS) / normalize;
+
+		// asteroids do not respawn
+		super.setRespawn(false);
 		
 		// reset the mass based on the created resources
 		super.setMass(MIN_ASTEROID_MASS + resources.getMass());

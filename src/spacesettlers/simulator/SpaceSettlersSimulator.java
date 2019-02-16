@@ -715,9 +715,8 @@ public final class SpaceSettlersSimulator {
 		//cleanup and remove dead drones - herr0861 edit
 		simulatedSpace.cleanupDeadDrones();
 
-		// respawn any objects that  (and that should respawn - this includes Flags)
-		final double asteroidMaxVelocity = simConfig.getRandomAsteroids().getMaxInitialVelocity();
-		simulatedSpace.respawnDeadObjects(random, asteroidMaxVelocity);
+		// respawn any objects that should respawn - this includes Flags)
+		simulatedSpace.respawnDeadObjects(random);
 
 		// spawn new asteroids with a small probability (up to the maximum number allowed)
 		int maxAsteroids = simConfig.getRandomAsteroids().getMaximumNumberAsteroids();
