@@ -1144,6 +1144,30 @@ public class Toroidal2DPhysics {
 	}
 
 	/**
+	 * Loop through all asteroids and remove any dead ones
+	 */
+	public int cleanupAllAndCountMineableDeadAsteroids() {
+		ArrayList<AbstractObject> deadObjects = new ArrayList<AbstractObject>();
+		int numMineable = 0;
+
+		for (Asteroid asteroid : asteroids) {
+			if (!asteroid.isAlive()) {
+				deadObjects.add(asteroid);
+				if (asteroid.isMineable()) {
+					numMineable++;
+				}
+			}
+		}
+
+		for (AbstractObject deadObject : deadObjects) {
+			removeObject(deadObject);
+		}
+		
+		// return the number of mineable ones that were removed
+		return numMineable;
+	}
+
+	/**
 	 * Return the maximum number of time steps for the simulation
 	 * 
 	 * @return
