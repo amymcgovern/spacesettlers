@@ -244,7 +244,12 @@ public final class SpaceSettlersSimulator {
 		// place the asteroids
 		RandomAsteroidConfig randomAsteroidConfig = simConfig.getRandomAsteroids();
 		for (int a = 0; a < randomAsteroidConfig.getNumberInitialAsteroids(); a++) {
-			Asteroid asteroid = createNewRandomAsteroid(randomAsteroidConfig);
+			boolean mineable = false;
+			if (random.nextDouble() < simConfig.getRandomAsteroids().getProbabilityMineable()) {
+				mineable = true;
+			}
+			
+			Asteroid asteroid = createNewRandomAsteroid(randomAsteroidConfig, mineable);
 			simulatedSpace.addObject(asteroid);
 		}
 
@@ -426,14 +431,9 @@ public final class SpaceSettlersSimulator {
 	 * @param asteroidConfig
 	 * @return
 	 */
-	private Asteroid createNewRandomAsteroid(RandomAsteroidConfig asteroidConfig) {
+	private Asteroid createNewRandomAsteroid(RandomAsteroidConfig asteroidConfig, boolean mineable) {
 		// choose if the asteroid is mine-able
 		double prob = random.nextDouble();
-
-		boolean mineable = false;
-		if (prob < asteroidConfig.getProbabilityMineable()) {
-			mineable = true;
-		}
 
 		// asteroids 
 		// choose the radius randomly for random asteroids
@@ -714,6 +714,15 @@ public final class SpaceSettlersSimulator {
 		
 		//cleanup and remove dead drones - herr0861 edit
 		simulatedSpace.cleanupDeadDrones();
+		
+		// count up dead asteroids and ensure we generate as 
+		// many mineable ones as existed before
+		int mineableAsteroids = simulatedSpace.cleanupAllAndCountMineableDeadAsteroids(); 
+
+		for (int i = 0; i < mineableAsteroids; i++) {
+			Asteroid asteroid = createNewRandomAsteroid(simConfig.getRandomAsteroids(), true);
+			simulatedSpace.addObject(asteroid);
+		}
 
 		// respawn any objects that should respawn - this includes Flags)
 		simulatedSpace.respawnDeadObjects(random);
@@ -724,7 +733,12 @@ public final class SpaceSettlersSimulator {
 		if (numAsteroids < maxAsteroids) {
 			if (random.nextDouble() < ASTEROID_SPAWN_PROBABILITY) {
 				//System.out.println("Spawning a new asteroid");
-				Asteroid asteroid = createNewRandomAsteroid(simConfig.getRandomAsteroids());
+				boolean mineable = false;
+				if (random.nextDouble() < simConfig.getRandomAsteroids().getProbabilityMineable()) {
+					mineable = true;
+				}
+				
+				Asteroid asteroid = createNewRandomAsteroid(simConfig.getRandomAsteroids(), mineable);
 				simulatedSpace.addObject(asteroid);
 			}
 		}
