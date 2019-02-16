@@ -25,7 +25,7 @@ public final class Missile extends AbstractWeapon {
 	 */
 	public Missile(Position position, Ship firingShip) {
 		super(MISSILE_MASS, MISSILE_RADIUS, position, MISSILE_DAMAGE, MISSILE_COST,firingShip);
-		super.shiftWeaponFiringLocation(INITIAL_VELOCITY);
+		super.shiftWeaponFiringLocation(Math.abs(firingShip.getPosition().getTotalTranslationalVelocity()) + INITIAL_VELOCITY);
 		graphic = new MissileGraphics(this);
 		setDrawable(true);
 		setAlive(true);
