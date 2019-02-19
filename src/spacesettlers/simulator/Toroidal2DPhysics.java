@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import spacesettlers.actions.DoNothingAction;
-import spacesettlers.actions.MoveToObjectAction;
 import spacesettlers.actions.AbstractAction;
 import spacesettlers.clients.ImmutableTeamInfo;
 import spacesettlers.configs.SpaceSettlersConfig;

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.geom.AffineTransform;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -17,7 +16,6 @@ import spacesettlers.graphics.SpacewarGraphics;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
 import spacesettlers.objects.resources.ResourcePile;
-import spacesettlers.objects.resources.ResourceTypes;
 import spacesettlers.simulator.Toroidal2DPhysics;
 
 /**

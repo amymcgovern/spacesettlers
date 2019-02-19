@@ -1,24 +1,15 @@
 package spacesettlers.objects;
 
 import java.awt.Color;
-import java.util.LinkedHashSet;
 import java.util.Random;
 
 import spacesettlers.actions.AbstractAction;
-import spacesettlers.actions.DoNothingAction;
 import spacesettlers.actions.MoveToObjectAction;
 import spacesettlers.clients.Team;
 import spacesettlers.graphics.DroneGraphics;
-import spacesettlers.graphics.MissileGraphics;
-import spacesettlers.graphics.ShipGraphics;
-import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
 import spacesettlers.objects.resources.ResourcePile;
-import spacesettlers.objects.weapons.AbstractWeapon;
-import spacesettlers.objects.weapons.EMP;
-import spacesettlers.objects.weapons.Missile;
 import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Position;
-import spacesettlers.utilities.Vector2D;
 
 /**
  * A drone is a powerup that can be purchased by a ship in the simulator.

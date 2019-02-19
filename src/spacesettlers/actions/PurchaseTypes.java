@@ -1,7 +1,6 @@
 package spacesettlers.actions;
 
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
-import spacesettlers.objects.resources.ResourcePile;
 
 /**
  * Enum with the types of purchases that a team can make and a map to the right powerup.

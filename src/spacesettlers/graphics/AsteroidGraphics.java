@@ -4,9 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
-import spacesettlers.gui.JSpaceSettlersComponent;
 import spacesettlers.objects.Asteroid;
-import spacesettlers.objects.resources.ResourceTypes;
 import spacesettlers.utilities.Position;
 
 /**

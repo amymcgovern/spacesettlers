@@ -6,8 +6,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import spacesettlers.clients.Team;
-import spacesettlers.objects.resources.ResourcePile;
-import spacesettlers.objects.resources.ResourceTypes;
 import spacesettlers.simulator.SpaceSettlersSimulator;
 
 /**
