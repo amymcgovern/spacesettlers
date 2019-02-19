@@ -126,7 +126,9 @@ public class Ladder {
 		int gameIndex = 0;
 		
 		// create the thread pool
-		threadPool = Executors.newFixedThreadPool(ladderConfig.getNumThreads());
+		int numThreads = Math.max(ladderConfig.getNumThreads(), 1);
+		
+		threadPool = Executors.newFixedThreadPool(numThreads);
 		ArrayList<Future<LadderSingleGame>> ladderResults = new ArrayList<Future<LadderSingleGame>>();
 
 		for (int repeat = 0; repeat < ladderConfig.getNumRepeatMatches(); repeat++) {
