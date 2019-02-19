@@ -8,6 +8,9 @@
 	
 	<!-- Write out the results to this file -->
 	<outputFileName>self-ladder.html</outputFileName>
+
+	<!--The number of threads for the ladder -->
+	<numThreads>4</numThreads>
 	
 	<!-- The list of static clients/teams.  These play in each match. -->
 	<staticTeams>

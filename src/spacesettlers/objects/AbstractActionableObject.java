@@ -3,7 +3,6 @@ package spacesettlers.objects;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import spacesettlers.objects.powerups.SpaceSettlersPowerup;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
 import spacesettlers.utilities.Position;
 

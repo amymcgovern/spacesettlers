@@ -1,7 +1,6 @@
 package spacesettlers.graphics;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Shape;
@@ -11,7 +10,6 @@ import java.awt.geom.Ellipse2D;
 import spacesettlers.gui.JSpaceSettlersComponent;
 import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
-import spacesettlers.objects.resources.ResourceTypes;
 import spacesettlers.utilities.Position;
 
 /**

@@ -2,6 +2,8 @@ package spacesettlers.ladder;
 
 import spacesettlers.simulator.SimulatorException;
 
+import java.util.concurrent.ExecutionException;
+
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPException;
@@ -109,8 +111,10 @@ public class RunLadder {
 	/**
 	 * @param args
 	 * @throws SimulatorException 
+	 * @throws InterruptedException 
+	 * @throws ExecutionException 
 	 */
-	public static void main(String[] args) throws SimulatorException {
+	public static void main(String[] args) throws SimulatorException, InterruptedException, ExecutionException {
 		RunLadder runLadder = new RunLadder(args);
 		
 		Ladder ladder = new Ladder(runLadder.config);

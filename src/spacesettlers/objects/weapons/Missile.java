@@ -5,7 +5,6 @@ import spacesettlers.objects.Ship;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
 import spacesettlers.utilities.Position;
-import spacesettlers.utilities.Vector2D;
 
 /**
  * A bullet/missle

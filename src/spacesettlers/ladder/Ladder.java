@@ -9,6 +9,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import spacesettlers.clients.Team;
 import spacesettlers.configs.*;
@@ -37,6 +41,8 @@ public class Ladder {
 	ArrayList<TeamRecord> sortedLadderResults;
 	
 	ArrayList<String> ladderOutputString;
+	
+	ExecutorService threadPool;
 
 	/**
 	 * Make a new ladder
@@ -105,9 +111,10 @@ public class Ladder {
 	/**
 	 * Runs the ladder for the specified number of games
 	 * @throws SimulatorException 
+	 * @throws InterruptedException 
+	 * @throws ExecutionException 
 	 */
-	@SuppressWarnings("unchecked")
-	public void run() throws SimulatorException {
+	public void run() throws SimulatorException, InterruptedException, ExecutionException {
 		ArrayList<HighLevelTeamConfig[]>clientsPerMatch = getAllClientsForAllMatches();
 		
 		int numGames = clientsPerMatch.size() * ladderConfig.getNumRepeatMatches();
@@ -117,90 +124,59 @@ public class Ladder {
 			System.out.println(team);
 		}
 		int gameIndex = 0;
+		
+		// create the thread pool
+		threadPool = Executors.newFixedThreadPool(ladderConfig.getNumThreads());
+		ArrayList<Future<LadderSingleGame>> ladderResults = new ArrayList<Future<LadderSingleGame>>();
 
 		for (int repeat = 0; repeat < ladderConfig.getNumRepeatMatches(); repeat++) {
 			for (HighLevelTeamConfig[] teamsForMatch : clientsPerMatch) {
 				gameIndex++;
-				// setup the simulator for this match
-				simConfig.setTeams(teamsForMatch);
 
-				// set the bases to match the teams for this game.  Read in the ones
-				// from the config file first (and rename them)
-				// only make new ones if we don't have enough
-				BaseConfig[] defaultBases = simConfig.getBases();
-				BaseConfig[] baseConfig = new BaseConfig[teamsForMatch.length];
-				for (int i = 0; i < teamsForMatch.length; i++) {
-					if (i < defaultBases.length) {
-						baseConfig[i] = defaultBases[i];
-						baseConfig[i].setTeamName(teamsForMatch[i].getTeamName());
-					} else {
-						baseConfig[i] = new BaseConfig(teamsForMatch[i].getTeamName());
-					}
-				}
-				simConfig.setBases(baseConfig);
+				// setup a new single game
+				LadderSingleGame newGame = new LadderSingleGame(parserConfig);
+				newGame.initializeGame(teamsForMatch, gameIndex, numGames);
 				
-				// if there are flags, then set the flags to also match the teams for this game
-				FlagConfig[] flagConfigs = simConfig.getFlags();
-				if (flagConfigs != null && flagConfigs.length > 0) {
-					if (flagConfigs.length != teamsForMatch.length) {
-						throw new SimulatorException("Error: The number of flags in the config file doesn't match the number of teams for the match");
-					}
-					for (int i = 0; i < teamsForMatch.length; i++) {
-						flagConfigs[i].setTeamName(teamsForMatch[i].getTeamName());
-					}
-				}
-
-				// tell the user the match is about to begin
-				String str = "***Game " + gameIndex + " / " + numGames + " with teams ";
-				for (HighLevelTeamConfig team : teamsForMatch) {
-					str += (team.getTeamName() + " ");
-				}
-				str += "***";
-				System.out.println(str);
-				ladderOutputString.add(str);
-
-				try {
-					// try to make a simulator and run it
-					simulator = new SpaceSettlersSimulator(simConfig, parserConfig);
-
-					str = "***Game " + gameIndex + " / " + numGames + " with teams ";
-					Set<Team> teams = simulator.getTeams();
-					for (Team team : teams) {
-						str += (team.getTeamName() + " = " + team.getLadderName() + " ");
-					}
-					str += "***";
-					System.out.println(str);
-					ladderOutputString.add(str);
-
-					// run the game
-					simulator.run();
-
-					// get the teams and print out their scores
-					for (Team team : teams) {
-						str = "Team: " + team.getLadderName() + " scored " + team.getScore();
-						ladderOutputString.add(str);
-						System.out.println(str);
-						
-						TeamRecord thisRecord;
-						if (ladderResultsMap.containsKey(team.getLadderName())) {
-							thisRecord = ladderResultsMap.get(team.getLadderName());
-						} else {
-							thisRecord = new TeamRecord(team);
-						}
-
-						thisRecord.update(team);
-						ladderResultsMap.put(team.getLadderName(), thisRecord);
-					}
-				} catch (Exception e) {
-					System.err.println("Error in match : skipping and moving to next one");
-					ladderOutputString.add("Error in match : skipping and moving to next one");
-					ladderOutputString.add(e.toString());
-					e.printStackTrace();
-				}
+				// run the game as threads are available
+				Future<LadderSingleGame> gameResult = threadPool.submit(newGame);
+				ladderResults.add(gameResult);
 			}
 		}
+		
+		// loop through all the games and see if they are done (no blocking)
+		int numFinished = 0;
+		
+		while (numFinished != numGames) {
+			numFinished = 0;
+			
+			// loop through all the games
+			for (Future<LadderSingleGame> future : ladderResults) {
+				if (future.isDone()) {
+					numFinished++;
+				} else {
+					break;
+				}
+			}
+			
+			// sleep for a bit if not all the games are done
+			if (numFinished != numGames) {
+				Thread.sleep(Math.max(1000, 100 * (numGames - numFinished)));
+			}
+		}		
 
-		// the games are over so sort the records
+		System.out.println("Finished running games!  Now grabbing results from the threads.");
+		
+		// the games are over so combine their records and then sort them
+		for (Future<LadderSingleGame> future : ladderResults) {
+			LadderSingleGame game = future.get();
+			
+			// output the results of the match
+			ladderOutputString.addAll(game.getLadderOutputString());
+			
+			ladderResultsMap.putAll(game.getLadderResultsMap());
+		}
+		
+		// now sort the final results
 		sortedLadderResults = new ArrayList<TeamRecord>();
 		for (TeamRecord record : ladderResultsMap.values()) {
 			sortedLadderResults.add(record);

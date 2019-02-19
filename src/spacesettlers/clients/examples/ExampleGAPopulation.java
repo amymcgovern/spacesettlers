@@ -1,7 +1,5 @@
 package spacesettlers.clients.examples;
 
-import java.util.ArrayList;
-
 import spacesettlers.simulator.Toroidal2DPhysics;
 
 /**

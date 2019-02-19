@@ -6,6 +6,9 @@
 	<!-- The maximum number of variable (e.g. can change each match) teams in a game -->
 	<maximumNumberVariableTeams>1</maximumNumberVariableTeams>
 	
+	<!--The number of threads for the ladder -->
+	<numThreads>4</numThreads>
+	
 	<!-- Write out the results to this file -->
 	<outputFileName>self-ladder.html</outputFileName>
 	

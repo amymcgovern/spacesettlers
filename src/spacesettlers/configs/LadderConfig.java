@@ -17,6 +17,11 @@ public class LadderConfig {
 	int numRepeatMatches;
 	
 	/**
+	 * Number of threads
+	 */
+	int numThreads;
+	
+	/**
 	 * Write out the results to this file
 	 */
 	String outputFileName;
@@ -29,7 +34,9 @@ public class LadderConfig {
 		this.maximumNumberVariableTeams = maximumNumberVariableTeams;
 	}
 	
-	
+	public int getNumThreads() {
+		return numThreads;
+	}
 
 	public String getOutputFileName() {
 		return outputFileName;
