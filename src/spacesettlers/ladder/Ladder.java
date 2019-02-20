@@ -367,6 +367,8 @@ public class Ladder {
 		str += "<th>Average Score</th>";
 		str += "<th>Average Beacons</th>";
 		str += "<th>Average Resources</th>";
+		str += "<th>Average Deaths</th>";
+		str += "<th>Average Kills</th>";
 		str += "</tr>";
 		
 		int place = 1;
@@ -377,6 +379,8 @@ public class Ladder {
 			str += "<td>" + record.getAverageScore() + "</td>\n";
 			str += "<td>" + record.getAverageBeacons() + "</td>\n";
 			str += "<td>" + record.getAverageResources() + "</td>\n";
+			str += "<td>" + record.getAverageDeaths() + "</td>\n";
+			str += "<td>" + record.getAverageKills() + "</td>\n";
 			str += "</tr>";
 			place++;
 		}

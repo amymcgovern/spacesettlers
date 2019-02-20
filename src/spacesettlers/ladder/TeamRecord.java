@@ -22,6 +22,10 @@ public class TeamRecord {
 	
 	double averageResources;
 	
+	int totalKills, totalDeaths;
+	
+	double averageKills, averageDeaths;
+	
 	String teamName;
 	
 	public TeamRecord(String teamName) {
@@ -46,6 +50,10 @@ public class TeamRecord {
 		averageBeacons = 0;
 		totalResources = 0;
 		averageResources = 0;
+		totalKills = 0;
+		totalDeaths = 0;
+		averageDeaths = 0;
+		averageKills = 0;
 	}
 
 	@Override
@@ -89,6 +97,12 @@ public class TeamRecord {
 		
 		totalBeacons += team.getTotalBeaconsCollected();
 		averageBeacons = totalBeacons / numGames;
+		
+		totalKills += team.getTotalKillsInflicted();
+		averageKills = totalKills / numGames;
+		
+		totalDeaths += team.getTotalKillsReceived();
+		averageDeaths += totalDeaths / numGames;
 	}
 
 	public double getAverageScore() {
@@ -111,6 +125,15 @@ public class TeamRecord {
 		return averageResources;
 	}
 
+	public double getAverageKills() {
+		return averageKills;
+	}
+
+	public double getAverageDeaths() {
+		return averageDeaths;
+	}
+
+	
 	
 	
 
