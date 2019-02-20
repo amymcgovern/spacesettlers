@@ -314,7 +314,7 @@ public class AggressiveHeuristicAsteroidCollectorSingletonTeamClient extends Tea
 				Ship ship = (Ship) space.getObjectById(shipId);
 				if (ship.getResources().getTotal() == 0 ) {
 					// we hit the base (or died, either way, we are not aiming for base now)
-					System.out.println("Hit the base and dropped off resources");
+					//System.out.println("Hit the base and dropped off resources");
 					aimingForBase.put(shipId, false);
 					justHitBase.put(shipId, true);
 				}
