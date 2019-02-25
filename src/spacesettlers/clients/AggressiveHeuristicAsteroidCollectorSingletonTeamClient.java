@@ -298,7 +298,7 @@ public class AggressiveHeuristicAsteroidCollectorSingletonTeamClient extends Tea
 
 		for (UUID asteroidId : asteroidToShipMap.keySet()) {
 			Asteroid asteroid = (Asteroid) space.getObjectById(asteroidId);
-			if (asteroid == null || !asteroid.isAlive() || asteroid.isMoveable()) {
+			if (asteroid != null && (!asteroid.isAlive() || asteroid.isMoveable())) {
 				finishedAsteroids.add(asteroid);
 				//System.out.println("Removing asteroid from map");
 			}
