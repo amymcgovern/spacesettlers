@@ -61,9 +61,6 @@
 			<teamName>BeaconCollectorTeam</teamName>
 		</BaseConfig>
 		<BaseConfig>
-			<teamName>HumanTeam</teamName>
-		</BaseConfig>
-		<BaseConfig>
 			<teamName>HeuristicMinerTeam</teamName>
 		</BaseConfig>
 	</bases>
