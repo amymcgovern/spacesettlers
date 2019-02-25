@@ -174,8 +174,20 @@ public class Ladder {
 			
 			// output the results of the match
 			ladderOutputString.addAll(game.getLadderOutputString());
+			System.out.println("Output string is ");
+			System.out.println(game.getLadderOutputString());
 			
-			ladderResultsMap.putAll(game.getLadderResultsMap());
+			// merge the records for each game into the global list by team
+			HashMap <String, Team> gameResults = game.getLadderResultsMap();
+			for (String teamName : gameResults.keySet()) {
+				Team thisTeam = gameResults.get(teamName);
+				
+				if (!ladderResultsMap.containsKey(teamName)) {
+					ladderResultsMap.put(teamName, new TeamRecord(thisTeam));
+				}
+				ladderResultsMap.get(teamName).update(thisTeam);
+			}
+			System.out.println(game.getLadderResultsMap());
 		}
 		
 		// now sort the final results
@@ -183,6 +195,7 @@ public class Ladder {
 		for (TeamRecord record : ladderResultsMap.values()) {
 			sortedLadderResults.add(record);
 		}
+		System.out.println("Sorted results are " + sortedLadderResults);
 		Collections.sort(sortedLadderResults, new TeamRecordComparator());
 		System.out.println("Overall team order: ");
 		for (TeamRecord record : sortedLadderResults) {

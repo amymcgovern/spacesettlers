@@ -133,6 +133,15 @@ public class TeamRecord {
 		return averageDeaths;
 	}
 
+	@Override
+	public String toString() {
+		return "TeamRecord [numGames=" + numGames + ", totalScore=" + totalScore + ", averageScore=" + averageScore
+				+ ", totalBeacons=" + totalBeacons + ", averageBeacons=" + averageBeacons + ", totalResources="
+				+ totalResources + ", averageResources=" + averageResources + ", totalKills=" + totalKills
+				+ ", totalDeaths=" + totalDeaths + ", averageKills=" + averageKills + ", averageDeaths=" + averageDeaths
+				+ ", teamName=" + teamName + "]";
+	}
+
 	
 	
 	

@@ -33,7 +33,7 @@ public class LadderSingleGame implements Callable {
 
 	JSAPResult parserConfig;
 
-	HashMap <String, TeamRecord> ladderResultsMap;
+	HashMap <String, Team> ladderResultsMap;
 
 	ArrayList<String> ladderOutputString;
 	
@@ -48,7 +48,7 @@ public class LadderSingleGame implements Callable {
 		loadConfigFiles(parserConfig);
 		this.parserConfig = parserConfig;
 
-		ladderResultsMap = new HashMap<String, TeamRecord>();
+		ladderResultsMap = new HashMap<String, Team>();
 		ladderOutputString = new ArrayList<String>();
 	}
 
@@ -172,15 +172,7 @@ public class LadderSingleGame implements Callable {
 				ladderOutputString.add(str);
 				System.out.println(str);
 
-				TeamRecord thisRecord;
-				if (ladderResultsMap.containsKey(team.getLadderName())) {
-					thisRecord = ladderResultsMap.get(team.getLadderName());
-				} else {
-					thisRecord = new TeamRecord(team);
-				}
-
-				thisRecord.update(team);
-				ladderResultsMap.put(team.getLadderName(), thisRecord);
+				ladderResultsMap.put(team.getLadderName(), team);
 			}
 		} catch (Exception e) {
 			System.err.println("Error in match : skipping and moving to next one");
@@ -193,7 +185,7 @@ public class LadderSingleGame implements Callable {
 		return this;
 	}
 
-	public HashMap<String, TeamRecord> getLadderResultsMap() {
+	public HashMap<String, Team> getLadderResultsMap() {
 		return ladderResultsMap;
 	}
 
