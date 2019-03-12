@@ -11,6 +11,7 @@ import java.util.UUID;
 import spacesettlers.actions.DoNothingAction;
 import spacesettlers.actions.AbstractAction;
 import spacesettlers.clients.ImmutableTeamInfo;
+import spacesettlers.clients.Team;
 import spacesettlers.configs.SpaceSettlersConfig;
 import spacesettlers.objects.Asteroid;
 import spacesettlers.objects.Base;
@@ -746,6 +747,14 @@ public class Toroidal2DPhysics {
 			}
 
 			if (!base.isAlive()) {
+				// if the base died, increment kill and assist count
+				Ship killShip = base.getKillTagTeam();
+				Ship assistShip = base.getAssistTagTeam();
+
+				if (killShip != null) killShip.incrementKillsInflicted();
+				if (assistShip != null) assistShip.incrementAssistsInflicted();
+				base.incrementKillsReceived();
+				
 				base.setAlive(false);
 				removeObject(base);
 				base.getTeam().removeBase(base);
@@ -755,6 +764,14 @@ public class Toroidal2DPhysics {
 		Set<Drone> dronesClone = new LinkedHashSet<Drone>(drones);
 		for (Drone drone : dronesClone) {
 			if (drone.getEnergy() <= 0 && drone.isAlive() == true) {// drone has died
+				// if the drone died, increment kill and assist count
+				Ship killShip = drone.getKillTagTeam();
+				Ship assistShip = drone.getAssistTagTeam();
+
+				if (killShip != null) killShip.incrementKillsInflicted();
+				if (assistShip != null) assistShip.incrementAssistsInflicted();
+
+				
 				drone.setDeadAndDropObjects(rand, this); // kill the drone dropping the flag and all resources, but no
 															// core. Should we make it have a chance to drop an AiCore?
 															// Probably not.
@@ -768,6 +785,14 @@ public class Toroidal2DPhysics {
 		// from when it was called inside updateEnergy
 		for (Ship ship : ships) {
 			if (ship.getEnergy() <= 0 && ship.isAlive() == true) {
+				// if the drone died, increment kill and assist count
+				Ship killShip = ship.getKillTagTeam();
+				Ship assistShip = ship.getAssistTagTeam();
+
+				if (killShip != null) killShip.incrementKillsInflicted();
+				if (assistShip != null) assistShip.incrementAssistsInflicted();
+
+				
 				// Spawn a new AiCore with the same velocity magnitude and direction as its
 				// parent ship.
 				// handle dropping the core if the ship died
@@ -802,6 +827,15 @@ public class Toroidal2DPhysics {
 				// this drops the flag
 				ship.setDeadAndDropObjects(rand, this);
 			}
+		}
+		
+		// verify all tags are still accurate with the new energies
+		for (Base base : bases) {
+			base.updateTags();
+		}
+
+		for (Ship ship : ships) {
+			ship.updateTags();
 		}
 	}
 

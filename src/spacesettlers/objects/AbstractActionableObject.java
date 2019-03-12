@@ -19,6 +19,9 @@ abstract public class AbstractActionableObject extends AbstractObject {
 	 * This keeps ships from simply firing at every step 
 	 */
 	public static final int INITIAL_WEAPON_CAPACITY = 5;
+	
+	/** Maximum energy for any tags (if it goes above this we drop any tags) */
+	public static final int TAG_MAX_ENERGY = 1500;
 
 	/**
 	 * Does the item have a shield and is it using it?
@@ -53,7 +56,17 @@ abstract public class AbstractActionableObject extends AbstractObject {
 	/**
 	 * Hits and killsInflicted and damageInflicted for this object
 	 */
-	int hitsInflicted, killsInflicted, damageInflicted, damageReceived, killsReceived;
+	int hitsInflicted, killsInflicted, damageInflicted, damageReceived, killsReceived, assistsInflicted;
+
+	/**
+	 * Reference to the last two teams that shot this ship (keep one for kill and one for assist)
+	 * These tags drop when the health goes back up and are only added if health is low enough.
+	 * 
+	 */
+	Ship killTagTeam;
+	Ship assistTagTeam;
+	int healthAtKillTag;
+	int healthAtAssistTag;
 
 
 	/**
@@ -66,7 +79,7 @@ abstract public class AbstractActionableObject extends AbstractObject {
 		super(mass, radius, position);
 		currentPowerups = new LinkedHashSet<SpaceSettlersPowerupEnum>();
 		weaponCapacity = INITIAL_WEAPON_CAPACITY;
-		hitsInflicted = killsInflicted = damageInflicted = damageReceived = killsReceived = 0;
+		hitsInflicted = killsInflicted = damageInflicted = damageReceived = killsReceived = assistsInflicted = 0;
 	}
 
 	/**
@@ -249,6 +262,14 @@ abstract public class AbstractActionableObject extends AbstractObject {
 	public int getKillsInflicted() {
 		return killsInflicted;
 	}
+	
+	/**
+	 * Return the total assists this object did
+	 * @return
+	 */
+	public int getTotalAssistsInflicted() {
+		return assistsInflicted;
+	}
 
 	/**
 	 * Get the killsReceived this object has made
@@ -264,7 +285,14 @@ abstract public class AbstractActionableObject extends AbstractObject {
 	public void incrementKillsInflicted() {
 		this.killsInflicted++;
 	}
-	
+
+	/**
+	 * increment the assists for this object
+	 */
+	public void incrementAssistsInflicted() {
+		this.assistsInflicted++;
+	}
+
 	/**
 	 * increment the kill received for this object
 	 */
@@ -312,6 +340,35 @@ abstract public class AbstractActionableObject extends AbstractObject {
 		return currentPowerups;
 	}
 	
+	/**
+	 * Tag the current shooter in case of kill 
+	 * 
+	 * @param teamName
+	 */
+	public void tagShooter(Ship firingShip) {
+		if (killTagTeam != null) {
+			// if there was already a kill tag team, move it to assist
+			assistTagTeam = killTagTeam;
+			healthAtAssistTag = healthAtKillTag;
+		}
+		// current team that shot becomes the kill team
+		killTagTeam = firingShip;
+		healthAtKillTag = energy;
+	}
+
+	public Ship getKillTagTeam() {
+		return killTagTeam;
+	}
+
+	public Ship getAssistTagTeam() {
+		return assistTagTeam;
+	}		
 	
-	
+	public void updateTags() {
+		if (this.getEnergy() > TAG_MAX_ENERGY) {
+			this.killTagTeam = null;
+			this.assistTagTeam = null;
+		}
+	}
+
 }

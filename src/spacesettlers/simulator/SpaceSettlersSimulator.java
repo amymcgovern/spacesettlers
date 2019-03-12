@@ -998,10 +998,13 @@ public final class SpaceSettlersSimulator {
 						(1000 * ((team.getTotalKillsReceived() + 1) * team.getTotalKillsReceived()) / 2.0) + 
 						(team.getSummedTotalResources() / 2.0));				
 			}
-		} else if (simConfig.getScoringMethod().equalsIgnoreCase("KillDeathRatio")) {
+		} else if (simConfig.getScoringMethod().equalsIgnoreCase("KillAssistsAndCores")) {
+			// revised from original kill death ratio to get rid of suicide issues (by tagging deaths)
 			for (Team team : teams) {
 				// adding one to the denominator to handle divide by zero issues
-				team.setScore(team.getTotalKillsInflicted() / (team.getTotalKillsReceived() + 1.0));			
+				double numerator = (double) team.getTotalKillsInflicted() + team.getTotalAssistsInflicted() + team.getTotalCoresCollected();
+				double denominator = team.getTotalKillsReceived() + 1.0;
+				team.setScore(numerator/denominator);			
 			}
 			
 		} else if (simConfig.getScoringMethod().equalsIgnoreCase("Cores")) {

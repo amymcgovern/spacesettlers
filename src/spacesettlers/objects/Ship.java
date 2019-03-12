@@ -67,8 +67,7 @@ public class Ship extends AbstractActionableObject {
 	 * Reference to the flag the ship has (if it has one)
 	 */
 	Flag flag;
-
-
+	
 	/**
 	 * Make a new ship for the specified team.  
 	 * @param teamName
@@ -94,6 +93,10 @@ public class Ship extends AbstractActionableObject {
 		this.flag = null;
 		this.numFlags = 0;
 		this.numCores = 0;
+		killTagTeam = null;
+		assistTagTeam = null;
+		healthAtKillTag = 0;
+		healthAtAssistTag = 0;
 	}
 
 	/**
@@ -125,6 +128,59 @@ public class Ship extends AbstractActionableObject {
 		newShip.numFlags = numFlags;
 		newShip.isShielded = isShielded;
 		newShip.numCores = numCores; 
+		newShip.killTagTeam = null;
+		newShip.assistTagTeam = null;
+		
+		if (this.killTagTeam != null) {
+			newShip.killTagTeam = killTagTeam.deepCloneNoTags();
+		}
+
+		if (this.assistTagTeam != null) {
+			newShip.assistTagTeam = assistTagTeam.deepCloneNoTags();
+		}
+		
+		newShip.healthAtAssistTag = healthAtAssistTag;
+		newShip.healthAtKillTag = healthAtKillTag;
+		
+		if (this.flag != null){
+			newShip.flag = flag.deepClone();
+		}
+		return newShip;
+	}
+
+	/**
+	 * Deep copy of a ship (used for security)
+	 * @return
+	 */
+	public Ship deepCloneNoTags() {
+		Ship newShip = new Ship(teamName, teamColor, getPosition().deepCopy());
+
+		newShip.setAlive(isAlive);
+		newShip.resources = new ResourcePile();
+		newShip.addResources(resources);
+		newShip.lastRespawnCounter = lastRespawnCounter;
+		newShip.numBeacons = numBeacons;
+		newShip.energy = energy;
+		newShip.respawnCounter = respawnCounter;
+		newShip.graphic = new ShipGraphics(newShip, teamColor);
+		newShip.currentAction = currentAction;
+		newShip.numWeaponsInAir = numWeaponsInAir;
+		newShip.id = id;
+		newShip.maxEnergy = maxEnergy;
+		newShip.currentPowerups = new LinkedHashSet<SpaceSettlersPowerupEnum>(currentPowerups);
+		newShip.weaponCapacity = weaponCapacity;
+		newShip.hitsInflicted = hitsInflicted;
+		newShip.killsInflicted = killsInflicted;
+		newShip.killsReceived = killsReceived;
+		newShip.damageInflicted = damageInflicted;
+		newShip.carryingFlag = carryingFlag;
+		newShip.numFlags = numFlags;
+		newShip.isShielded = isShielded;
+		newShip.numCores = numCores; 
+		newShip.killTagTeam = null;
+		newShip.assistTagTeam = null;
+		newShip.healthAtAssistTag = healthAtAssistTag;
+		newShip.healthAtKillTag = healthAtKillTag;
 		
 		if (this.flag != null){
 			newShip.flag = flag.deepClone();
@@ -363,6 +419,6 @@ public class Ship extends AbstractActionableObject {
 		this.carryingFlag = false;
 		flag.depositFlag();
 		flag = null;
-	}		
-
+	}
+	
 }

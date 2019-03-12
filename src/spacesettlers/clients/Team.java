@@ -108,7 +108,12 @@ public class Team {
 	 * Keep track of the total killsInflicted for the team (for the ladder, if used)
 	 */
 	int totalKillsInflicted, totalKillsReceived;
-	
+
+	/**
+	 * Keep track of the total assists on kills for the team (for the ladder, if used)
+	 */
+	int totalAssistsInflicted;
+
 	/**
 	 * Keep track of the total hitsInflicted for the team (for the ladder, if used)
 	 */
@@ -164,6 +169,7 @@ public class Team {
 		availableResources = new ResourcePile();
 		this.totalHitsInflicted = 0;
 		this.totalKillsInflicted = 0;
+		this.totalAssistsInflicted = 0;
 		this.totalKillsReceived = 0;
 		this.totalDamageInflicted = 0;
 		this.totalDamageReceived = 0;
@@ -198,6 +204,7 @@ public class Team {
 		newTeam.availableResources = new ResourcePile(availableResources);
 		newTeam.totalHitsInflicted = this.totalHitsInflicted;
 		newTeam.totalKillsInflicted = this.totalKillsInflicted;
+		newTeam.totalAssistsInflicted = this.totalAssistsInflicted;
 		newTeam.totalKillsReceived = this.totalKillsReceived;
 		newTeam.totalDamageInflicted = this.totalDamageInflicted;
 		newTeam.totalDamageReceived = this.totalDamageReceived;
@@ -514,11 +521,13 @@ public class Team {
 		int killsReceived = 0;
 		int damageInflicted = 0;
 		int damagedReceived = 0;
+		int totalAssists = 0;
 		for (Ship ship : teamShips) {
 			beacons += ship.getNumBeacons();
 			hits += ship.getHitsInflicted();
 			killsInflicted += ship.getKillsInflicted();
 			killsReceived += ship.getKillsReceived();
+			totalAssists += ship.getTotalAssistsInflicted();
 			damageInflicted += ship.getDamageInflicted();
 			
 			// check team ships for how much damageInflicted they have received
@@ -535,6 +544,7 @@ public class Team {
 		setTotalBeacons(beacons);
 		this.totalKillsInflicted = killsInflicted;
 		this.totalKillsReceived = killsReceived;
+		this.totalAssistsInflicted = totalAssists;
 		this.totalHitsInflicted = hits;
 		this.totalDamageInflicted = damageInflicted;
 		this.totalDamageReceived = damagedReceived;
@@ -849,7 +859,11 @@ public class Team {
 	public int getTotalKillsInflicted() {
 		return totalKillsInflicted;
 	}
-	
+
+	public int getTotalAssistsInflicted() {
+		return this.totalAssistsInflicted;
+	}
+
 	public int getTotalKillsReceived() {
 		return totalKillsReceived;
 	}

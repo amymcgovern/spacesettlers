@@ -81,6 +81,10 @@ public class Drone extends AbstractActionableObject {
 		this.flag = null;
 		this.numFlags = 0;
 		this.currentAction = null;
+		killTagTeam = null;
+		assistTagTeam = null;
+		healthAtKillTag = 0;
+		healthAtAssistTag = 0;
 	}
 
 	/**
@@ -106,6 +110,20 @@ public class Drone extends AbstractActionableObject {
 		newDrone.carryingFlag = carryingFlag;
 		newDrone.numFlags = numFlags;
 		newDrone.isShielded = isShielded;
+		
+		if (this.killTagTeam != null) {
+			newDrone.killTagTeam = killTagTeam.deepClone();
+		} else {
+			newDrone.killTagTeam = null;
+		}
+
+		if (this.assistTagTeam != null) {
+			newDrone.assistTagTeam = assistTagTeam.deepClone();
+		} else {
+			newDrone.assistTagTeam = null;
+		}
+		newDrone.healthAtAssistTag = healthAtAssistTag;
+		newDrone.healthAtKillTag = healthAtKillTag;
 		if (this.flag != null){
 			newDrone.flag = flag.deepClone();
 		}

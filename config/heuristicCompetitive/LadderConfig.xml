@@ -30,22 +30,14 @@
 			<initialRegionLRX>1024</initialRegionLRX>
 			<initialRegionLRY>600</initialRegionLRY>
 		</HighLevelTeamConfig>
-		<HighLevelTeamConfig>
-			<teamName>HeuristicMinerTeam</teamName>
-			<configFile>aggressive-heuristic-clientinit.xml</configFile>
-			<initialRegionULX>640</initialRegionULX>
-			<initialRegionULY>400</initialRegionULY>
-			<initialRegionLRX>940</initialRegionLRX>
-			<initialRegionLRY>700</initialRegionLRY>
-		</HighLevelTeamConfig>
 	</staticTeams>
 
 	<!-- The list of variable clients/teams.  Each will participate in numRepeatMatches but against 
 		 each other and the static teams. -->
 	<variableTeams>
 		<HighLevelTeamConfig>
-			<teamName>DoNothingTeam</teamName>
-			<configFile>donothing-clientinit.xml</configFile>
+			<teamName>HeuristicMinerTeam</teamName>
+			<configFile>aggressive-heuristic-clientinit.xml</configFile>
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
 			<teamName>AmyTeam</teamName>

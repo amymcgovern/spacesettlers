@@ -20,6 +20,7 @@ public class Base extends AbstractActionableObject {
     public static final int INITIAL_BASE_ENERGY = 5000;
     public static final int INITIAL_ENERGY_HEALING_INCREMENT = 1;
     
+    
 	/**
 	 * The color of this team
 	 */
@@ -56,6 +57,10 @@ public class Base extends AbstractActionableObject {
 		this.maxEnergy = INITIAL_BASE_ENERGY;
 		healingIncrement = INITIAL_ENERGY_HEALING_INCREMENT;
 		resources = new ResourcePile();
+		killTagTeam = null;
+		assistTagTeam = null;
+		healthAtKillTag = 0;
+		healthAtAssistTag = 0;
 	}
 
 	/**
@@ -76,6 +81,21 @@ public class Base extends AbstractActionableObject {
 		newBase.numFlags = numFlags;
 		newBase.isShielded = isShielded;
 		newBase.numCores = numCores;
+		
+		if (this.killTagTeam != null) {
+			newBase.killTagTeam = killTagTeam.deepClone();
+		} else {
+			newBase.killTagTeam = null;
+		}
+
+		if (this.assistTagTeam != null) {
+			newBase.assistTagTeam = assistTagTeam.deepClone();
+		} else {
+			newBase.assistTagTeam = null;
+		}
+		newBase.healthAtAssistTag = healthAtAssistTag;
+		newBase.healthAtKillTag = healthAtKillTag;
+		
 		return newBase;
 	}
 

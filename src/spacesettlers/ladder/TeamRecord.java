@@ -22,10 +22,10 @@ public class TeamRecord {
 	
 	double averageResources;
 	
-	int totalKills, totalDeaths;
+	int totalKills, totalDeaths, totalAssists, totalCores;
 	
-	double averageKills, averageDeaths;
-	
+	double averageKills, averageDeaths, averageAssists, averageCores;
+			
 	String teamName;
 	
 	public TeamRecord(String teamName) {
@@ -52,8 +52,12 @@ public class TeamRecord {
 		averageResources = 0;
 		totalKills = 0;
 		totalDeaths = 0;
+		totalAssists = 0;
+		totalCores = 0;
 		averageDeaths = 0;
 		averageKills = 0;
+		averageAssists = 0;
+		averageCores = 0;
 	}
 
 	@Override
@@ -90,19 +94,25 @@ public class TeamRecord {
 		numGames++;
 		
 		totalScore += team.getScore();
-		averageScore = totalScore / numGames;
+		averageScore = (double) totalScore / numGames;
 		
 		totalResources += team.getSummedTotalResources();
-		averageResources = totalResources / numGames;
+		averageResources = (double) totalResources / numGames;
 		
 		totalBeacons += team.getTotalBeaconsCollected();
-		averageBeacons = totalBeacons / numGames;
+		averageBeacons = (double) totalBeacons / numGames;
 		
 		totalKills += team.getTotalKillsInflicted();
-		averageKills = totalKills / numGames;
+		averageKills = (double) totalKills / numGames;
 		
 		totalDeaths += team.getTotalKillsReceived();
-		averageDeaths += totalDeaths / numGames;
+		averageDeaths = (double) totalDeaths / numGames;
+		
+		totalAssists += team.getTotalAssistsInflicted();
+		averageAssists = (double) totalAssists / numGames;
+		
+		totalCores += team.getTotalCoresCollected();
+		averageCores = (double) totalCores / numGames;
 	}
 
 	public double getAverageScore() {
@@ -131,6 +141,14 @@ public class TeamRecord {
 
 	public double getAverageDeaths() {
 		return averageDeaths;
+	}
+	
+	public double getAverageAssists() {
+		return averageAssists;
+	}
+	
+	public double getAverageCores() {
+		return averageCores;
 	}
 
 	@Override

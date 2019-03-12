@@ -254,6 +254,10 @@ public class CollisionHandler {
 			if (!ship.isShielded()) {
 				double initialEnergy = ship.getEnergy();
 				ship.updateEnergy(missile.getDamage());				
+				
+				// kill/assist tags for missiles to ships
+				ship.tagShooter(missile.getFiringShip());
+				
 				if (ship.getEnergy() <= 0) {
 					// if you killed the ship, only count the final amount of damage needed to kill it 
 					firingShip.incrementDamageInflicted((int) initialEnergy);
@@ -273,8 +277,9 @@ public class CollisionHandler {
 				//System.out.println("ship " + firingShip.getTeamName() + " stealing resourcesAvailable " + shipMoney + " from " + ship.getTeamName() + ship.getId());
 				
 				// it killed a ship
-				firingShip.incrementKillsInflicted();
-				ship.incrementKillsReceived();
+				//firingShip.incrementKillsInflicted();
+				// removed increment of kills here to handle in simulator with assists now - Amy 03/10/2019
+				//ship.incrementKillsReceived();
 			}
 
 		}
@@ -283,18 +288,27 @@ public class CollisionHandler {
 			Drone drone = (Drone) object2;
 			
 			double initialEnergy = drone.getEnergy();
-			drone.updateEnergy(missile.getDamage());				
+			drone.updateEnergy(missile.getDamage());	
+			
+			// kill/assist tags for missiles 
+			drone.tagShooter(missile.getFiringShip());
+			
 			if (drone.getEnergy() <= 0) {
-				// if you killed the ship, only count the final amount of damage needed to kill it 
+				// if you killed the drone, only count the final amount of damage needed to kill it 
 				firingShip.incrementDamageInflicted((int) initialEnergy);
 			} else {
 				// otherwise a missile is a fixed amount of damage
 				firingShip.incrementDamageInflicted(-missile.getDamage());
 			}
 
-			// it hit a ship
+			// count hits
 			firingShip.incrementHitsInflicted();
-			
+
+			// count kills if the drone is dead
+			if (drone.getEnergy() <= 0) {
+				// removed increment of kills here to handle in simulator with assists now - Amy 03/10/2019
+				//firingShip.incrementKillsInflicted();
+			}
 		}
 		
 		// did it hit a base?
@@ -305,6 +319,9 @@ public class CollisionHandler {
 			if (!base.isShielded()) {
 				double initialEnergy = base.getEnergy();
 				base.updateEnergy(missile.getDamage());
+				
+				// kill/assist tags for missiles 
+				base.tagShooter(missile.getFiringShip());
 				
 				if (base.getEnergy() <= 0) {
 					// if the base is dead, you can only count the energy it had prior to being dead
@@ -359,6 +376,8 @@ public class CollisionHandler {
 				ship.incrementDamageReceived(emp.getDamage());
 				ship.setFreezeCount(emp.getFreezeCount());
 
+				ship.tagShooter(emp.getFiringShip());
+
 				// it hit a ship
 				firingShip.incrementHitsInflicted();
 			}
@@ -374,6 +393,9 @@ public class CollisionHandler {
 				base.incrementDamageReceived(emp.getDamage());
 				base.setFreezeCount(emp.getFreezeCount());
 
+				// kill/assist tags for missiles 
+				base.tagShooter(emp.getFiringShip());				
+				
 				// it hit a base
 				firingShip.incrementHitsInflicted();
 			}
