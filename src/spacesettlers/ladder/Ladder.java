@@ -394,10 +394,10 @@ public class Ladder {
 			str += "<td>" + record.getAverageScore() + "</td>\n";
 			str += "<td>" + record.getAverageBeacons() + "</td>\n";
 			str += "<td>" + record.getAverageResources() + "</td>\n";
-			str += "<td>" + record.getAverageDeaths() + "</td>\n";
-			str += "<td>" + record.getAverageKills() + "</td>\n";
-			str += "<td>" + record.getAverageAssists() + "</td>\n";
-			str += "<td>" + record.getAverageCores() + "</td>\n";
+			str += "<td>" + String.format("%02.02f", record.getAverageDeaths()) + "</td>\n";
+			str += "<td>" + String.format("%02.02f", record.getAverageKills()) + "</td>\n";
+			str += "<td>" + String.format("%02.02f", record.getAverageAssists()) + "</td>\n";
+			str += "<td>" + String.format("%02.02f", record.getAverageCores()) + "</td>\n";
 			str += "</tr>";
 			place++;
 		}
