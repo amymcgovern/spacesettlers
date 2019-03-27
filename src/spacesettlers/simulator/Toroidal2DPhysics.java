@@ -791,6 +791,9 @@ public class Toroidal2DPhysics {
 
 				if (killShip != null) killShip.incrementKillsInflicted();
 				if (assistShip != null) assistShip.incrementAssistsInflicted();
+				
+				// mark the ship as having been killed
+				ship.incrementKillsReceived();
 
 				
 				// Spawn a new AiCore with the same velocity magnitude and direction as its
