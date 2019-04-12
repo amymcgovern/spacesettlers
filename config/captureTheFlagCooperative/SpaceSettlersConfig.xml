@@ -69,22 +69,38 @@
 		<FlagConfig>
 			<teamName>Team1</teamName>
 			<startX>
+				<int>300</int>
 				<int>350</int>
-				<int>375</int>
+				<int>400</int>
+				<int>330</int>
+				<int>350</int>
+				<int>400</int>
 			</startX>
 			<startY>
+				<int>225</int>
 				<int>250</int>
+				<int>275</int>
+				<int>725</int>
+				<int>750</int>
 				<int>800</int>
 			</startY>
 		</FlagConfig>
 		<FlagConfig>
 			<teamName>Team2</teamName>
 			<startX>
+				<int>1200</int>
 				<int>1250</int>
+				<int>1275</int>
+				<int>1200</int>
 				<int>1250</int>
+				<int>1350</int>
 			</startX>
 			<startY>
 				<int>250</int>
+				<int>300</int>
+				<int>370</int>
+				<int>825</int>
+				<int>750</int>
 				<int>800</int>
 			</startY>
 		</FlagConfig>
@@ -115,6 +131,8 @@
 	
 	<!-- For asteroid configuration in CTF: You must specify the full location and radius for the full playing field of asteroids -->
 	<fixedAsteroids>
+		
+	
 	<!--Make a wall of smaller asteroids down the middle of the board (enough space to shoot 
 	but not enough to fit a ship through.  it should divide the bases-->
 		<FixedAsteroidConfig>
@@ -124,17 +142,22 @@
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
 			<x>800</x>
-			<y>300</y>
+			<y>290</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
 			<x>800</x>
-			<y>350</y>
+			<y>330</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
 			<x>800</x>
-			<y>400</y>
+			<y>370</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>410</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
@@ -144,17 +167,22 @@
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
 			<x>800</x>
-			<y>500</y>
+			<y>490</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
 			<x>800</x>
-			<y>550</y>
+			<y>530</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
 			<x>800</x>
-			<y>600</y>
+			<y>570</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>610</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
@@ -164,17 +192,22 @@
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
 			<x>800</x>
-			<y>700</y>
+			<y>690</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
 			<x>800</x>
-			<y>750</y>
+			<y>730</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
 			<x>800</x>
-			<y>800</y>
+			<y>770</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>800</x>
+			<y>810</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
@@ -182,104 +215,150 @@
 			<y>850</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
+		
 		<!-- Now make an alcove for the flag for each team. This one is the upper left. -->
 		<FixedAsteroidConfig>
-			<x>300</x>
-			<y>150</y>
+			<x>240</x>
+			<y>200</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>210</x>
+			<y>230</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>210</x>
+			<y>270</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>240</x>
+			<y>300</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>270</x>
+			<y>330</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>310</x>
+			<y>330</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
 			<x>350</x>
-			<y>150</y>
+			<y>330</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>400</x>
-			<y>175</y>
+			<x>390</x>
+			<y>330</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>425</x>
-			<y>225</y>
+			<x>420</x>
+			<y>300</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>425</x>
-			<y>275</y>
+			<x>450</x>
+			<y>270</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>400</x>
-			<y>325</y>
+			<x>450</x>
+			<y>230</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>350</x>
-			<y>350</y>
-			<radius>10</radius>
-		</FixedAsteroidConfig>
-		<FixedAsteroidConfig>
-			<x>300</x>
-			<y>350</y>
+			<x>420</x>
+			<y>200</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		
 		<!-- Lower left flag alcove. -->
 		<FixedAsteroidConfig>
-			<x>300</x>
+			<x>260</x>
 			<y>700</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>350</x>
+			<x>300</x>
+			<y>670</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>340</x>
+			<y>670</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>380</x>
 			<y>700</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>400</x>
-			<y>725</y>
+			<x>420</x>
+			<y>730</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>425</x>
-			<y>775</y>
+			<x>420</x>
+			<y>770</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>425</x>
-			<y>825</y>
+			<x>420</x>
+			<y>810</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>400</x>
-			<y>875</y>
+			<x>420</x>
+			<y>850</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>350</x>
-			<y>900</y>
+			<x>380</x>
+			<y>880</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>340</x>
+			<y>910</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
 			<x>300</x>
-			<y>900</y>
+			<y>910</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>260</x>
+			<y>880</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 
 		<!-- Upper right flag alcove. -->
 		<FixedAsteroidConfig>
-			<x>1300</x>
-			<y>150</y>
+			<x>1325</x>
+			<y>195</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>1250</x>
-			<y>150</y>
+			<x>1285</x>
+			<y>165</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>1200</x>
-			<y>175</y>
+			<x>1245</x>
+			<y>165</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1205</x>
+			<y>195</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
@@ -289,82 +368,142 @@
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
 			<x>1175</x>
-			<y>275</y>
+			<y>265</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>1200</x>
-			<y>325</y>
+			<x>1175</x>
+			<y>305</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>1250</x>
-			<y>350</y>
+			<x>1175</x>
+			<y>345</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>1300</x>
-			<y>350</y>
+			<x>1205</x>
+			<y>375</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1245</x>
+			<y>405</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1285</x>
+			<y>405</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1325</x>
+			<y>375</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		
-		<!-- Lower left flag alcove. -->
+		<!-- Lower right flag alcove. -->
 		<FixedAsteroidConfig>
-			<x>1300</x>
-			<y>700</y>
+			<x>1190</x>
+			<y>855</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>1250</x>
-			<y>700</y>
-			<radius>10</radius>
-		</FixedAsteroidConfig>
-		<FixedAsteroidConfig>
-			<x>1200</x>
-			<y>725</y>
-			<radius>10</radius>
-		</FixedAsteroidConfig>
-		<FixedAsteroidConfig>
-			<x>1175</x>
-			<y>775</y>
-			<radius>10</radius>
-		</FixedAsteroidConfig>
-		<FixedAsteroidConfig>
-			<x>1175</x>
+			<x>1160</x>
 			<y>825</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>1200</x>
-			<y>875</y>
+			<x>1160</x>
+			<y>785</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
-			<x>1250</x>
-			<y>900</y>
+			<x>1190</x>
+			<y>755</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1220</x>
+			<y>725</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1260</x>
+			<y>725</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
 			<x>1300</x>
-			<y>900</y>
+			<y>725</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1340</x>
+			<y>725</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1370</x>
+			<y>755</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1400</x>
+			<y>785</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1400</x>
+			<y>825</y>
+			<radius>10</radius>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1370</x>
+			<y>855</y>
 			<radius>10</radius>
 		</FixedAsteroidConfig>
 		
-		<!-- a couple of wrap around ones to make navigation more fun -->
+		<!-- a couple of large slow moving ones to make navigation extra fun -->
 		<FixedAsteroidConfig>
 			<x>0</x>
 			<y>0</y>
-			<radius>100</radius>
+			<radius>75</radius>
+			<isMoveable>True</isMoveable>
+			<isMineable>False</isMineable>
+			<maxInitialVelocity>10</maxInitialVelocity>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
 			<x>800</x>
 			<y>0</y>
-			<radius>75</radius>
+			<radius>70</radius>
+			<isMoveable>True</isMoveable>
+			<isMineable>False</isMineable>
+			<maxInitialVelocity>10</maxInitialVelocity>
 		</FixedAsteroidConfig>
 		<FixedAsteroidConfig>
 			<x>0</x>
 			<y>540</y>
-			<radius>75</radius>
+			<radius>60</radius>
+			<isMoveable>True</isMoveable>
+			<isMineable>False</isMineable>
+			<maxInitialVelocity>10</maxInitialVelocity>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>250</x>
+			<y>0</y>
+			<radius>50</radius>
+			<isMoveable>True</isMoveable>
+			<isMineable>False</isMineable>
+			<maxInitialVelocity>10</maxInitialVelocity>
+		</FixedAsteroidConfig>
+		<FixedAsteroidConfig>
+			<x>1250</x>
+			<y>0</y>
+			<radius>50</radius>
+			<isMoveable>True</isMoveable>
+			<isMineable>False</isMineable>
+			<maxInitialVelocity>10</maxInitialVelocity>
 		</FixedAsteroidConfig>
 		
 		

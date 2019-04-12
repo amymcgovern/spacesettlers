@@ -390,6 +390,7 @@ public final class SpaceSettlersSimulator {
 				}
 				//System.out.println("Starting Locations are " + startingPositions);
 				Position flagPosition = startingPositions[random.nextInt(startingPositions.length)];
+
 				//System.out.println("Chosen location is " + flagPosition);
 				Flag flag = new Flag(flagPosition, flagConfig.getTeamName(), thisTeam, startingPositions);
 				
@@ -409,14 +410,20 @@ public final class SpaceSettlersSimulator {
 	 * @return
 	 */
 	private Asteroid createNewFixedAsteroid(FixedAsteroidConfig asteroidConfig) {
-		boolean mineable = false;
-		boolean moveable = false;
+		boolean mineable = asteroidConfig.isMineable();
+		boolean moveable = asteroidConfig.isMoveable();
 
 		int radius = asteroidConfig.getRadius();
 
 		// create the asteroid (no fuels in it either)
 		Asteroid asteroid = new Asteroid(new Position(asteroidConfig.getX(), asteroidConfig.getY()), 
 				mineable, radius, moveable, 0, 0, 0);
+
+		// fixed ones can move (new change 2019, fixed just means it is pre-specified really)
+		if (asteroid.isMoveable()) {
+			Vector2D randomMotion = Vector2D.getRandom(random, asteroidConfig.getMaxInitialVelocity());
+			asteroid.getPosition().setTranslationalVelocity(randomMotion);
+		}
 
 		return asteroid;
 	}

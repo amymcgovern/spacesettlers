@@ -661,8 +661,9 @@ public class Toroidal2DPhysics {
 				double angularAccel = Math.abs(currentPosition.getAngularVelocity() - newPosition.getAngularVelocity())
 						/ timeStep;
 				double angularInertia = (3.0 * drone.getMass() * drone.getRadius() * angularAccel) / 2.0;
-				double linearAccel = Math.abs(currentPosition.getTranslationalVelocity().getMagnitude()
-						- newPosition.getTranslationalVelocity().getMagnitude()) / timeStep;
+				//double linearAccel = Math.abs(currentPosition.getTranslationalVelocity().getMagnitude()
+				//		- newPosition.getTranslationalVelocity().getMagnitude()) / timeStep;
+				double linearAccel = currentPosition.getTranslationalVelocity().subtract(newPosition.getTranslationalVelocity()).getMagnitude() / timeStep;
 				double linearInertia = drone.getMass() * linearAccel;
 				int penalty = (int) Math.floor(0.7 * ENERGY_PENALTY * (angularInertia + linearInertia));
 				drone.updateEnergy(-penalty);
@@ -702,8 +703,7 @@ public class Toroidal2DPhysics {
 				double angularAccel = Math.abs(currentPosition.getAngularVelocity() - newPosition.getAngularVelocity())
 						/ timeStep;
 				double angularInertia = (3.0 * ship.getMass() * ship.getRadius() * angularAccel) / 2.0;
-				double linearAccel = Math.abs(currentPosition.getTranslationalVelocity().getMagnitude()
-						- newPosition.getTranslationalVelocity().getMagnitude()) / timeStep;
+				double linearAccel = currentPosition.getTranslationalVelocity().subtract(newPosition.getTranslationalVelocity()).getMagnitude() / timeStep;
 				double linearInertia = ship.getMass() * linearAccel;
 				int penalty = (int) Math.floor(ENERGY_PENALTY * (angularInertia + linearInertia));
 				ship.updateEnergy(-penalty);
