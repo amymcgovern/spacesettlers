@@ -14,6 +14,7 @@ import spacesettlers.actions.PurchaseCosts;
 import spacesettlers.actions.PurchaseTypes;
 import spacesettlers.graphics.CircleGraphics;
 import spacesettlers.graphics.SpacewarGraphics;
+import spacesettlers.graphics.TargetGraphics;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.AbstractObject;
 import spacesettlers.objects.Ship;
@@ -32,6 +33,7 @@ import spacesettlers.utilities.Position;
 public class RandomTeamClient extends TeamClient {
 	HashSet<SpacewarGraphics> graphics;
 	boolean fired = false;
+	Position currentTarget;
 	
 	public static int RANDOM_MOVE_RADIUS = 200;
 	public static double SHOOT_PROBABILITY = 0.1;
@@ -39,6 +41,7 @@ public class RandomTeamClient extends TeamClient {
 	@Override
 	public void initialize(Toroidal2DPhysics space) {
 		graphics = new HashSet<SpacewarGraphics>();
+		currentTarget = null;
 	}
 
 	@Override
@@ -64,14 +67,10 @@ public class RandomTeamClient extends TeamClient {
 					Position currentPosition = ship.getPosition();
 					Position newGoal = space.getRandomFreeLocationInRegion(random, Ship.SHIP_RADIUS, (int) currentPosition.getX(), 
 							(int) currentPosition.getY(), RANDOM_MOVE_RADIUS);
+					currentTarget = newGoal;
 					MoveAction newAction = null;
 					newAction = new MoveAction(space, currentPosition, newGoal);
 					//System.out.println("Ship is at " + currentPosition + " and goal is " + newGoal);
-					SpacewarGraphics graphic = new CircleGraphics(1, getTeamColor(), newGoal);
-					graphics.add(graphic);
-					//Vector2D shortVec = space.findShortestDistanceVector(currentPosition, newGoal);
-					//LineShadow lineShadow = new LineShadow(currentPosition, newGoal, shortVec);
-					//newShadows.add(lineShadow);
 					randomActions.put(ship.getId(), newAction);
 				} else {
 					randomActions.put(ship.getId(), ship.getCurrentAction());
@@ -96,8 +95,11 @@ public class RandomTeamClient extends TeamClient {
 
 	@Override
 	public Set<SpacewarGraphics> getGraphics() {
-		HashSet<SpacewarGraphics> newGraphics = new HashSet<SpacewarGraphics>(graphics);  
-		graphics.clear();
+		HashSet<SpacewarGraphics> newGraphics = new HashSet<SpacewarGraphics>();  
+		if (currentTarget != null) {
+			SpacewarGraphics graphic = new TargetGraphics(20, getTeamColor(), this.currentTarget);
+			newGraphics.add(graphic);
+		}
 		return newGraphics;
 	}
 

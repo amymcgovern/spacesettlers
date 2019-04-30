@@ -19,11 +19,26 @@ public class TargetGraphics extends SpacewarGraphics {
 	private double radius;
 	
 	private Position currentPosition;
+	
+	Color color;
 
+	/**
+	 * Default target is drawn in red
+	 * @param radius
+	 * @param position
+	 */
     public TargetGraphics(int radius, Position position) {
         super(radius * 2, radius * 2);
         this.radius = radius;
         this.currentPosition = position;
+		this.color = new Color(1f, 0f, 0f, 1f);
+    }
+
+    public TargetGraphics(int radius, Color color, Position position) {
+        super(radius * 2, radius * 2);
+        this.radius = radius;
+        this.currentPosition = position;
+        this.color = color;
     }
 
 	@Override
@@ -54,7 +69,6 @@ public class TargetGraphics extends SpacewarGraphics {
 	@Override
 	public void draw(Graphics2D graphics) {
 		double[] radii = {.8 * radius, .5 * radius, .2 * radius};
-		Color color = new Color(1f, 0f, 0f, 1f);
 		graphics.setColor(color);
 		graphics.setStroke(new BasicStroke((float)(radius/6), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		Ellipse2D.Double circle = null;
