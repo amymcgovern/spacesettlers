@@ -305,10 +305,6 @@ public final class SpaceSettlersSimulator {
 			// make the team inside the simulator for this team
 			Team team = createTeam(teamConfig, teamClient, teamClientConfig);
 
-			for (Ship ship : team.getShips()) {
-				simulatedSpace.addObject(ship);
-			}
-
 			clientMap.put(teamConfig.getTeamName(), teamClient);
 		}
 
@@ -497,6 +493,7 @@ public final class SpaceSettlersSimulator {
 			System.out.println("Starting ship for team " + team.getTeamName() + " in location " + freeLocation);
 			Ship ship = new Ship(teamConfig.getTeamName(), team.getTeamColor(), freeLocation);
 			team.addShip(ship);
+			simulatedSpace.addObject(ship);
 		}
 
 		teams.add(team);
