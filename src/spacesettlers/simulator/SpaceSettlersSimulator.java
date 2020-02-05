@@ -515,8 +515,8 @@ public final class SpaceSettlersSimulator {
 		String fileName = configPath + teamConfig.getConfigFile();
 
 		XStream xstream = new XStream();
-		xstream.allowTypesByRegExp(new String[] { ".*" });
 		xstream.alias("TeamClientConfig", TeamClientConfig.class);
+		xstream.allowTypesByRegExp(new String[] { ".*" });
 		TeamClientConfig lowLevelTeamConfig;
 
 		try { 
@@ -588,6 +588,7 @@ public final class SpaceSettlersSimulator {
 		xstream.alias("AsteroidConfig", RandomAsteroidConfig.class);
 		xstream.alias("FixedAsteroidConfig", FixedAsteroidConfig.class);
 		xstream.alias("FlagConfig", FlagConfig.class);
+		xstream.allowTypesByRegExp(new String[] { ".*" });
 
 		try { 
 			simConfig = (SpaceSettlersConfig) xstream.fromXML(new File(configFile));

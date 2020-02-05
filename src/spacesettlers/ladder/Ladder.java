@@ -80,6 +80,7 @@ public class Ladder {
 		xstream.alias("AsteroidConfig", RandomAsteroidConfig.class);
 		xstream.alias("FixedAsteroidConfig", FixedAsteroidConfig.class);
 		xstream.alias("FlagConfig", FlagConfig.class);
+		xstream.allowTypesByRegExp(new String[] { ".*" });
 
 
 		try { 
