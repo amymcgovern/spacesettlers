@@ -82,6 +82,7 @@ public class LadderSingleGame implements Callable {
 		xstream = new XStream();
 		xstream.alias("LadderConfig", LadderConfig.class);
 		xstream.alias("HighLevelTeamConfig", HighLevelTeamConfig.class);
+		xstream.allowTypesByRegExp(new String[] { ".*" });
 
 		try { 
 			ladderConfig = (LadderConfig) xstream.fromXML(new File(configFile));
