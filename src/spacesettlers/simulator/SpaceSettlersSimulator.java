@@ -515,6 +515,7 @@ public final class SpaceSettlersSimulator {
 		String fileName = configPath + teamConfig.getConfigFile();
 
 		XStream xstream = new XStream();
+		xstream.allowTypesByRegExp(new String[] { ".*" });
 		xstream.alias("TeamClientConfig", TeamClientConfig.class);
 		TeamClientConfig lowLevelTeamConfig;
 
