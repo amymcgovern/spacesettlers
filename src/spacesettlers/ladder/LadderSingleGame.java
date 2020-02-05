@@ -68,7 +68,7 @@ public class LadderSingleGame implements Callable {
 		xstream.alias("AsteroidConfig", RandomAsteroidConfig.class);
 		xstream.alias("FixedAsteroidConfig", FixedAsteroidConfig.class);
 		xstream.alias("FlagConfig", FlagConfig.class);
-
+		xstream.allowTypesByRegExp(new String[] { ".*" });
 
 		try { 
 			simConfig = (SpaceSettlersConfig) xstream.fromXML(new File(configFile));
