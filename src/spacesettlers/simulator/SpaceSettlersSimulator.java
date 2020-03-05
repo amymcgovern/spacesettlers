@@ -972,6 +972,10 @@ public final class SpaceSettlersSimulator {
 			for (Team team : teams) {
 				team.setScore(team.getSummedTotalResources() + 100.0 * team.getTotalCoresCollected());
 			}
+		} else if (simConfig.getScoringMethod().equalsIgnoreCase("ResourcesAndBeacons")) {
+			for (Team team : teams) {
+				team.setScore(team.getSummedTotalResources() + 100.0 * team.getTotalBeaconsCollected());
+			}	
 		} else if (simConfig.getScoringMethod().equalsIgnoreCase("Beacons")) {
 			for (Team team : teams) {
 				int beacons = 0;
