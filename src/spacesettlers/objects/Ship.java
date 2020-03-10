@@ -124,6 +124,7 @@ public class Ship extends AbstractActionableObject {
 		newShip.killsInflicted = killsInflicted;
 		newShip.killsReceived = killsReceived;
 		newShip.damageInflicted = damageInflicted;
+		newShip.damageReceived = damageReceived;
 		newShip.carryingFlag = carryingFlag;
 		newShip.numFlags = numFlags;
 		newShip.isShielded = isShielded;
@@ -173,6 +174,7 @@ public class Ship extends AbstractActionableObject {
 		newShip.killsInflicted = killsInflicted;
 		newShip.killsReceived = killsReceived;
 		newShip.damageInflicted = damageInflicted;
+		newShip.damageReceived = damageReceived;
 		newShip.carryingFlag = carryingFlag;
 		newShip.numFlags = numFlags;
 		newShip.isShielded = isShielded;
