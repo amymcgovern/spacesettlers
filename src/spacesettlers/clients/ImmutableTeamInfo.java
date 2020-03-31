@@ -56,6 +56,11 @@ public class ImmutableTeamInfo {
 	 */
 	int totalDamageReceived;
 	
+	/**
+	 * Total kills received
+	 */
+	int totalKillsReceived;
+	
 	
 	/**
 	 * The name that shows up in the ladder
@@ -74,6 +79,7 @@ public class ImmutableTeamInfo {
 		this.totalHitsInflicted = team.totalHitsInflicted;
 		this.totalKillsInflicted = team.totalKillsInflicted;
 		this.totalCoresCollected = team.totalCoresCollected;//herr0861 edit
+		this.totalKillsReceived = team.totalKillsReceived;
 		
 	}
 
@@ -125,6 +131,9 @@ public class ImmutableTeamInfo {
 		return totalDamageReceived;
 	}
 
+	public int getTotalKillsReceived() {
+		return totalKillsReceived;
+	}
 	
 	
 }
