@@ -4,9 +4,9 @@
 	<classname>spacesettlers.clients.PacifistFlagCollectorTeamClient</classname>
 	
 	<!-- You can choose the color your team's ships will be on the screen.  Specify the red, green, and blue components -->
-	<teamColorRed>100</teamColorRed>
+	<teamColorRed>200</teamColorRed>
 	<teamColorGreen>50</teamColorGreen>
-	<teamColorBlue>100</teamColorBlue>
+	<teamColorBlue>200</teamColorBlue>
 	
 	<!-- The name that shows up in the ladder -->
 	<ladderName>Pacifist Flag Collector With 3 Ships for EC</ladderName>

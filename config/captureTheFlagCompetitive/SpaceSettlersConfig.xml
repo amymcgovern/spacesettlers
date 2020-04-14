@@ -37,7 +37,7 @@
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
 			<teamName>Team2</teamName>
-			<configFile>aggressive-flag2ships-clientinit.xml</configFile>
+			<configFile>passive-flag3ships-clientinit.xml</configFile>
 		</HighLevelTeamConfig>		
 	</teams>
 
