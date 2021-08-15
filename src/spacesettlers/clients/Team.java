@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import spacesettlers.actions.AbstractAction;
+import spacesettlers.actions.AbstractGameSearchAction;
 import spacesettlers.actions.PurchaseCosts;
 import spacesettlers.actions.PurchaseTypes;
 import spacesettlers.graphics.SpacewarGraphics;
@@ -678,7 +679,64 @@ public class Team {
         return powerups;
 	}
 
+	/**
+	 * Get the searches for the team this turn
+	 * 
+	 * @param space
+	 * @return
+	 */
+	public Map<UUID, AbstractGameSearchAction> getTeamSearches(Toroidal2DPhysics space) {
+        Map<UUID, AbstractGameSearchAction> searches = new HashMap<UUID,AbstractGameSearchAction>();
 
+		final Toroidal2DPhysics clonedSpace = space.deepClone();
+		final Set<AbstractActionableObject> clonedActionableObjects = getTeamActionableObjectsClone(space);
+		
+        // if the previous thread call hasn't finished, then just return default
+		if (executor == null || executor.isTerminated()) {
+			executor = Executors.newSingleThreadExecutor();
+		} else {
+			return searches;
+		}
+
+		//System.out.println("exec " + executor.isTerminated());
+        Future<Map<UUID,AbstractGameSearchAction>> future = executor.submit(
+        		new Callable<Map<UUID,AbstractGameSearchAction>>(){
+        			public Map<UUID,AbstractGameSearchAction> call() throws Exception {
+        				return teamClient.getGameSearch(clonedSpace, clonedActionableObjects);
+        			}
+        		});
+        
+        try {
+            //start
+        	searches = future.get(SpaceSettlersSimulator.TEAM_ACTION_TIMEOUT, TimeUnit.MILLISECONDS);
+            //finished in time
+        } catch (TimeoutException e) {
+            //was terminated
+        	//return empty map, don't buy anything
+        	System.out.println(getTeamName() + " timed out in getTeamPowerups");
+        	searches = new HashMap<UUID,AbstractGameSearchAction>();
+        } catch (InterruptedException e) {
+        	//we were interrupted (should not happen but lets be good programmers) 
+        	//return empty map, don't buy anything
+        	searches = new HashMap<UUID,AbstractGameSearchAction>();
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			//the executor threw and exception (should not happen but lets be good programmers) 
+        	//return empty map, don't buy anything
+			searches = new HashMap<UUID,AbstractGameSearchAction>();
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.err.println("Error in agent.  Printing stack trace");
+        	searches = new HashMap<UUID,AbstractGameSearchAction>();
+			e.printStackTrace();
+		}
+
+        executor.shutdownNow();
+        
+        return searches;
+	}
+
+	
 	/**
 	 * Get any graphics the team client wants to draw
 	 * 

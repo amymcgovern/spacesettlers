@@ -25,22 +25,29 @@ public class Asteroid extends AbstractObject {
     boolean isMineable;
     
     /**
+     * Is the asteroid gameable?
+     */
+    boolean isGameable;
+    
+    /**
      * Create an asteroid with proportions of resources (from config file)
      * 
      * @param location
      * @param mineable
+     * @param gameable
      * @param radius
      * @param moveable
      * @param fuel
      * @param water
      * @param metals
      */
-    public Asteroid(Position location, boolean mineable, int radius, boolean moveable, double fuel, double water, double metals) {
+    public Asteroid(Position location, boolean mineable, boolean gameable, int radius, boolean moveable, double fuel, double water, double metals) {
 		super(MIN_ASTEROID_MASS, radius, location);
 		
 		setDrawable(true);
 		setAlive(true);
 		isMineable = mineable;
+		isGameable = gameable;
 		graphic = new AsteroidGraphics(this);
 		this.isMoveable = moveable;
 		this.fuelProportion = fuel;
@@ -63,16 +70,18 @@ public class Asteroid extends AbstractObject {
      * 
      * @param location
      * @param mineable
+     * @param gameable
      * @param radius
      * @param moveable
      * @param initialResources
      */
-    public Asteroid(Position location, boolean mineable, int radius, boolean moveable, ResourcePile initialResources) {
+    public Asteroid(Position location, boolean mineable, boolean gameable, int radius, boolean moveable, ResourcePile initialResources) {
 		super(MIN_ASTEROID_MASS, radius, location);
 		
 		setDrawable(true);
 		setAlive(true);
 		isMineable = mineable;
+		isGameable = gameable;
 		graphic = new AsteroidGraphics(this);
 		this.isMoveable = moveable;
 		
@@ -98,7 +107,7 @@ public class Asteroid extends AbstractObject {
      * Make a copy for security
      */
     public Asteroid deepClone() {
-    	Asteroid newAsteroid = new Asteroid(getPosition().deepCopy(), isMineable, radius, isMoveable, 
+    	Asteroid newAsteroid = new Asteroid(getPosition().deepCopy(), isMineable, isGameable, radius, isMoveable, 
     			fuelProportion, waterProportion, metalsProportion);
     	newAsteroid.setAlive(isAlive);
     	newAsteroid.id = id;
@@ -122,6 +131,13 @@ public class Asteroid extends AbstractObject {
 		return isMineable;
 	}
 
+	/**
+	 * @return the isGameable
+	 */
+	public boolean isGameable() {
+		return isGameable;
+	}
+	
 	/**
 	 * Get the fuel proportion (used for graphics but maybe useful in other ways)
 	 * @return the proportion of the asteroid dedicated to fuel

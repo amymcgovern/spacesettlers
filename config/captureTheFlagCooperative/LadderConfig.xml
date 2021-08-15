@@ -16,7 +16,7 @@
 	<staticTeams>
 		<HighLevelTeamConfig>
 			<teamName>SimpleFlagCollector</teamName>
-			<configFile>passive-flag2ships-clientinit.xml</configFile>
+			<configFile>passive-flag3ships-clientinit.xml</configFile>
 		</HighLevelTeamConfig>
 	</staticTeams>
 

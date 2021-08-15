@@ -7,7 +7,7 @@
 	<maximumNumberVariableTeams>1</maximumNumberVariableTeams>
 	
 	<!--The number of threads for the ladder -->
-	<numThreads>4</numThreads>
+	<numThreads>1</numThreads>
 	
 	<!-- Write out the results to this file -->
 	<outputFileName>self-ladder.html</outputFileName>
@@ -45,7 +45,7 @@
 	<variableTeams>
 		<HighLevelTeamConfig>
 			<teamName>ExampleTeam</teamName>
-			<configFile>passive-heuristic-clientinit2.xml</configFile>
+			<configFile>tuck9702.xml</configFile>
 		</HighLevelTeamConfig>
 	</variableTeams>
 

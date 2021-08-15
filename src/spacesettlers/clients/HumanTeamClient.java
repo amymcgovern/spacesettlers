@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import spacesettlers.actions.AbstractAction;
+import spacesettlers.actions.AbstractGameSearchAction;
 import spacesettlers.actions.DoNothingAction;
 import spacesettlers.actions.MoveAction;
 import spacesettlers.actions.PurchaseCosts;
@@ -288,5 +289,13 @@ public class HumanTeamClient extends TeamClient {
 			}
 		}
 	}
+	
+	@Override
+	public Map<UUID, AbstractGameSearchAction> getGameSearch(Toroidal2DPhysics space,
+			Set<AbstractActionableObject> actionableObjects) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }

@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Random;
 
 import spacesettlers.actions.AbstractAction;
+import spacesettlers.actions.AbstractGameSearchAction;
 import spacesettlers.graphics.ShipGraphics;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
 import spacesettlers.objects.resources.ResourcePile;
@@ -31,6 +32,11 @@ public class Ship extends AbstractActionableObject {
 	 * The action the ship is currently executing
 	 */
 	AbstractAction currentAction;
+
+	/**
+	 * The game search action the ship is currently executing
+	 */
+	AbstractGameSearchAction currentSearch;
 
 	/**
 	 * Time checks left until the ship can respawn
@@ -115,6 +121,7 @@ public class Ship extends AbstractActionableObject {
 		newShip.respawnCounter = respawnCounter;
 		newShip.graphic = new ShipGraphics(newShip, teamColor);
 		newShip.currentAction = currentAction;
+		newShip.currentSearch = currentSearch;
 		newShip.numWeaponsInAir = numWeaponsInAir;
 		newShip.id = id;
 		newShip.maxEnergy = maxEnergy;
@@ -382,6 +389,27 @@ public class Ship extends AbstractActionableObject {
 		this.currentAction = currentAction;
 	}
 
+	/**
+	 * Set the search the ship could use if it hits a gameable asteroid
+	 * Note, this should only be done within the simulator and not
+	 * within the team client (where it will be ignored)
+	 * 
+	 * @param currentAction
+	 */
+	public void setCurrentSearch(AbstractGameSearchAction currentSearch) {
+		this.currentSearch = currentSearch;
+	}
+	
+	/**
+	 * Return the current game search action
+	 * 
+	 * @return
+	 */
+	public AbstractGameSearchAction getCurrentSearch() {
+		return currentSearch;
+	}
+
+	
 	public String toString() {
 		String str = "Ship id " + id + " team " + teamName + " at " + position + " resources " + resources + 
 				" flags: " + numFlags;

@@ -18,6 +18,7 @@ import com.martiansoftware.jsap.JSAPResult;
 import com.thoughtworks.xstream.XStream;
 
 import spacesettlers.actions.AbstractAction;
+import spacesettlers.actions.AbstractGameSearchAction;
 import spacesettlers.actions.DoNothingAction;
 import spacesettlers.actions.PurchaseTypes;
 import spacesettlers.clients.ImmutableTeamInfo;
@@ -408,12 +409,13 @@ public final class SpaceSettlersSimulator {
 	private Asteroid createNewFixedAsteroid(FixedAsteroidConfig asteroidConfig) {
 		boolean mineable = asteroidConfig.isMineable();
 		boolean moveable = asteroidConfig.isMoveable();
+		boolean gameable = asteroidConfig.isGameable();
 
 		int radius = asteroidConfig.getRadius();
 
 		// create the asteroid (no fuels in it either)
 		Asteroid asteroid = new Asteroid(new Position(asteroidConfig.getX(), asteroidConfig.getY()), 
-				mineable, radius, moveable, 0, 0, 0);
+				mineable, gameable, radius, moveable, 0, 0, 0);
 
 		// fixed ones can move (new change 2019, fixed just means it is pre-specified really)
 		if (asteroid.isMoveable()) {
@@ -447,6 +449,17 @@ public final class SpaceSettlersSimulator {
 		if (prob < asteroidConfig.getProbabilityMoveable()) {
 			moveable = true;
 		}
+		
+		// choose if the asteroid is gameable (which can only be true if it is mineable)
+		boolean gameable = false;
+		if (mineable) {
+			prob = random.nextDouble();
+			if (prob < asteroidConfig.getProbabilityGameable()) {
+				gameable = true;
+				// gameable asteroids have more resources (thus they are larger)
+				radius = radius * 2;
+			}
+		}
 
 		// choose the asteroid mixture
 		double fuel = random.nextDouble() * asteroidConfig.getProbabilityFuelType();
@@ -461,7 +474,7 @@ public final class SpaceSettlersSimulator {
 
 		// create the asteroid
 		Asteroid asteroid = new Asteroid(simulatedSpace.getRandomFreeLocation(random, radius * 2), 
-				mineable, radius, moveable, fuel, water, metals);
+				mineable, gameable, radius, moveable, fuel, water, metals);
 
 		if (asteroid.isMoveable()) {
 			Vector2D randomMotion = Vector2D.getRandom(random, asteroidConfig.getMaxInitialVelocity());
@@ -645,14 +658,12 @@ public final class SpaceSettlersSimulator {
 			}
 			
 			
-			
 			/*
 			 * herr0861
 			 * Loop through the drones and assign them their actions from the team. 
 			 */
 			for (UUID droneID : team.getDrones()) {
-				Drone drone = (Drone)simulatedSpace.getObjectById(droneID);
-				
+				Drone drone = (Drone)simulatedSpace.getObjectById(droneID);				
 				
 				if (teamActions == null || !teamActions.containsKey(droneID)) {
 					drone.setCurrentAction(simulatedSpace.deepClone());
@@ -696,6 +707,28 @@ public final class SpaceSettlersSimulator {
 			}
 		}
 
+		// get the game searches being used on this turn
+		Map<UUID, AbstractGameSearchAction> allSearches = new HashMap<UUID, AbstractGameSearchAction>();
+		for (Team team : teams) {
+			Map<UUID, AbstractGameSearchAction> searches = team.getTeamSearches(simulatedSpace);
+			if (searches != null) {
+				for (UUID key : searches.keySet()) {
+					// verify searches belong to this team
+					if (!team.isValidTeamID(key)) {
+						continue;
+					}
+
+					// get the object and ensure it can have a search on it
+					AbstractObject swObject = simulatedSpace.getObjectById(key);
+					if (swObject instanceof Ship) {
+						Ship ship = (Ship) swObject;
+						ship.setCurrentSearch(searches.get(key));
+					}
+				}
+			}
+		}
+
+		
 		// now update the physics on all objects
 		simulatedSpace.advanceTime(random, this.getTimestep(), allPowerups);
 

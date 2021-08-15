@@ -17,8 +17,7 @@ import spacesettlers.utilities.Movement;
 /**
  * All Space Settlers actions must extend this class.  It is assumed
  * that most actions are focusing on movement and that weapon firing
- * is a single step action.  To fire, call "setWeapon()" with 
- * the desired weapon.
+ * is a single step action.  
  * 
  * @author amy
  */
@@ -27,6 +26,11 @@ abstract public class AbstractAction {
 	 * The weapon for this time step
 	 */
 	AbstractWeapon weapon;
+	
+	/**
+	 * The game search (used only for the gaming asteroids)
+	 */
+	AbstractGameSearchAction gameSearch;
 
 	/**
 	 * All actions must return a movement in (x,y) and orientation space.

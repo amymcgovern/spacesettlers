@@ -110,6 +110,9 @@
 	<randomAsteroids>
 		<!-- The probability that a newly spawned asteroid will be mineable -->
 		<probabilityMineable>1.0</probabilityMineable>
+
+		<!-- The probability that a newly spawned asteroid will be gameable -->
+		<probabilityGameable>0.0</probabilityGameable>
 		
 		<!-- The number of asteroids when the game starts -->
 		<numberInitialAsteroids>10</numberInitialAsteroids>

@@ -14,6 +14,8 @@ public class RandomAsteroidConfig {
 	
 	double probabilityMoveable;
 	
+	double probabilityGameable;
+	
 	double maxInitialVelocity;
 	
 	double probabilityFuelType;
@@ -63,5 +65,8 @@ public class RandomAsteroidConfig {
 		return probabilityMetalsType;
 	}
 
+	public double getProbabilityGameable() {
+		return probabilityGameable;
+	}
 	
 }

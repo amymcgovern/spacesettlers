@@ -61,7 +61,11 @@ public class AsteroidGraphics extends SpacewarGraphics {
             graphics.setColor(FUEL_ASTEROID_COLOR);
             graphics.fill(shape);
 
-
+            // if the asteroid is gameable, it should have a G inside it
+            if (asteroid.isGameable()) {
+            	graphics.setPaint(Color.WHITE);
+            	graphics.drawString("G", (int) drawLocation.getX()-3, (int) drawLocation.getY() + 4);
+            }
             
         } else {
         	// non-mineable asteroid is just a brown circle

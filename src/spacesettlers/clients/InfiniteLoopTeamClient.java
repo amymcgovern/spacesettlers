@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import spacesettlers.actions.AbstractAction;
+import spacesettlers.actions.AbstractGameSearchAction;
 import spacesettlers.actions.DoNothingAction;
 import spacesettlers.actions.PurchaseCosts;
 import spacesettlers.actions.PurchaseTypes;
@@ -74,6 +75,13 @@ public class InfiniteLoopTeamClient extends TeamClient {
 
 	@Override
 	public Map<UUID, SpaceSettlersPowerupEnum> getPowerups(Toroidal2DPhysics space,
+			Set<AbstractActionableObject> actionableObjects) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<UUID, AbstractGameSearchAction> getGameSearch(Toroidal2DPhysics space,
 			Set<AbstractActionableObject> actionableObjects) {
 		// TODO Auto-generated method stub
 		return null;

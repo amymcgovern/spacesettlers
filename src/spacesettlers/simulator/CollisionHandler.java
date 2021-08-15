@@ -9,6 +9,7 @@ import spacesettlers.objects.Ship;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import spacesettlers.actions.AbstractGameSearchAction;
 import spacesettlers.objects.AbstractObject;
 import spacesettlers.objects.AiCore;
 import spacesettlers.objects.weapons.EMP;
@@ -484,6 +485,16 @@ public class CollisionHandler {
 		core.updateEnergy((int)(penalty));
 	}
 
+	/**
+	 * Play a game with a ship and an asteroid
+	 * 
+	 * TODO:  Implement (right now you just always lose)
+	 * @return
+	 */
+	public boolean playGame(AbstractGameSearchAction search) {
+		return false;
+	}
+	
 	
 	/**
 	 * Collide with an asteroid
@@ -497,8 +508,19 @@ public class CollisionHandler {
 			return;
 		}
 		
-		// if a ship ran into it, it "mines" the asteroid
-		ship.addResources(asteroid.getResources());
+		// if the asteroid is gameable, the ship needs to play against it before it can get the resources
+		if (asteroid.isGameable()) {
+			boolean win = playGame(ship.getCurrentSearch());
+			if (win) {
+				// if a ship ran into it, it "mines" the asteroid
+				ship.addResources(asteroid.getResources());
+			}
+		} else {
+			// if a ship ran into it, it "mines" the asteroid
+			ship.addResources(asteroid.getResources());
+		}
+
+		// no matter if you win the game or not, the asteroid disappears if we touched it
 		asteroid.setAlive(false);
 		//System.out.println("ship " + ship.getTeamName() + ship.getId() +" now has resourcesAvailable " + ship.getMoney());
 	}

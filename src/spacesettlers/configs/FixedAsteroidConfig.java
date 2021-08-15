@@ -13,7 +13,7 @@ public class FixedAsteroidConfig {
 	 */
 	int x, y, radius;
 	
-	boolean isMoveable, isMineable;
+	boolean isMoveable, isMineable, isGameable;
 	
 	double maxInitialVelocity;
 	
@@ -35,6 +35,10 @@ public class FixedAsteroidConfig {
 
 	public boolean isMineable() {
 		return isMineable;
+	}
+	
+	public boolean isGameable() {
+		return isGameable;
 	}
 
 	public double getMaxInitialVelocity() {

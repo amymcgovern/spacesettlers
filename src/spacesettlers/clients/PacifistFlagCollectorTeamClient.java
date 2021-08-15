@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import spacesettlers.actions.AbstractAction;
+import spacesettlers.actions.AbstractGameSearchAction;
 import spacesettlers.actions.DoNothingAction;
 import spacesettlers.actions.MoveToObjectAction;
 import spacesettlers.actions.PurchaseCosts;
@@ -535,4 +536,12 @@ public class PacifistFlagCollectorTeamClient extends TeamClient {
 		return powerUps;
 	}
 
+	@Override
+	public Map<UUID, AbstractGameSearchAction> getGameSearch(Toroidal2DPhysics space,
+			Set<AbstractActionableObject> actionableObjects) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 }
