@@ -164,7 +164,7 @@ public class SpaceSettlersGUI {
 			}
 
 			MouseAdapter mouseListen = team.getMouseAdapter(clickTransform);
-			if (listener != null) {
+			if (mouseListen != null) {
 				mainComponent.addMouseListener(mouseListen);
 				//mainComponent.addMouseMotionListener(mouseListen);
 			}
