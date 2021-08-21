@@ -10,6 +10,10 @@ import spacesettlers.objects.Ship;
 import java.util.concurrent.ThreadLocalRandom;
 
 import spacesettlers.actions.AbstractGameSearchAction;
+import spacesettlers.game.AbstractGame;
+import spacesettlers.game.AbstractGameAction;
+import spacesettlers.game.GameFactory;
+import spacesettlers.game.HeuristicGameAgent;
 import spacesettlers.objects.AbstractObject;
 import spacesettlers.objects.AiCore;
 import spacesettlers.objects.weapons.EMP;
@@ -491,8 +495,22 @@ public class CollisionHandler {
 	 * TODO:  Implement (right now you just always lose)
 	 * @return
 	 */
-	public boolean playGame(AbstractGameSearchAction search) {
-		return false;
+	public boolean playGame(AbstractGameSearchAction opponent) {
+		AbstractGame game = GameFactory.generateNewGame();
+		HeuristicGameAgent myPlayer = new HeuristicGameAgent();
+		AbstractGameAction action;
+		
+		while (!game.isGameOver()) {
+			if (game.getTurn()) {
+				action = myPlayer.getNextMove(game);
+			} else {
+				action = opponent.getNextMove(game);
+			}
+			game.playAction(action);
+		}
+
+		// returns true if the winner was this agent
+		return game.getWinner();
 	}
 	
 	

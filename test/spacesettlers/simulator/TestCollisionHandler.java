@@ -124,7 +124,7 @@ public class TestCollisionHandler {
 
 		Position asteroid2Pos = new Position(0, 10, -Math.PI/4);
 		asteroid2Pos.setTranslationalVelocity(new Vector2D(0, -10));
-		asteroid = new Asteroid(asteroid2Pos, false, 10, true, .33, .33, .34);
+		asteroid = new Asteroid(asteroid2Pos, false, false, 10, true, .33, .33, .34);
 		ship1.setMass(asteroid.getMass());
 		
 		collisionHandler.collide(ship1, asteroid, space);
@@ -147,7 +147,7 @@ public class TestCollisionHandler {
 
 		Position asteroid2Pos = new Position(10, 0, -Math.PI/4);
 		asteroid2Pos.setTranslationalVelocity(new Vector2D(-10, 0));
-		asteroid = new Asteroid(asteroid2Pos, false, 10, true, .33, .33, .34);
+		asteroid = new Asteroid(asteroid2Pos, false, false, 10, true, .33, .33, .34);
 		ship1.setMass(asteroid.getMass());
 		
 		collisionHandler.collide(ship1, asteroid, space);
@@ -166,11 +166,11 @@ public class TestCollisionHandler {
 		
 		Position position1 = new Position(0, 0, Math.PI / 4);
 		position1.setTranslationalVelocity(new Vector2D(20, 0));
-		asteroid1 = new Asteroid(position1, false, 10, true, .33, .33, .34);
+		asteroid1 = new Asteroid(position1, false, false, 10, true, .33, .33, .34);
 
 		Position position2 = new Position(10, 0, -Math.PI/4);
 		position2.setTranslationalVelocity(new Vector2D(-10, 0));
-		asteroid2 = new Asteroid(position2, false, 10, true, .33, .33, .34);
+		asteroid2 = new Asteroid(position2, false, false, 10, true, .33, .33, .34);
 		
 		collisionHandler.collide(asteroid1, asteroid2, space);
 		
@@ -187,10 +187,10 @@ public class TestCollisionHandler {
 		
 		Position position1 = new Position(0, 0, Math.PI / 4);
 		position1.setTranslationalVelocity(new Vector2D(20, 0));
-		asteroid1 = new Asteroid(position1, false, 10, true, .33, .33, .34);
+		asteroid1 = new Asteroid(position1, false, false, 10, true, .33, .33, .34);
 
 		Position position2 = new Position(10, 0, -Math.PI/4);
-		asteroid2 = new Asteroid(position2, false, 10, false, .33, .33, .34);
+		asteroid2 = new Asteroid(position2, false, false, 10, false, .33, .33, .34);
 		
 		collisionHandler.collide(asteroid1, asteroid2, space);
 		
@@ -212,7 +212,7 @@ public class TestCollisionHandler {
 
 		Position asteroid2Pos = new Position(10, 0, -Math.PI/4);
 		asteroid2Pos.setTranslationalVelocity(new Vector2D(-10, 0));
-		asteroid = new Asteroid(asteroid2Pos, true, 10, true, .33, .33, .34);
+		asteroid = new Asteroid(asteroid2Pos, true, false, 10, true, .33, .33, .34);
 		
 		ResourcePile asteroidResources = asteroid.getResources();
 		
@@ -238,7 +238,7 @@ public class TestCollisionHandler {
 
 		Position asteroid2Pos = new Position(134, 0, -Math.PI/4);
 		asteroid2Pos.setTranslationalVelocity(new Vector2D(-10, 0));
-		asteroid = new Asteroid(asteroid2Pos, false, 20, true, .33, .33, .34);
+		asteroid = new Asteroid(asteroid2Pos, false, false, 20, true, .33, .33, .34);
 		ship.setMass(asteroid.getMass());
 
 		// ship radius is 15 and is at 100,0
