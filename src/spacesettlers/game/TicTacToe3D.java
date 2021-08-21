@@ -102,11 +102,11 @@ public class TicTacToe3D extends AbstractGame {
 		}
 
 
-		// check in the 2D boards at each depth
-		for (int dep = 0; dep < num_depth; dep++) {
+		// check rows across depth
+		for (int row = 0; row < num_rows; row++) {
 
 			// check across the rows
-			for (int row = 0; row < num_rows; row++) {
+			for (int dep = 0; dep < num_depth; dep++) {
 				int num_in_row = 1;
 				int player = board[row][0][dep];  
 
@@ -123,11 +123,11 @@ public class TicTacToe3D extends AbstractGame {
 			}
 
 			// check down the columns
-			for (int col = 0; col < num_cols; col++) {
+			for (int dep = 0; dep < num_depth; dep++) {
 				int num_in_row = 1;
-				int player = board[0][col][dep];  
+				int player = board[row][0][dep];  
 
-				for (int row = 1; row < num_rows; row++) {
+				for (int col = 1; col < num_rows; col++) {
 					if (board[row][col][dep] == player) {
 						num_in_row++;
 					} else {
@@ -139,12 +139,12 @@ public class TicTacToe3D extends AbstractGame {
 				}
 			}
 
-			// check the diagonals
-			int player = board[0][0][dep];  
+			// check the 3D diagonals
+			int player = board[0][0][0];  
 			int num_in_row = 1;
 
-			for (int row = 0; row < num_rows; row++) {
-				if (board[row][row][dep] == player) {
+			for (int dep = 0; dep < num_depth; dep++) {
+				if (board[dep][dep][dep] == player) {
 					num_in_row++;
 				} else {
 					break;
@@ -154,10 +154,10 @@ public class TicTacToe3D extends AbstractGame {
 				return true;
 			}
 
-			player = board[num_rows-1][num_cols-1][dep];  
+			player = board[num_rows-1][num_cols-1][num_depth-1];  
 			num_in_row = 1;
-			for (int row = num_rows-1; row <= 0; row++) {
-				if (board[row][row][dep] == player) {
+			for (int dep = num_depth-1; dep <= 0; dep++) {
+				if (board[dep][dep][dep] == player) {
 					num_in_row++;
 				} else {
 					break;
