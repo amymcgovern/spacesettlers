@@ -19,9 +19,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import spacesettlers.actions.AbstractAction;
-import spacesettlers.actions.AbstractGameSearchAction;
 import spacesettlers.actions.PurchaseCosts;
 import spacesettlers.actions.PurchaseTypes;
+import spacesettlers.game.AbstractGameAgent;
 import spacesettlers.graphics.SpacewarGraphics;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.Base;
@@ -685,8 +685,8 @@ public class Team {
 	 * @param space
 	 * @return
 	 */
-	public Map<UUID, AbstractGameSearchAction> getTeamSearches(Toroidal2DPhysics space) {
-        Map<UUID, AbstractGameSearchAction> searches = new HashMap<UUID,AbstractGameSearchAction>();
+	public Map<UUID, AbstractGameAgent> getTeamSearches(Toroidal2DPhysics space) {
+        Map<UUID, AbstractGameAgent> searches = new HashMap<UUID,AbstractGameAgent>();
 
 		final Toroidal2DPhysics clonedSpace = space.deepClone();
 		final Set<AbstractActionableObject> clonedActionableObjects = getTeamActionableObjectsClone(space);
@@ -699,9 +699,9 @@ public class Team {
 		}
 
 		//System.out.println("exec " + executor.isTerminated());
-        Future<Map<UUID,AbstractGameSearchAction>> future = executor.submit(
-        		new Callable<Map<UUID,AbstractGameSearchAction>>(){
-        			public Map<UUID,AbstractGameSearchAction> call() throws Exception {
+        Future<Map<UUID,AbstractGameAgent>> future = executor.submit(
+        		new Callable<Map<UUID,AbstractGameAgent>>(){
+        			public Map<UUID,AbstractGameAgent> call() throws Exception {
         				return teamClient.getGameSearch(clonedSpace, clonedActionableObjects);
         			}
         		});
@@ -714,20 +714,20 @@ public class Team {
             //was terminated
         	//return empty map, don't buy anything
         	System.out.println(getTeamName() + " timed out in getTeamPowerups");
-        	searches = new HashMap<UUID,AbstractGameSearchAction>();
+        	searches = new HashMap<UUID,AbstractGameAgent>();
         } catch (InterruptedException e) {
         	//we were interrupted (should not happen but lets be good programmers) 
         	//return empty map, don't buy anything
-        	searches = new HashMap<UUID,AbstractGameSearchAction>();
+        	searches = new HashMap<UUID,AbstractGameAgent>();
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			//the executor threw and exception (should not happen but lets be good programmers) 
         	//return empty map, don't buy anything
-			searches = new HashMap<UUID,AbstractGameSearchAction>();
+			searches = new HashMap<UUID,AbstractGameAgent>();
 			e.printStackTrace();
 		} catch (Exception e) {
 			System.err.println("Error in agent.  Printing stack trace");
-        	searches = new HashMap<UUID,AbstractGameSearchAction>();
+        	searches = new HashMap<UUID,AbstractGameAgent>();
 			e.printStackTrace();
 		}
 

@@ -5,7 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Random;
 
 import spacesettlers.actions.AbstractAction;
-import spacesettlers.actions.AbstractGameSearchAction;
+import spacesettlers.game.AbstractGameAgent;
 import spacesettlers.graphics.ShipGraphics;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
 import spacesettlers.objects.resources.ResourcePile;
@@ -36,7 +36,7 @@ public class Ship extends AbstractActionableObject {
 	/**
 	 * The game search action the ship is currently executing
 	 */
-	AbstractGameSearchAction currentSearch;
+	AbstractGameAgent currentGameAgent;
 
 	/**
 	 * Time checks left until the ship can respawn
@@ -121,7 +121,7 @@ public class Ship extends AbstractActionableObject {
 		newShip.respawnCounter = respawnCounter;
 		newShip.graphic = new ShipGraphics(newShip, teamColor);
 		newShip.currentAction = currentAction;
-		newShip.currentSearch = currentSearch;
+		newShip.currentGameAgent = currentGameAgent;
 		newShip.numWeaponsInAir = numWeaponsInAir;
 		newShip.id = id;
 		newShip.maxEnergy = maxEnergy;
@@ -172,6 +172,7 @@ public class Ship extends AbstractActionableObject {
 		newShip.respawnCounter = respawnCounter;
 		newShip.graphic = new ShipGraphics(newShip, teamColor);
 		newShip.currentAction = currentAction;
+		newShip.currentGameAgent = currentGameAgent;
 		newShip.numWeaponsInAir = numWeaponsInAir;
 		newShip.id = id;
 		newShip.maxEnergy = maxEnergy;
@@ -390,14 +391,14 @@ public class Ship extends AbstractActionableObject {
 	}
 
 	/**
-	 * Set the search the ship could use if it hits a gameable asteroid
+	 * Set the game approach the ship could use if it hits a gameable asteroid
 	 * Note, this should only be done within the simulator and not
 	 * within the team client (where it will be ignored)
 	 * 
 	 * @param currentAction
 	 */
-	public void setCurrentSearch(AbstractGameSearchAction currentSearch) {
-		this.currentSearch = currentSearch;
+	public void setCurrentGameAgent(AbstractGameAgent currentAgent) {
+		this.currentGameAgent = currentAgent;
 	}
 	
 	/**
@@ -405,8 +406,8 @@ public class Ship extends AbstractActionableObject {
 	 * 
 	 * @return
 	 */
-	public AbstractGameSearchAction getCurrentSearch() {
-		return currentSearch;
+	public AbstractGameAgent getCurrentGameAgent() {
+		return currentGameAgent;
 	}
 
 	

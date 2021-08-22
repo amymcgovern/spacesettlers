@@ -8,6 +8,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import spacesettlers.game.AbstractGameAgent;
 import spacesettlers.objects.Drone;
 import spacesettlers.objects.Ship;
 import spacesettlers.objects.weapons.AbstractWeapon;
@@ -30,7 +31,7 @@ abstract public class AbstractAction {
 	/**
 	 * The game search (used only for the gaming asteroids)
 	 */
-	AbstractGameSearchAction gameSearch;
+	AbstractGameAgent gameSearch;
 
 	/**
 	 * All actions must return a movement in (x,y) and orientation space.

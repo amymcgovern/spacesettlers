@@ -10,9 +10,9 @@ import java.util.Set;
 import java.util.UUID;
 
 import spacesettlers.actions.AbstractAction;
-import spacesettlers.actions.AbstractGameSearchAction;
 import spacesettlers.actions.PurchaseCosts;
 import spacesettlers.actions.PurchaseTypes;
+import spacesettlers.game.AbstractGameAgent;
 import spacesettlers.graphics.SpacewarGraphics;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
@@ -155,7 +155,7 @@ abstract public class TeamClient {
 	 * @param actionableObjects the shipsfor this team
 	 * @return
 	 */
-	abstract public Map<UUID, AbstractGameSearchAction> getGameSearch(Toroidal2DPhysics space, 
+	abstract public Map<UUID, AbstractGameAgent> getGameSearch(Toroidal2DPhysics space, 
 			Set<AbstractActionableObject> actionableObjects);
 
 	

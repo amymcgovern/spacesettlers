@@ -18,13 +18,13 @@ import com.martiansoftware.jsap.JSAPResult;
 import com.thoughtworks.xstream.XStream;
 
 import spacesettlers.actions.AbstractAction;
-import spacesettlers.actions.AbstractGameSearchAction;
 import spacesettlers.actions.DoNothingAction;
 import spacesettlers.actions.PurchaseTypes;
 import spacesettlers.clients.ImmutableTeamInfo;
 import spacesettlers.clients.Team;
 import spacesettlers.clients.TeamClient;
 import spacesettlers.configs.*;
+import spacesettlers.game.AbstractGameAgent;
 import spacesettlers.gui.SpaceSettlersGUI;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.AbstractObject;
@@ -708,9 +708,9 @@ public final class SpaceSettlersSimulator {
 		}
 
 		// get the game searches being used on this turn
-		Map<UUID, AbstractGameSearchAction> allSearches = new HashMap<UUID, AbstractGameSearchAction>();
+		Map<UUID, AbstractGameAgent> allSearches = new HashMap<UUID, AbstractGameAgent>();
 		for (Team team : teams) {
-			Map<UUID, AbstractGameSearchAction> searches = team.getTeamSearches(simulatedSpace);
+			Map<UUID, AbstractGameAgent> searches = team.getTeamSearches(simulatedSpace);
 			if (searches != null) {
 				for (UUID key : searches.keySet()) {
 					// verify searches belong to this team
@@ -722,7 +722,7 @@ public final class SpaceSettlersSimulator {
 					AbstractObject swObject = simulatedSpace.getObjectById(key);
 					if (swObject instanceof Ship) {
 						Ship ship = (Ship) swObject;
-						ship.setCurrentSearch(searches.get(key));
+						ship.setCurrentGameAgent(searches.get(key));
 					}
 				}
 			}

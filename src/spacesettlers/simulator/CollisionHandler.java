@@ -9,11 +9,11 @@ import spacesettlers.objects.Ship;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import spacesettlers.actions.AbstractGameSearchAction;
 import spacesettlers.game.AbstractGame;
 import spacesettlers.game.AbstractGameAction;
+import spacesettlers.game.AbstractGameAgent;
 import spacesettlers.game.GameFactory;
-import spacesettlers.game.HeuristicGameAgent;
+import spacesettlers.game.HeuristicTicTacToe3DGameAgent;
 import spacesettlers.objects.AbstractObject;
 import spacesettlers.objects.AiCore;
 import spacesettlers.objects.weapons.EMP;
@@ -495,9 +495,11 @@ public class CollisionHandler {
 	 * TODO:  Implement (right now you just always lose)
 	 * @return
 	 */
-	public boolean playGame(AbstractGameSearchAction opponent) {
+	public boolean playGame(AbstractGameAgent opponent) {
 		AbstractGame game = GameFactory.generateNewGame();
-		HeuristicGameAgent myPlayer = new HeuristicGameAgent();
+		int player = game.getHeuristicPlayer();
+		
+		HeuristicTicTacToe3DGameAgent myPlayer = new HeuristicTicTacToe3DGameAgent(player);
 		AbstractGameAction action;
 		
 		while (!game.isGameOver()) {
@@ -510,7 +512,11 @@ public class CollisionHandler {
 		}
 
 		// returns true if the winner was this agent
-		return game.getWinner();
+		if (game.getWinner() == player) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	
@@ -528,7 +534,7 @@ public class CollisionHandler {
 		
 		// if the asteroid is gameable, the ship needs to play against it before it can get the resources
 		if (asteroid.isGameable()) {
-			boolean win = playGame(ship.getCurrentSearch());
+			boolean win = playGame(ship.getCurrentGameAgent());
 			if (win) {
 				// if a ship ran into it, it "mines" the asteroid
 				ship.addResources(asteroid.getResources());
