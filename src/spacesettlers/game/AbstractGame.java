@@ -7,8 +7,8 @@ package spacesettlers.game;
  *
  */
 public abstract class AbstractGame {
-	 static int player1 = 1;
-	 static int player2 = 2;
+	 public static int player1 = 1;
+	 public static int player2 = 2;
 	 
 	 int heuristicPlayer;
 	

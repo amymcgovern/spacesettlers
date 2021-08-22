@@ -45,7 +45,7 @@
 		<HighLevelTeamConfig>
 			<teamName>HeuristicMinerTeam</teamName>
 			<!-- Pick the one you intend to play against (self versus other) -->
-			<configFile>passive-heuristic-clientinit.xml</configFile>
+			<configFile>passive-heuristic-game-clientinit.xml</configFile>
 		</HighLevelTeamConfig>
 	</teams>
 

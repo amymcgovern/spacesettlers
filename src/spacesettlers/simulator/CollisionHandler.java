@@ -497,9 +497,9 @@ public class CollisionHandler {
 	 */
 	public boolean playGame(AbstractGameAgent opponent) {
 		AbstractGame game = GameFactory.generateNewGame();
-		int player = game.getHeuristicPlayer();
+		int asteroidPlayer = game.getHeuristicPlayer();
 		
-		HeuristicTicTacToe3DGameAgent myPlayer = new HeuristicTicTacToe3DGameAgent(player);
+		HeuristicTicTacToe3DGameAgent myPlayer = new HeuristicTicTacToe3DGameAgent(asteroidPlayer);
 		AbstractGameAction action;
 		
 		while (!game.isGameOver()) {
@@ -511,11 +511,13 @@ public class CollisionHandler {
 			game.playAction(action);
 		}
 
-		// returns true if the winner was this agent
-		if (game.getWinner() == player) {
-			return true;
-		} else {
+		// returns true if the winner was the ship agent
+		if (game.getWinner() == asteroidPlayer) {
+			System.out.println("Gaming asteroid reached: Winner is asteroid.");
 			return false;
+		} else {
+			System.out.println("Gaming asteroid reached: Winner is ship.");
+			return true;
 		}
 	}
 	
