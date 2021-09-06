@@ -72,6 +72,12 @@ public class SpaceSettlersConfig {
 	 * Scoring method for this game
 	 */
 	String scoringMethod;
+
+
+	/** 
+	 * Shows the damage taken as a positive number if true
+	 */
+	Boolean showPositiveDamageTaken;
 	
 	/**
 	 * @return the height of the simulation environment.  This is measured in pixels.
@@ -172,6 +178,10 @@ public class SpaceSettlersConfig {
 	 */
 	public String getScoringMethod() {
 		return scoringMethod;
+	}
+
+	public Boolean showPositiveDamageTaken() {
+		return showPositiveDamageTaken;
 	}
 
 	public void setTeams(HighLevelTeamConfig[] teams) {

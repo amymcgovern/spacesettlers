@@ -17,6 +17,9 @@
 	<!-- Scoring mechanism used for this game: Can be Resources, Beacons, ... (more as we add them) -->
 	<scoringMethod>TotalFlagsMinusKills</scoringMethod>
 
+	<!-- Show the team damage taken as a positive value -->
+	<showPositiveDamageTaken>true</showPositiveDamageTaken>
+
 	<!-- Specify the number of the beacons.  The locations are initialized randomly -->
 	<numBeacons>5</numBeacons>
 	

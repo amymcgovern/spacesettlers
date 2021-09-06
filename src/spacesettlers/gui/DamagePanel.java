@@ -15,6 +15,7 @@ import spacesettlers.simulator.SpaceSettlersSimulator;
  */
 public class DamagePanel extends JPanel {
 	JLabel damageInflicted, damageReceived, killsInflicted, killsReceived;
+	Boolean showPositiveDamageTaken = null;
 	
 	public DamagePanel() {
 		setLayout(new GridLayout(4, 2));
@@ -36,7 +37,12 @@ public class DamagePanel extends JPanel {
 		damageInflicted = new JLabel("0");
 		add(damageInflicted);
 		
+		
+		// feature improvement: Could look to customize the color of the labels with the config file
+		// Could add a graphics configuration window to change the colors of labels plus lots of game objects
 		damageReceived = new JLabel("0");
+		// Set the color to red to indicate receiving damage is bad..
+		damageReceived.setForeground(java.awt.Color.RED);
 		add(damageReceived);
 		
 		// row 3: the kills
@@ -59,13 +65,22 @@ public class DamagePanel extends JPanel {
 				break;
 			}
 		}
+
+		// Set the damage display to show positive damage received
+		// based on config file value. Set this once for the lifetime of damage panel. 
+		if (showPositiveDamageTaken == null) {
+			showPositiveDamageTaken = simulator.getDisplayPositiveDamageRecieved();
+		}
+
 		
 		damageInflicted.setText(team.getTotalDamageInflicted() + "");
-		damageReceived.setText(team.getTotalDamageReceived() + "");
 		killsInflicted.setText(team.getTotalKillsInflicted() + "");
 		killsReceived.setText(team.getTotalKillsReceived() + "");
-
+		if (showPositiveDamageTaken) {
+			damageReceived.setText(Math.abs(team.getTotalDamageReceived()) + "");
+		}
+		else {
+			damageReceived.setText(team.getTotalDamageReceived() + "");
+		}
 	}
-
-	
 }

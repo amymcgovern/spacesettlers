@@ -1231,7 +1231,12 @@ public final class SpaceSettlersSimulator {
 		this.graphicsSleep = graphicsSleep;
 	}
 
-
-
+	public boolean getDisplayPositiveDamageRecieved() {
+		Boolean positiveDamage = this.simConfig.showPositiveDamageTaken();
+		if ( positiveDamage == null) {
+			positiveDamage = false;
+		}
+		return positiveDamage;
+	}
 
 }
