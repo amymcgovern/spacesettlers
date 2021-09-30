@@ -502,6 +502,13 @@ public class CollisionHandler {
 		HeuristicTicTacToe3DGameAgent myPlayer = new HeuristicTicTacToe3DGameAgent(asteroidPlayer);
 		AbstractGameAction action;
 		
+		if (opponent == null) {
+			System.out.println("Gaming asteroid reached and no player specified by opponent: Winner is asteroid.");
+			return false;
+		} else {
+			System.out.println("Gaming asteroid reached and proceeding with game");
+		}
+		
 		while (!game.isGameOver()) {
 			if (game.getTurn()) {
 				action = myPlayer.getNextMove(game);
