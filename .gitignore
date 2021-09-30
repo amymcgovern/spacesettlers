@@ -4,3 +4,6 @@ dist/*.jar
 .project
 .*
 !**/.gitignore
+/bin/
+src/amy
+src/example
