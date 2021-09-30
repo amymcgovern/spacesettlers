@@ -492,7 +492,6 @@ public class CollisionHandler {
 	/**
 	 * Play a game with a ship and an asteroid
 	 * 
-	 * TODO:  Implement (right now you just always lose)
 	 * @return
 	 */
 	public boolean playGame(AbstractGameAgent opponent) {
