@@ -165,6 +165,24 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 
 		return empty;
 	}
+	
+	/**
+	 * Returns a clone of the board (so agents can't set anything)
+	 * 
+	 * @return
+	 */
+	public int[][][]getBoard() {
+		int[][][] new_board = new int[board_size][board_size][board_size];
+
+		for (int i = 0; i < board_size; i++) {
+			for (int j = 0; j < board_size; j++) {
+				for (int k = 0; k < board_size; k++) {
+					new_board[i][j][k] = board[i][j][k];
+				}
+			}
+		}
+		return new_board;
+	}
 
 	/**
 	 * Makes the move - if the spot is not empty, the move is ignored (turn lost)
