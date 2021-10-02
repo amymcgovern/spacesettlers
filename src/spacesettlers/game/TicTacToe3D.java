@@ -65,6 +65,7 @@ public class TicTacToe3D extends AbstractGame {
 		if (!currentPlayer) {
 			player = player2;
 		}
+		currentPlayer = !currentPlayer;
 		
 		this.myBoard.makeMove(TTTAction, player);
 	}
