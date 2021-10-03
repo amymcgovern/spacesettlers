@@ -100,71 +100,207 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 		}
 
 
-		// check rows across depth
-		for (int row = 0; row < board_size; row++) {
-
-			// check across the rows
-			for (int dep = 0; dep < board_size; dep++) {
-				int num_in_row = 1;
-				int player = board[row][0][dep];  
-				if (player != empty) {
-					for (int col = 1; col < board_size; col++) {
-						if (board[row][col][dep] == player) {
-							num_in_row++;
-						} else {
-							break;
-						}
-						if (num_in_row == board_size) {
-							return player;
-						}
-					}
-				}
-			}
-
-			// check down the columns
-			for (int dep = 0; dep < board_size; dep++) {
-				int num_in_row = 1;
-				int player = board[row][0][dep];  
-
-				for (int col = 1; col < board_size; col++) {
-					if (player != empty) {
-						if (board[row][col][dep] == player) {
-							num_in_row++;
-						} else {
-							break;
-						}
-						if (num_in_row == board_size) {
-							return player;
-						}
-					}
-				}
-			}
-		}
-
 		// check the 3D diagonals
-		if ((board[0][0][0] == board[1][1][1]) && (board[2][2][2] == board[1][1][1]) && 
-				(board[0][0][0] != empty)) {
-			return board[0][0][0];
+		int centerPoint;
+		
+		//Cross diagonals (4)
+		centerPoint = board [1][1][1];
+		if (centerPoint != empty) {
+			
+			/*
+					x-- --- ---
+					--- -x- ---
+					--- --- --x
+			*/
+			if ((board[0][0][0] == centerPoint) && (board[2][2][2] == centerPoint)) {
+				return centerPoint;
+			}
+
+			/*
+					--- --- --x
+					--- -x- ---
+					x-- --- ---
+			*/
+			if ((board[2][0][0] == centerPoint) && (board[0][2][2] == centerPoint)) {
+				return centerPoint;
+			}
+
+			/*
+					--- --- x--
+					--- -x- ---
+					--x --- ---
+			*/
+			if ((board[0][0][2] == centerPoint) && (board[2][2][0] == centerPoint)) {
+				return centerPoint;
+			}
+
+			/*
+					--x --- ---
+					--- -x- ---
+					--- --- x--
+			*/
+			if ((board[0][2][0] == centerPoint) && (board[2][0][2] == centerPoint)) {
+				return centerPoint;
+			}
 		}
 
-		if ((board[2][0][0] == board[1][1][1]) && (board[0][2][2] == board[1][1][1]) && 
-				(board[2][0][0] != empty)) {
-			return board[2][0][0];
+		//Columnn 3D Diagonals (6)
+		/*
+					x-- --- ---
+					--- x-- ---
+					--- --- x--
+		*/
+		/*
+					--- --- x--
+					--- x-- ---
+					x-- --- ---
+		*/
+		centerPoint = board[1][0][1];
+		if (centerPoint != empty) {
+			if ((board[0][0][0] == centerPoint)  && (board[2][0][2] == centerPoint)) {
+				return centerPoint;
+			}
+
+			if ((board[2][0][0] == centerPoint)  && (board[0][0][2] == centerPoint)) {
+				return centerPoint;
+			}
 		}
 
-		if ((board[0][0][2] == board[1][1][1]) && (board[2][2][0] == board[1][1][1]) && 
-				(board[0][0][2] != empty)) {
-			return board[0][0][2];
+		/*
+					-x- --- ---
+					--- -x- ---
+					--- --- -x-
+		*/
+		/*
+					--- --- -x-
+					--- -x- ---
+					-x- --- ---
+		*/
+		centerPoint = board[1][1][1];
+		if (centerPoint != empty) {
+			if ((board[0][1][0] == centerPoint)  && (board[2][1][2] == centerPoint)) {
+				return centerPoint;
+			}
+
+			if ((board[2][1][0] == centerPoint)  && (board[0][1][2] == centerPoint)) {
+				return centerPoint;
+			}
 		}
 
-		if ((board[0][2][0] == board[1][1][1]) && (board[2][0][2] == board[1][1][1]) && 
-				(board[0][2][0] != empty)) {
-			return board[0][2][0];
+		/*
+					--- --- --x
+					--- --x ---
+					--x --- ---
+		*/
+		/*
+					--x --- ---
+					--- --x ---
+					--- --- --x
+		*/
+		centerPoint = board[1][2][1];
+		if (centerPoint != empty) {
+			if ((board[2][2][0] == centerPoint)  && (board[0][2][2] == centerPoint)) {
+				return centerPoint;
+			}
+
+			if ((board[2][1][0] == centerPoint)  && (board[0][1][2] == centerPoint)) {
+				return centerPoint;
+			}
+		}
+
+		//Row 3D diagonals (6)
+		/*
+					x-- -x- --x
+					--- --- ---
+					--- --- ---
+		*/
+		/*
+					--x -x- x--
+					--- --- ---
+					--- --- ---
+		*/
+		centerPoint = board[0][1][1];
+		if (centerPoint != empty) {
+			if ((board[0][0][0] == centerPoint)  && (board[0][2][2] == centerPoint)) {
+				return centerPoint;
+			}
+
+			if ((board[0][2][0] == centerPoint)  && (board[0][0][2] == centerPoint)) {
+				return centerPoint;
+			}
+		}
+
+		/*
+					--- --- ---
+					x-- -x- --x
+					--- --- ---
+		*/
+		/*
+					--- --- ---
+					--x -x- x--
+					--- --- ---
+		*/
+		centerPoint = board[1][1][1];
+		if (centerPoint != empty) {
+			if ((board[1][0][0] == centerPoint)  && (board[1][2][2] == centerPoint)) {
+				return centerPoint;
+			}
+
+			if ((board[1][2][0] == centerPoint)  && (board[1][0][2] == centerPoint)) {
+				return centerPoint;
+			}
+		}
+
+		/*
+					--- --- ---
+					--- --- ---
+					x-- -x- --x
+		*/
+		/*
+					--- --- ---
+					--- --- ---
+					--x -x- x--
+		*/
+		centerPoint = board[2][1][1];
+		if (centerPoint != empty) {
+			if ((board[2][0][0] == centerPoint)  && (board[2][2][2] == centerPoint)) {
+				return centerPoint;
+			}
+
+			if ((board[2][2][0] == centerPoint)  && (board[2][0][2] == centerPoint)) {
+				return centerPoint;
+			}
+		}
+
+		//Check the pillars
+		/*
+					x-- x-- x--
+					--- --- ---
+					--- --- ---
+		*/
+		for (int row = 0; row < board_size; row++) {
+			for (int col = 0; col < board_size; col++) {
+				int num_in_pillar = 1;
+				int player = board[row][col][0];
+				if (player != empty) {
+					for (int dep = 1; dep < board_size; dep++) {
+						if (board[row][col][dep] == player) {
+							num_in_pillar++;
+						} else {
+							break;
+						}
+						if (num_in_pillar == board_size) {
+							return player;
+						}
+					}
+				}
+			}
 		}
 
 
 		return empty;
 	}
+	
 	
 	/**
 	 * Returns a clone of the board (so agents can't set anything)
