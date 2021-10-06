@@ -9,6 +9,15 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 		board = new int[board_size][board_size][board_size];
 	}
 
+	/**
+	 * Returns the empty value for the board
+	 * @return
+	 */
+	public static int getEmpty() {
+		return empty;
+	}
+
+
 	public TicTacToe3DBoard deepClone() {
 		TicTacToe3DBoard newBoard = new TicTacToe3DBoard();
 

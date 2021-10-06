@@ -9,5 +9,17 @@ public class TicTacToe3DAction extends AbstractGameAction {
 		this.col = col;
 		this.depth = depth;
 	}
+
+	public int getRow() {
+		return row;
+	}
+
+	public int getCol() {
+		return col;
+	}
+
+	public int getDepth() {
+		return depth;
+	}
 	
 }
