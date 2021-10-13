@@ -12,8 +12,8 @@ public class HeuristicTicTacToe3DGameAgent extends AbstractGameAgent {
 	}
 
 	/**
-	 * For right now (just to ensure the code is working all the way through), the heuristic plays in the first
-	 * available move
+	 * First see if we can win in one and then otherwise take the first available 
+	 * (this will be improved over time)
 	 * 
 	 * @param game
 	 * @return
