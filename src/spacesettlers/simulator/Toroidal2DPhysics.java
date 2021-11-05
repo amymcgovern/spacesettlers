@@ -1256,8 +1256,9 @@ public class Toroidal2DPhysics {
 		for (AbstractObject obstruction : obstructions) {
 			// If the distance to the obstruction is greater than the distance to the end
 			// goal, ignore the obstruction
+			// bug fix for radius of obstruction provided by Yo 
 			pathToObstruction = findShortestDistanceVector(startPosition, obstruction.getPosition());
-			if (pathToObstruction.getMagnitude() > distanceToGoal) {
+			if (pathToObstruction.getMagnitude() > distanceToGoal + obstruction.getRadius()) {
 				continue;
 			}
 
