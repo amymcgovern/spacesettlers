@@ -13,7 +13,7 @@
 	<ladderName>Aggressive Heuristic Game Asteroid Collector</ladderName>
 	
 	<!-- The number of ships in the team.  Note, if this is bigger than the maximum number of allowable ships per team, it is ignored -->
-	<numberInitialShipsInTeam>2</numberInitialShipsInTeam>
+	<numberInitialShipsInTeam>1</numberInitialShipsInTeam>
 	
 	<!-- Optional:  if the agent needs to read in from a file, it can specify the path to it here -->
 	<knowledgeFile>spacesettlers/clients/aggressive_knowledge.xml</knowledgeFile>
