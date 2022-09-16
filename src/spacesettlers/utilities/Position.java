@@ -1,5 +1,7 @@
 package spacesettlers.utilities;
 
+import spacesettlers.simulator.Toroidal2DPhysics;
+
 /**
  * Position in space (x,y,orientation)
  * @author amy
@@ -127,6 +129,23 @@ public class Position {
 		if (Double.isFinite(x) && Double.isFinite(y) && 
 				Double.isFinite(angularVelocity) && Double.isFinite(orientation)  &&
 				velocity.isValid()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Compares positions on location (x,y) with comparing distance between two locations and ignores orientation and velocities
+	 * For example, it can be used to check if ship's location matches up with the position passed.
+	 * @param Toroidal2DPhysics object: space
+	 * @param Position object: shipPosition
+	 * @param Position object: currentPosition
+	 * @return true if ship reached certain location or within the allowable difference distance i.e., between 0 and 4.
+	 */
+	public boolean equalsLocationOnlyWithDistance(Toroidal2DPhysics space, Position shipPosition, Position currentPosition) {
+		double differenceDistance = space.findShortestDistance(shipPosition, currentPosition);
+		if (differenceDistance > 0 && differenceDistance < 4) {
 			return true;
 		} else {
 			return false;
