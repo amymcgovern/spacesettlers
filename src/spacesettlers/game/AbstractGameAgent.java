@@ -5,18 +5,18 @@ package spacesettlers.game;
  * @author amy
  *
  */
-public abstract class AbstractGameAgent {
+public abstract class AbstractGameAgent<T extends AbstractGameBoard, U extends AbstractGameAction> {
 	int player;
 
 	/**
 	 * All game agents must be able to return a next move
-	 * @param game
+	 * @param board
 	 * @return
 	 */
-	public abstract AbstractGameAction getNextMove(AbstractGame game);
+	public abstract U getNextMove(T board);
 
 	
-	public int getPlayer() {
+	public int getPlayerID() {
 		return player;
 	}
 

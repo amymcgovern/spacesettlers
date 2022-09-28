@@ -401,11 +401,10 @@ public class PacifistHeuristicGameAsteroidCollectorTeamClient extends TeamClient
 	 * 
 	 */
 	@Override
-	public Map<UUID, AbstractGameAgent> getGameSearch(Toroidal2DPhysics space,
+	public Map<UUID, AbstractGameAgent<?,?>> getGameSearch(Toroidal2DPhysics space,
 			Set<AbstractActionableObject> actionableObjects) {
-		HeuristicTicTacToe3DGameAgent agent = new HeuristicTicTacToe3DGameAgent(AbstractGame.player1);
-		
-		HashMap<UUID, AbstractGameAgent> actions = new HashMap<UUID, AbstractGameAgent>();
+		HashMap<UUID, AbstractGameAgent<?,?>> actions = new HashMap<>();
+		HeuristicTicTacToe3DGameAgent agent = new HeuristicTicTacToe3DGameAgent();
 
 		// loop through each ship
 		for (AbstractObject actionable :  actionableObjects) {

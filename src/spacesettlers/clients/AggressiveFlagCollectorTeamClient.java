@@ -663,7 +663,7 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 	}
 
 	@Override
-	public Map<UUID, AbstractGameAgent> getGameSearch(Toroidal2DPhysics space,
+	public Map<UUID, AbstractGameAgent<?,?>> getGameSearch(Toroidal2DPhysics space,
 			Set<AbstractActionableObject> actionableObjects) {
 		// TODO Auto-generated method stub
 		return null;

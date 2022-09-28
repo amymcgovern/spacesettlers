@@ -155,7 +155,7 @@ abstract public class TeamClient {
 	 * @param actionableObjects the shipsfor this team
 	 * @return
 	 */
-	abstract public Map<UUID, AbstractGameAgent> getGameSearch(Toroidal2DPhysics space, 
+	abstract public Map<UUID, AbstractGameAgent<?,?>> getGameSearch(Toroidal2DPhysics space, 
 			Set<AbstractActionableObject> actionableObjects);
 
 	

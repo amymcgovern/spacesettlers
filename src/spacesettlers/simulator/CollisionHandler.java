@@ -1,21 +1,20 @@
 package spacesettlers.simulator;
 
+import java.util.concurrent.ThreadLocalRandom;
+
+import spacesettlers.game.AbstractGameAgent;
+import spacesettlers.game.GameFactory;
+import spacesettlers.game.HeuristicTicTacToe3DGameAgent;
+import spacesettlers.game.TicTacToe3D;
+import spacesettlers.game.TicTacToe3DGameAgent;
+import spacesettlers.objects.AbstractObject;
+import spacesettlers.objects.AiCore;
 import spacesettlers.objects.Asteroid;
 import spacesettlers.objects.Base;
 import spacesettlers.objects.Beacon;
 import spacesettlers.objects.Drone;
 import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
-
-import java.util.concurrent.ThreadLocalRandom;
-
-import spacesettlers.game.AbstractGame;
-import spacesettlers.game.AbstractGameAction;
-import spacesettlers.game.AbstractGameAgent;
-import spacesettlers.game.GameFactory;
-import spacesettlers.game.HeuristicTicTacToe3DGameAgent;
-import spacesettlers.objects.AbstractObject;
-import spacesettlers.objects.AiCore;
 import spacesettlers.objects.weapons.EMP;
 import spacesettlers.objects.weapons.Missile;
 import spacesettlers.utilities.Position;
@@ -494,31 +493,21 @@ public class CollisionHandler {
 	 * 
 	 * @return
 	 */
-	public boolean playGame(AbstractGameAgent opponent) {
-		AbstractGame game = GameFactory.generateNewGame();
-		int asteroidPlayer = game.getHeuristicPlayer();
-		
-		HeuristicTicTacToe3DGameAgent myPlayer = new HeuristicTicTacToe3DGameAgent(asteroidPlayer);
-		AbstractGameAction action;
-		
-		if (opponent == null) {
+	public boolean playGame(AbstractGameAgent<?,?> opponent) {		
+		if (!TicTacToe3DGameAgent.class.isInstance(opponent)) {
 			System.out.println("Gaming asteroid reached and no player specified by opponent: Winner is asteroid.");
 			return false;
 		} else {
 			System.out.println("Gaming asteroid reached and proceeding with game");
 		}
+
+		HeuristicTicTacToe3DGameAgent asteroidPlayer = new HeuristicTicTacToe3DGameAgent();
 		
-		while (!game.isGameOver()) {
-			if (game.getTurn()) {
-				action = myPlayer.getNextMove(game);
-			} else {
-				action = opponent.getNextMove(game);
-			}
-			game.playAction(action);
-		}
+		final TicTacToe3D game = GameFactory.generateNewGame(asteroidPlayer, TicTacToe3DGameAgent.class.cast(opponent));
+		game.run();
 
 		// returns true if the winner was the ship agent
-		if (game.getWinner() == asteroidPlayer) {
+		if (game.getWinner() == asteroidPlayer.getPlayerID()) {
 			System.out.println("Gaming asteroid reached: Winner is asteroid.");
 			return false;
 		} else {

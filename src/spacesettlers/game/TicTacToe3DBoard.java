@@ -2,7 +2,7 @@ package spacesettlers.game;
 
 public class TicTacToe3DBoard extends AbstractGameBoard {
 	int[][][] board;
-	static int empty = 0;
+	static int EMPTY = 0;
 	static int board_size = 3;
 
 	public TicTacToe3DBoard() {
@@ -14,7 +14,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 	 * @return
 	 */
 	public static int getEmpty() {
-		return empty;
+		return EMPTY;
 	}
 
 
@@ -43,7 +43,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 			for (int row = 0; row < board_size; row++) {
 				int num_in_row = 1;
 				int player = board[row][0][dep]; 
-				if (player != empty) {
+				if (player != EMPTY) {
 					for (int col = 1; col < board_size; col++) {
 						if (board[row][col][dep] == player) {
 							num_in_row++;
@@ -62,7 +62,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 				int num_in_row = 1;
 				int player = board[0][col][dep];  
 
-				if (player != empty) {
+				if (player != EMPTY) {
 					for (int row = 1; row < board_size; row++) {
 						if (board[row][col][dep] == player) {
 							num_in_row++;
@@ -79,7 +79,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 			// check the diagonals
 			int player = board[0][0][dep];
 			int num_in_row = 1;
-			if (player != empty) {
+			if (player != EMPTY) {
 				for (int row = 1; row < board_size; row++) {
 					if (board[row][row][dep] == player) {
 						num_in_row++;
@@ -94,7 +94,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 
 			player = board[0][board_size-1][dep];  
 			num_in_row = 1;
-			if (player != empty) {
+			if (player != EMPTY) {
 				for (int row = 1; row < board_size; row++) {
 					if (board[row][board_size-row-1][dep] == player) {
 						num_in_row++;
@@ -114,7 +114,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 		
 		//Cross diagonals (4)
 		centerPoint = board [1][1][1];
-		if (centerPoint != empty) {
+		if (centerPoint != EMPTY) {
 			
 			/*
 					x-- --- ---
@@ -165,7 +165,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 					x-- --- ---
 		*/
 		centerPoint = board[1][0][1];
-		if (centerPoint != empty) {
+		if (centerPoint != EMPTY) {
 			if ((board[0][0][0] == centerPoint)  && (board[2][0][2] == centerPoint)) {
 				return centerPoint;
 			}
@@ -186,7 +186,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 					-x- --- ---
 		*/
 		centerPoint = board[1][1][1];
-		if (centerPoint != empty) {
+		if (centerPoint != EMPTY) {
 			if ((board[0][1][0] == centerPoint)  && (board[2][1][2] == centerPoint)) {
 				return centerPoint;
 			}
@@ -207,7 +207,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 					--- --- --x
 		*/
 		centerPoint = board[1][2][1];
-		if (centerPoint != empty) {
+		if (centerPoint != EMPTY) {
 			if ((board[2][2][0] == centerPoint)  && (board[0][2][2] == centerPoint)) {
 				return centerPoint;
 			}
@@ -229,7 +229,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 					--- --- ---
 		*/
 		centerPoint = board[0][1][1];
-		if (centerPoint != empty) {
+		if (centerPoint != EMPTY) {
 			if ((board[0][0][0] == centerPoint)  && (board[0][2][2] == centerPoint)) {
 				return centerPoint;
 			}
@@ -250,7 +250,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 					--- --- ---
 		*/
 		centerPoint = board[1][1][1];
-		if (centerPoint != empty) {
+		if (centerPoint != EMPTY) {
 			if ((board[1][0][0] == centerPoint)  && (board[1][2][2] == centerPoint)) {
 				return centerPoint;
 			}
@@ -271,7 +271,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 					--x -x- x--
 		*/
 		centerPoint = board[2][1][1];
-		if (centerPoint != empty) {
+		if (centerPoint != EMPTY) {
 			if ((board[2][0][0] == centerPoint)  && (board[2][2][2] == centerPoint)) {
 				return centerPoint;
 			}
@@ -291,7 +291,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 			for (int col = 0; col < board_size; col++) {
 				int num_in_pillar = 1;
 				int player = board[row][col][0];
-				if (player != empty) {
+				if (player != EMPTY) {
 					for (int dep = 1; dep < board_size; dep++) {
 						if (board[row][col][dep] == player) {
 							num_in_pillar++;
@@ -307,7 +307,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 		}
 
 
-		return empty;
+		return EMPTY;
 	}
 	
 	
@@ -336,7 +336,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 	 * @param player
 	 */
 	public void makeMove(TicTacToe3DAction TTTAction, int player) {
-		if (board[TTTAction.row][TTTAction.col][TTTAction.depth] == empty) {
+		if (board[TTTAction.row][TTTAction.col][TTTAction.depth] == EMPTY) {
 			board[TTTAction.row][TTTAction.col][TTTAction.depth] = player;
 		}
 	}
