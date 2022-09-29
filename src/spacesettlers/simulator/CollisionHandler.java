@@ -2,11 +2,10 @@ package spacesettlers.simulator;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import spacesettlers.game.AbstractGameAction;
+import spacesettlers.game.AbstractGame;
 import spacesettlers.game.AbstractGameAgent;
 import spacesettlers.game.GameFactory;
 import spacesettlers.game.HeuristicTicTacToe3DGameAgent;
-import spacesettlers.game.TicTacToe3D;
 import spacesettlers.objects.AbstractObject;
 import spacesettlers.objects.AiCore;
 import spacesettlers.objects.Asteroid;
@@ -503,7 +502,7 @@ public class CollisionHandler {
 		}
 
 		HeuristicTicTacToe3DGameAgent myPlayer = new HeuristicTicTacToe3DGameAgent(0); // arg does nothing, but didn't want to break the api so it needs an int passed in
-		final TicTacToe3D game = GameFactory.generateNewGame(myPlayer, opponent);
+		final AbstractGame game = GameFactory.generateNewGame(myPlayer, opponent);
 		
 		while (!game.isGameOver()) {
 			game.playAction(game.getCurrentPlayer().getNextMove(game));

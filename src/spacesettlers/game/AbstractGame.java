@@ -18,7 +18,7 @@ public abstract class AbstractGame {
 	public abstract boolean isGameOver();
 
 	/**
-	 * Return true if it is the true player's turn and false otherwise
+	 * Return true if it is the true player 1's turn and false otherwise
 	 * @return
 	 */
 	public abstract boolean getTurn();
@@ -41,5 +41,21 @@ public abstract class AbstractGame {
 	 */
 	public abstract AbstractGameBoard getBoard();
 
+	/**
+	 * Return the game agent assigned as player 1.
+	 * @return
+	 */
+	public abstract AbstractGameAgent getPlayer1();
 	
+	/**
+	 * Return the game agent assigned as player 2.
+	 * @return
+	 */
+	public abstract AbstractGameAgent getPlayer2();
+	
+	/**
+	 * Return the game agent whose turn it is currently.
+	 * @return
+	 */
+	public abstract AbstractGameAgent getCurrentPlayer();
 }

@@ -58,8 +58,13 @@ public class TicTacToe3D extends AbstractGame {
 		}
 	}
 
+	@Override
 	public AbstractGameAgent getPlayer1() { return player1; }
+	
+	@Override
 	public AbstractGameAgent getPlayer2() { return player2; }
+	
+	@Override
 	public AbstractGameAgent getCurrentPlayer() { return isPlayer1Turn ? player1 : player2; }
 
 	/**
