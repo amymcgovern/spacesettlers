@@ -9,7 +9,7 @@ package spacesettlers.game;
  */
 
 public class GameFactory {
-	public static AbstractGame generateNewGame() {
-		return new TicTacToe3D();
+	public static AbstractGame generateNewGame(final AbstractGameAgent lhs_player, final AbstractGameAgent rhs_player) {
+		return new TicTacToe3D(lhs_player, rhs_player);
 	}
 }

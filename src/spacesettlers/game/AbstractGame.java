@@ -9,8 +9,6 @@ package spacesettlers.game;
 public abstract class AbstractGame {
 	 public static int player1 = 1;
 	 public static int player2 = 2;
-	 
-	 int heuristicPlayer;
 	
 	/** 
 	 * Is the game over?
@@ -20,7 +18,7 @@ public abstract class AbstractGame {
 	public abstract boolean isGameOver();
 
 	/**
-	 * Return true if it is the true player's turn and false otherwise
+	 * Return true if it is the true player 1's turn and false otherwise
 	 * @return
 	 */
 	public abstract boolean getTurn();
@@ -44,11 +42,20 @@ public abstract class AbstractGame {
 	public abstract AbstractGameBoard getBoard();
 
 	/**
-	 * Return the heuristic player (set inside the actual game initialization)
+	 * Return the game agent assigned as player 1.
 	 * @return
 	 */
-	public int getHeuristicPlayer() {
-		return heuristicPlayer;
-	}
+	public abstract AbstractGameAgent getPlayer1();
 	
+	/**
+	 * Return the game agent assigned as player 2.
+	 * @return
+	 */
+	public abstract AbstractGameAgent getPlayer2();
+	
+	/**
+	 * Return the game agent whose turn it is currently.
+	 * @return
+	 */
+	public abstract AbstractGameAgent getCurrentPlayer();
 }
