@@ -7,8 +7,9 @@ package spacesettlers.game;
  *
  */
 public class HeuristicTicTacToe3DGameAgent extends AbstractGameAgent {
-	public HeuristicTicTacToe3DGameAgent(int player) {
-		this.player = player;
+
+	public HeuristicTicTacToe3DGameAgent(int player1) {
+		// Does nothing, but needed to not break any client APIs for now.
 	}
 
 	/**

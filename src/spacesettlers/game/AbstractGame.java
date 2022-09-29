@@ -9,8 +9,6 @@ package spacesettlers.game;
 public abstract class AbstractGame {
 	 public static int player1 = 1;
 	 public static int player2 = 2;
-	 
-	 int heuristicPlayer;
 	
 	/** 
 	 * Is the game over?
@@ -43,12 +41,5 @@ public abstract class AbstractGame {
 	 */
 	public abstract AbstractGameBoard getBoard();
 
-	/**
-	 * Return the heuristic player (set inside the actual game initialization)
-	 * @return
-	 */
-	public int getHeuristicPlayer() {
-		return heuristicPlayer;
-	}
 	
 }

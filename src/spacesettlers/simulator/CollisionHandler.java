@@ -1,21 +1,20 @@
 package spacesettlers.simulator;
 
+import java.util.concurrent.ThreadLocalRandom;
+
+import spacesettlers.game.AbstractGameAction;
+import spacesettlers.game.AbstractGameAgent;
+import spacesettlers.game.GameFactory;
+import spacesettlers.game.HeuristicTicTacToe3DGameAgent;
+import spacesettlers.game.TicTacToe3D;
+import spacesettlers.objects.AbstractObject;
+import spacesettlers.objects.AiCore;
 import spacesettlers.objects.Asteroid;
 import spacesettlers.objects.Base;
 import spacesettlers.objects.Beacon;
 import spacesettlers.objects.Drone;
 import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
-
-import java.util.concurrent.ThreadLocalRandom;
-
-import spacesettlers.game.AbstractGame;
-import spacesettlers.game.AbstractGameAction;
-import spacesettlers.game.AbstractGameAgent;
-import spacesettlers.game.GameFactory;
-import spacesettlers.game.HeuristicTicTacToe3DGameAgent;
-import spacesettlers.objects.AbstractObject;
-import spacesettlers.objects.AiCore;
 import spacesettlers.objects.weapons.EMP;
 import spacesettlers.objects.weapons.Missile;
 import spacesettlers.utilities.Position;
@@ -495,11 +494,6 @@ public class CollisionHandler {
 	 * @return
 	 */
 	public boolean playGame(AbstractGameAgent opponent) {
-		AbstractGame game = GameFactory.generateNewGame();
-		int asteroidPlayer = game.getHeuristicPlayer();
-		
-		HeuristicTicTacToe3DGameAgent myPlayer = new HeuristicTicTacToe3DGameAgent(asteroidPlayer);
-		AbstractGameAction action;
 		
 		if (opponent == null) {
 			System.out.println("Gaming asteroid reached and no player specified by opponent: Winner is asteroid.");
@@ -507,18 +501,20 @@ public class CollisionHandler {
 		} else {
 			System.out.println("Gaming asteroid reached and proceeding with game");
 		}
+
+		HeuristicTicTacToe3DGameAgent myPlayer = new HeuristicTicTacToe3DGameAgent(0); // arg does nothing, but didn't want to break the api so it needs an int passed in
+		final TicTacToe3D game = GameFactory.generateNewGame(myPlayer, opponent);
+
+		System.out.println(myPlayer.getPlayer());
+		System.out.println(opponent.getPlayer());
+		System.out.println(game.getCurrentPlayer().getPlayer());
 		
 		while (!game.isGameOver()) {
-			if (game.getTurn()) {
-				action = myPlayer.getNextMove(game);
-			} else {
-				action = opponent.getNextMove(game);
-			}
-			game.playAction(action);
+			game.playAction(game.getCurrentPlayer().getNextMove(game));
 		}
 
 		// returns true if the winner was the ship agent
-		if (game.getWinner() == asteroidPlayer) {
+		if (game.getWinner() == myPlayer.getPlayer()) {
 			System.out.println("Gaming asteroid reached: Winner is asteroid.");
 			return false;
 		} else {
