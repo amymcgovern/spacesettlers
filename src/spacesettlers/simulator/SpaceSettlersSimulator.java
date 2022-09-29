@@ -708,9 +708,9 @@ public final class SpaceSettlersSimulator {
 		}
 
 		// get the game searches being used on this turn
-		Map<UUID, AbstractGameAgent> allSearches = new HashMap<UUID, AbstractGameAgent>();
+		Map<UUID, AbstractGameAgent<?,?>> allSearches = new HashMap<>();
 		for (Team team : teams) {
-			Map<UUID, AbstractGameAgent> searches = team.getTeamSearches(simulatedSpace);
+			Map<UUID, AbstractGameAgent<?,?>> searches = team.getTeamSearches(simulatedSpace);
 			if (searches != null) {
 				for (UUID key : searches.keySet()) {
 					// verify searches belong to this team

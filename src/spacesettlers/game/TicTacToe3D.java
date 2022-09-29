@@ -8,31 +8,42 @@ import java.util.Random;
  * @author amy
  *
  */
-public class TicTacToe3D extends AbstractGame {
+public class TicTacToe3D extends AbstractGame<TicTacToe3DBoard, TicTacToe3DGameAgent> implements Runnable {
 	TicTacToe3DBoard myBoard;
-	private boolean currentPlayer;
-	private Random random;
+	private boolean isPlayer1Turn;
+	
+	final TicTacToe3DGameAgent player1, player2;
 
 	/**
-	 * Initialize an empty board and choose a random first player
+	 * Initialize an empty board and randomly assign selected players as player1 and player2.
+	 * @param player_lhs 
+	 * @param player_rhs
 	 */
-	public TicTacToe3D() {
+	public TicTacToe3D(final TicTacToe3DGameAgent player_lhs, final TicTacToe3DGameAgent player_rhs) {
 		myBoard = new TicTacToe3DBoard();
-		random = new Random();
-		currentPlayer = random.nextBoolean();
-		super.heuristicPlayer = player1;
+		
+		final Random random = new Random();
+		isPlayer1Turn = new Random().nextBoolean();
+		
+		if (random.nextBoolean()) {
+			(player1 = player_lhs).setPlayer(AbstractGame.PLAYER1_ID);
+			(player2 = player_rhs).setPlayer(AbstractGame.PLAYER2_ID);
+		} else {
+			(player1 = player_rhs).setPlayer(AbstractGame.PLAYER1_ID);
+			(player2 = player_lhs).setPlayer(AbstractGame.PLAYER2_ID);
+		}
 	}
 
 	/**
 	 * Used only for unit tests so the board is set to something specific
 	 * @param board
 	 */
-	public TicTacToe3D(int [][][]board, boolean player) {
+	public TicTacToe3D(int [][][]board, boolean isPlayer1Turn, TicTacToe3DGameAgent player1, TicTacToe3DGameAgent player2) {
 		this.myBoard = new TicTacToe3DBoard();
 		this.myBoard.setBoard(board);
-		currentPlayer = player;
-		random = new Random();
-		super.heuristicPlayer = player1;
+		this.isPlayer1Turn = isPlayer1Turn;
+		(this.player1 = player1).setPlayer(1);
+		(this.player2 = player2).setPlayer(2);
 	}
 
 
@@ -42,11 +53,7 @@ public class TicTacToe3D extends AbstractGame {
 	 * @return true if the game is over and false otherwise
 	 */
 	public boolean isGameOver() {
-		if (myBoard.getWinningPlayer() != myBoard.empty) {
-			return true;
-		} else {
-			return false;
-		}
+		return myBoard.getWinningPlayer() != TicTacToe3DBoard.EMPTY;
 		
 	}
 
@@ -54,33 +61,40 @@ public class TicTacToe3D extends AbstractGame {
 	 * Return true if is player 1's turn
 	 */
 	public boolean getTurn() {
-		return currentPlayer;
+		return isPlayer1Turn;
 	}
 
 	@Override
-	public void playAction(AbstractGameAction action) {
-		TicTacToe3DAction TTTAction = (TicTacToe3DAction) action;
-		int player = player1;
-		
-		if (!currentPlayer) {
-			player = player2;
-		}
-		currentPlayer = !currentPlayer;
-		
-		this.myBoard.makeMove(TTTAction, player);
+	public void playCurrentTurn() {
+		final TicTacToe3DGameAgent player = getCurrentPlayer();
+		myBoard.makeMove(player.getNextMove(myBoard), player.getPlayerID());
+		isPlayer1Turn = !isPlayer1Turn;
 	}
 
 	/**
-	 * Returns true if player 1 is the winner.  
+	 * Returns the winning player id if any. Else, the empty value (0).
 	 */
 	public int getWinner() {
 		return myBoard.getWinningPlayer();
 	}
 
 	@Override
-	public AbstractGameBoard getBoard() {
+	public TicTacToe3DBoard getBoard() {
 		return myBoard.deepClone();
 	}
 
+	/**
+	 * @return The player whose turn it is currently.
+	 */
+	public TicTacToe3DGameAgent getCurrentPlayer() {
+		return isPlayer1Turn ? player1 : player2;
+	}
+
+	@Override
+	public void run() {
+		while (!isGameOver()) {
+			playCurrentTurn();
+		}
+	}
 
 }
