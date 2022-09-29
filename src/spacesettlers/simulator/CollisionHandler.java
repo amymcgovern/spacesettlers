@@ -504,10 +504,6 @@ public class CollisionHandler {
 
 		HeuristicTicTacToe3DGameAgent myPlayer = new HeuristicTicTacToe3DGameAgent(0); // arg does nothing, but didn't want to break the api so it needs an int passed in
 		final TicTacToe3D game = GameFactory.generateNewGame(myPlayer, opponent);
-
-		System.out.println(myPlayer.getPlayer());
-		System.out.println(opponent.getPlayer());
-		System.out.println(game.getCurrentPlayer().getPlayer());
 		
 		while (!game.isGameOver()) {
 			game.playAction(game.getCurrentPlayer().getNextMove(game));
