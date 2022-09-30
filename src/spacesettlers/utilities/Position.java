@@ -141,10 +141,10 @@ public class Position {
 	 * @param Toroidal2DPhysics object: space
 	 * @param Position object: shipPosition
 	 * @param Position object: currentPosition
-	 * @param int value: allowableDifference
+	 * @param double value: allowableDifference
 	 * @return true if ship reached certain location or within the allowable difference distance i.e., between 0 and allowableDifference value.
 	 */
-	public boolean equalsLocationOnlyWithDistance(Toroidal2DPhysics space, Position shipPosition, Position currentPosition, int allowableDifference) {
+	public boolean equalsLocationOnlyWithDistance(Toroidal2DPhysics space, Position shipPosition, Position currentPosition, double allowableDifference) {
 		double differenceDistance = space.findShortestDistance(shipPosition, currentPosition);
 		if (differenceDistance > 0 && differenceDistance < allowableDifference) {
 			return true;
