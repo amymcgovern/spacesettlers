@@ -340,4 +340,23 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 			board[TTTAction.row][TTTAction.col][TTTAction.depth] = player;
 		}
 	}
+	
+	/**
+	 * print out the board to a string
+	 */
+	public String toString() {
+		StringBuffer myStr = new StringBuffer();
+		
+		for (int k = 0; k < board_size; k++) {
+			myStr.append("Board at depth " + k + "\n");
+			for (int i = 0; i < board_size; i++) {
+				for (int j = 0; j < board_size; j++) {
+					myStr.append(board[i][j][k]);
+				}
+				myStr.append("\n");
+			}
+		}
+		return myStr.toString();
+	}
+	
 }
