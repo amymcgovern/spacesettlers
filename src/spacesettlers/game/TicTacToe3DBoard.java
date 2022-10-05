@@ -8,7 +8,7 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 	public TicTacToe3DBoard() {
 		board = new int[board_size][board_size][board_size];
 	}
-
+	
 	/**
 	 * Returns the empty value for the board
 	 * @return
@@ -17,6 +17,14 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 		return empty;
 	}
 
+	
+	/**
+	 * Returns the size along each dimension for the board
+	 * @return
+	 */
+	public static int getBoardSize() {
+		return board_size;
+	}
 
 	public TicTacToe3DBoard deepClone() {
 		TicTacToe3DBoard newBoard = new TicTacToe3DBoard();
