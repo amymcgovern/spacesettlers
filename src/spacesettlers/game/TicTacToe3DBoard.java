@@ -350,6 +350,16 @@ public class TicTacToe3DBoard extends AbstractGameBoard {
 	}
 	
 	/**
+	* Unmakes a move previously made
+	*
+	* @param TTTAction
+	*/ 
+	public void unMakeMove(TicTacToe3DAction TTTAction) {
+		board[TTTAction.row][TTTAction.col][TTTAction.depth] = empty;
+	}
+	
+
+	/**
 	 * print out the board to a string
 	 */
 	public String toString() {
