@@ -19,6 +19,7 @@ import spacesettlers.objects.Beacon;
 import spacesettlers.objects.Drone;
 import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
+import spacesettlers.objects.Star;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.AbstractObject;
 import spacesettlers.objects.AiCore;
@@ -56,6 +57,11 @@ public class Toroidal2DPhysics {
 	 * The list of beacons
 	 */
 	Set<Beacon> beacons;
+
+	/**
+	 * The list of stars
+	 */
+	Set<Star> stars;
 
 	/**
 	 * The list of asteroids
@@ -143,6 +149,7 @@ public class Toroidal2DPhysics {
 		timeStep = simConfig.getSimulationTimeStep();
 		collisionHandler = new CollisionHandler();
 		beacons = new LinkedHashSet<Beacon>();
+		stars = new LinkedHashSet<Star>();
 		asteroids = new LinkedHashSet<Asteroid>();
 		bases = new LinkedHashSet<Base>();
 		ships = new LinkedHashSet<Ship>();
@@ -172,6 +179,7 @@ public class Toroidal2DPhysics {
 		allObjects = new LinkedHashSet<AbstractObject>();
 		collisionHandler = new CollisionHandler();
 		beacons = new LinkedHashSet<Beacon>();
+		stars = new LinkedHashSet<Star>();
 		asteroids = new LinkedHashSet<Asteroid>();
 		bases = new LinkedHashSet<Base>();
 		ships = new LinkedHashSet<Ship>();
@@ -202,6 +210,7 @@ public class Toroidal2DPhysics {
 		allObjects = new LinkedHashSet<AbstractObject>();
 		collisionHandler = new CollisionHandler();
 		beacons = new LinkedHashSet<Beacon>();
+		stars = new LinkedHashSet<Star>();
 		asteroids = new LinkedHashSet<Asteroid>();
 		bases = new LinkedHashSet<Base>();
 		ships = new LinkedHashSet<Ship>();
@@ -224,6 +233,10 @@ public class Toroidal2DPhysics {
 
 		if (obj instanceof Beacon) {
 			beacons.add((Beacon) obj);
+		}
+
+		if (obj instanceof Star) {
+			stars.add((Star) obj);
 		}
 
 		if (obj instanceof AiCore) {
@@ -267,6 +280,10 @@ public class Toroidal2DPhysics {
 
 		if (obj.getClass() == Beacon.class) {
 			beacons.remove((Beacon) obj);
+		}
+
+		if (obj.getClass() == Star.class) {
+			stars.remove((Star) obj);
 		}
 
 		if (obj.getClass() == Asteroid.class) {
@@ -326,6 +343,15 @@ public class Toroidal2DPhysics {
 	 */
 	public Set<Beacon> getBeacons() {
 		return beacons;
+	}
+
+	/**
+	 * Return the list of stars
+	 * 
+	 * @return
+	 */
+	public Set<Star> getStars() {
+		return stars;
 	}
 
 	/**
@@ -1100,8 +1126,8 @@ public class Toroidal2DPhysics {
 				object.setAlive(true);
 				object.setDrawable(true);
 
-				// reset the UUID if it is a beacon
-				if (object instanceof Beacon) {
+				// reset the UUID if it is a beacon or a star
+				if (object instanceof Beacon || object instanceof Star) {
 					object.resetId();
 				}
 			}

@@ -174,6 +174,15 @@ public class Base extends AbstractActionableObject {
 		team.incrementTotalFlagsCollected();
 	}
 	
+	/**
+	 * Add a star to this team.  The star itself is then killed so it can regenerate.
+	 * 
+	 * @param star
+	 */
+	public void addStar(Star star) {
+		super.incrementFlags();
+		team.incrementStarsCollected(1);
+	}
 
 	/**
 	 * Change the healing energy (from a collision or just time healing it)

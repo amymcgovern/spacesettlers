@@ -15,10 +15,13 @@
 	<randomSeed>0</randomSeed>
 
 	<!-- Scoring mechanism used for this game: Can be Resources, Beacons, ... (more as we add them) -->
-	<scoringMethod>Resources</scoringMethod>
+	<scoringMethod>Stars</scoringMethod>
 
 	<!-- Specify the number of the beacons.  The locations are initialized randomly -->
 	<numBeacons>6</numBeacons>
+
+	<!-- Specify the number of the stars.  The locations are initialized randomly -->
+	<numStars>6</numStars>
 	
 	<!-- Specify the maximum number of ships in a team -->
 	<maximumShipsPerTeam>5</maximumShipsPerTeam>

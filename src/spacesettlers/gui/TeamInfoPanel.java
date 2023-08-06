@@ -21,7 +21,7 @@ public class TeamInfoPanel extends JPanel {
 	GridBagConstraints constraints;
 	ResourcesPanel resourcesPanel;
 	DamagePanel damagePanel;
-	JLabel score, flags, cores;
+	JLabel score, flags, cores, stars;
 	
 	public TeamInfoPanel(Team team) {
 		this.team = team;
@@ -74,15 +74,26 @@ public class TeamInfoPanel extends JPanel {
 		constraints.gridwidth = GridBagConstraints.REMAINDER;
 		add(flags, constraints);
 		
-		
-		resourcesPanel = new ResourcesPanel();
+		JLabel StarText = new JLabel("Stars");
 		constraints.gridx = 0;
 		constraints.gridy = 4;
+		constraints.gridwidth = GridBagConstraints.RELATIVE;
+		add(StarText, constraints);
+
+		stars = new JLabel("0");
+		constraints.gridx = 1;
+		constraints.gridy = 4;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		add(stars, constraints);
+
+		resourcesPanel = new ResourcesPanel();
+		constraints.gridx = 0;
+		constraints.gridy = 5;
 		add(resourcesPanel, constraints);
 
 		damagePanel = new DamagePanel();
 		constraints.gridx = 0;
-		constraints.gridy = 5;
+		constraints.gridy = 6;
 		add(damagePanel, constraints);
 
 	}
@@ -93,6 +104,7 @@ public class TeamInfoPanel extends JPanel {
 		score.setText(team.getScore() + "");
 		flags.setText(team.getTotalFlagsCollected() + "");
 		cores.setText(team.getTotalCoresCollected() + "");
+		stars.setText(team.getTotalStarsCollected() + "");
 	}
 	
 }

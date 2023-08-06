@@ -49,6 +49,11 @@ public class Ship extends AbstractActionableObject {
 	int numBeacons;
 
 	/**
+	 * Number of stars picked up by this ship
+	 */
+	int numStars;
+
+	/**
 	 * Last time the respawn counter was used
 	 */
 	int lastRespawnCounter;
@@ -88,6 +93,7 @@ public class Ship extends AbstractActionableObject {
 		this.isMoveable = true;
 		respawnCounter = 0;
 		numBeacons = 0;
+		numStars = 0;
 		energy = SHIP_INITIAL_ENERGY;
 		lastRespawnCounter = 16;
 		resources = new ResourcePile();
@@ -117,6 +123,7 @@ public class Ship extends AbstractActionableObject {
 		newShip.addResources(resources);
 		newShip.lastRespawnCounter = lastRespawnCounter;
 		newShip.numBeacons = numBeacons;
+		newShip.numStars = numStars;
 		newShip.energy = energy;
 		newShip.respawnCounter = respawnCounter;
 		newShip.graphic = new ShipGraphics(newShip, teamColor);
@@ -168,6 +175,7 @@ public class Ship extends AbstractActionableObject {
 		newShip.addResources(resources);
 		newShip.lastRespawnCounter = lastRespawnCounter;
 		newShip.numBeacons = numBeacons;
+		newShip.numStars = numStars;
 		newShip.energy = energy;
 		newShip.respawnCounter = respawnCounter;
 		newShip.graphic = new ShipGraphics(newShip, teamColor);
@@ -369,6 +377,21 @@ public class Ship extends AbstractActionableObject {
 	 */
 	public void incrementBeaconCount() {
 		numBeacons++;
+	}
+
+	/**
+	 * Return the number of stars picked up by this ship
+	 * @return
+	 */
+	public int getNumStars() {
+		return numStars;
+	}
+
+	/**
+	 * Increment the number of stars for this ship
+	 */
+	public void incrementStarCount() {
+		numStars++;
 	}
 
 	/**

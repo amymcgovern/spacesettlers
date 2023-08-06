@@ -32,6 +32,11 @@ public class SpaceSettlersConfig {
 	int numBeacons;
 	
 	/**
+	 * Number of stars in the spacewar environment
+	 */
+	int numStars;
+
+	/**
 	 * Maximum number of ships in a team (can be 1)
 	 */
 	int maximumShipsPerTeam;
@@ -114,6 +119,13 @@ public class SpaceSettlersConfig {
 	 */
 	public int getNumBeacons() {
 		return numBeacons;
+	}
+
+	/**
+	 * @return the numStars
+	 */
+	public int getNumStars() {
+		return numStars;
 	}
 
 	/**

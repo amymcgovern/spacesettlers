@@ -96,6 +96,11 @@ public class Team {
 	int totalCoresCollected;
 	
 	/**
+	 * The number of Stars collected by this team
+	 */
+	int totalStarsCollected;
+
+	/**
 	 * available (unspent) resourcesAvailable from the asteroids and the total resourcesAvailable earned
 	 */
 	ResourcePile availableResources, totalResources;
@@ -523,6 +528,7 @@ public class Team {
 		int damageInflicted = 0;
 		int damagedReceived = 0;
 		int totalAssists = 0;
+		int starsCollected = 0;
 		for (Ship ship : teamShips) {
 			beacons += ship.getNumBeacons();
 			hits += ship.getHitsInflicted();
@@ -530,6 +536,7 @@ public class Team {
 			killsReceived += ship.getKillsReceived();
 			totalAssists += ship.getTotalAssistsInflicted();
 			damageInflicted += ship.getDamageInflicted();
+			starsCollected += ship.getNumStars();
 			
 			// check team ships for how much damageInflicted they have received
 			damagedReceived += ship.getDamageReceived();
@@ -549,6 +556,7 @@ public class Team {
 		this.totalHitsInflicted = hits;
 		this.totalDamageInflicted = damageInflicted;
 		this.totalDamageReceived = damagedReceived;
+		this.totalStarsCollected = starsCollected;
 	}
 	
 	/**
@@ -847,7 +855,24 @@ public class Team {
 	public int getTotalCoresCollected() { 
 		return this.totalCoresCollected;
 	}
-	
+
+	/**
+	 * This returns the amount of stars that the team has collected as an integer.
+	 * @return int
+	 */
+	public int getTotalStarsCollected() { 
+		return this.totalStarsCollected;
+	}
+
+	/**
+	 * Increases the amount of stars collected by the team by the specified amount.
+	 * @param numCores
+	 */
+	public void incrementStarsCollected (int numStars) {
+		this.totalStarsCollected += numStars;
+	}
+
+
 	/**
 	 * Return the currently available resources
 	 * 

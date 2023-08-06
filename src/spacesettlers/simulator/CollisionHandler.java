@@ -14,6 +14,7 @@ import spacesettlers.objects.Beacon;
 import spacesettlers.objects.Drone;
 import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
+import spacesettlers.objects.Star;
 import spacesettlers.objects.weapons.EMP;
 import spacesettlers.objects.weapons.Missile;
 import spacesettlers.utilities.Position;
@@ -53,6 +54,15 @@ public class CollisionHandler {
 			return;
 		} else if (object2 instanceof Beacon) {
 			beaconCollision((Beacon) object2, object1);
+			return;
+		}
+
+		// if either object is a star, handle that (and don't elastically collide)
+		if (object1 instanceof Star) {
+			starCollision((Star) object1, object2);
+			return;
+		} else if (object2 instanceof Star) {
+			starCollision((Star) object2, object1);
 			return;
 		}
 
@@ -588,6 +598,22 @@ public class CollisionHandler {
 			Drone drone = (Drone) object;
 			drone.updateEnergy(Beacon.BEACON_ENERGY_BOOST);
 		}
+	}
+
+	/**
+	 * Collide with a star
+	 * @param star
+	 * @param object
+	 */
+	public void starCollision(Star star, AbstractObject object) {
+		// stars die when they are touched (respawned elsewhere)
+		star.setAlive(false);
+
+		System.out.println("Star hit an object of type " + object);
+		if (object.getClass() == Ship.class) {
+			Ship ship = (Ship) object;
+			ship.incrementStarCount();
+		} 
 	}
 	
 	/**

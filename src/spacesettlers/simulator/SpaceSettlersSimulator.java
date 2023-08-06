@@ -34,6 +34,7 @@ import spacesettlers.objects.Beacon;
 import spacesettlers.objects.Drone;
 import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
+import spacesettlers.objects.Star;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
 import spacesettlers.utilities.Position;
 import spacesettlers.utilities.Vector2D;
@@ -232,6 +233,13 @@ public final class SpaceSettlersSimulator {
 			simulatedSpace.addObject(beacon);
 		}
 
+		// place the stars (if any)
+		for (int s = 0; s < simConfig.getNumStars(); s++) {
+			Star star = new Star(simulatedSpace.getRandomFreeLocation(random, Star.STAR_RADIUS * 2));
+			//System.out.println("New star at " + star.getPosition());
+			simulatedSpace.addObject(star);
+		}
+
 		// place any fixed location asteroids
 		FixedAsteroidConfig[] fixedAsteroidConfigs = simConfig.getFixedAsteroids();
 		if (fixedAsteroidConfigs != null) {
@@ -378,15 +386,28 @@ public final class SpaceSettlersSimulator {
 						break;
 					}
 				}
-				int[] startX = flagConfig.getStartX();
-				int[] startY = flagConfig.getStartY();
-				
-				Position[] startingPositions = new Position[startX.length];
-				for (int i = 0; i < startX.length; i++) {
-					startingPositions[i] = new Position(startX[i], startY[i]);
+
+				// initialize the flag either from config or randomly in free space
+				Position flagPosition;
+				Position[] startingPositions;
+
+				if (flagConfig.isFixedLocation()) {
+					int[] startX = flagConfig.getStartX();
+					int[] startY = flagConfig.getStartY();
+					
+					startingPositions = new Position[startX.length];
+					for (int i = 0; i < startX.length; i++) {
+						startingPositions[i] = new Position(startX[i], startY[i]);
+					}
+					//System.out.println("Starting Locations are " + startingPositions);
+					flagPosition = startingPositions[random.nextInt(startingPositions.length)];
+				} else {
+					// make the base in the region specified for this team
+					// ensure bases are not created right next to asteroids (free by 4 * base_radius for now)
+					startingPositions = new Position[1];
+					startingPositions[0] = simulatedSpace.getRandomFreeLocation(random, 4 * Flag.FLAG_RADIUS);
+					flagPosition =  startingPositions[0];
 				}
-				//System.out.println("Starting Locations are " + startingPositions);
-				Position flagPosition = startingPositions[random.nextInt(startingPositions.length)];
 
 				//System.out.println("Chosen location is " + flagPosition);
 				Flag flag = new Flag(flagPosition, flagConfig.getTeamName(), thisTeam, startingPositions);
@@ -1068,6 +1089,11 @@ public final class SpaceSettlersSimulator {
 			// this scores by the raw number of flags collected (competitive ladder)
 			for (Team team : teams) {
 				team.setScore(team.getTotalFlagsCollected());
+			}
+		} else if (simConfig.getScoringMethod().equalsIgnoreCase("Stars")) {
+			// this scores by the raw number of stars collected
+			for (Team team : teams) {
+				team.setScore(team.getTotalStarsCollected());
 			}
 		} else if (simConfig.getScoringMethod().equalsIgnoreCase("FlagsPlusCores")) {
 			// this scores by the raw number of flags collected (competitive ladder)

@@ -1,9 +1,36 @@
-build
-dist/*.jar
+### IntelliJ IDEA ###
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+*.iml
+
+### Eclipse ###
+.apt_generated
 .classpath
+.factorypath
 .project
-.*
-!**/.gitignore
-/bin/
-src/amy
-src/example
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### IntelliJ ###
+.idea/
+
+### don't check in builds ###
+build/
+
+### Mac OS ###
+.DS_Store

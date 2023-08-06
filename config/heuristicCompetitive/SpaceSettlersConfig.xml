@@ -19,7 +19,10 @@
 
 	<!-- Specify the number of the beacons.  The locations are initialized randomly -->
 	<numBeacons>6</numBeacons>
-	
+
+	<!-- Specify the number of the stars.  The locations are initialized randomly -->
+	<numStars>6</numStars>
+
 	<!-- Specify the maximum number of ships in a team -->
 	<maximumShipsPerTeam>1</maximumShipsPerTeam>
 	<maximumInitialShipsPerTeam>1</maximumInitialShipsPerTeam>

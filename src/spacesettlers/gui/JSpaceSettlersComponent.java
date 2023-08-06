@@ -15,7 +15,9 @@ import javax.swing.JComponent;
 
 import spacesettlers.clients.Team;
 import spacesettlers.graphics.SpacewarGraphics;
+import spacesettlers.graphics.StarGraphics;
 import spacesettlers.objects.AbstractObject;
+import spacesettlers.objects.Star;
 import spacesettlers.simulator.SpaceSettlersSimulator;
 import spacesettlers.utilities.Position;
 
