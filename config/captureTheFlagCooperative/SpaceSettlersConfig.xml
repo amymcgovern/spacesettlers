@@ -68,6 +68,7 @@
 	<flags>
 		<FlagConfig>
 			<teamName>Team1</teamName>
+			<fixedLocation>true</fixedLocation>
 			<startX>
 				<int>300</int>
 				<int>350</int>
@@ -87,6 +88,7 @@
 		</FlagConfig>
 		<FlagConfig>
 			<teamName>Team2</teamName>
+			<fixedLocation>true</fixedLocation>
 			<startX>
 				<int>1200</int>
 				<int>1250</int>
