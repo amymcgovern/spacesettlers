@@ -32,5 +32,8 @@ bin/
 ### don't check in builds ###
 build/
 
+### don't check in any of Dr McGovern's solutions ###
+src/mcgo2121/
+
 ### Mac OS ###
 .DS_Store
