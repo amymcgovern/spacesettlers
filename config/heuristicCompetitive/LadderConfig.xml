@@ -40,8 +40,8 @@
 			<configFile>aggressive-heuristic-clientinit.xml</configFile>
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
-			<teamName>AmyTeam</teamName>
-			<configFile>amy-spacesettlersinit.xml</configFile>
+			<teamName>MyTeam</teamName>
+			<configFile>spacesettlersinit.xml</configFile>
 		</HighLevelTeamConfig>
 	</variableTeams>
 

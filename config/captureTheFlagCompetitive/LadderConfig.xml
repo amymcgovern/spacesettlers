@@ -25,7 +25,7 @@
 	<variableTeams>
 		<HighLevelTeamConfig>
 			<teamName>MyTeam</teamName>
-			<configFile>amy-spacesettlersinit.xml</configFile>
+			<configFile>spacesettlersinit.xml</configFile>
 		</HighLevelTeamConfig>
 		
 	</variableTeams>
