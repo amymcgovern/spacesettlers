@@ -45,7 +45,7 @@
 	<variableTeams>
 		<HighLevelTeamConfig>
 			<teamName>ExampleTeam</teamName>
-			<configFile>tuck9702.xml</configFile>
+			<configFile>random-clientinit.xml</configFile>
 		</HighLevelTeamConfig>
 	</variableTeams>
 
