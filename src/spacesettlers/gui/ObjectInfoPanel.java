@@ -10,11 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import spacesettlers.objects.AbstractObject;
-import spacesettlers.objects.Asteroid;
-import spacesettlers.objects.Base;
-import spacesettlers.objects.Beacon;
-import spacesettlers.objects.Ship;
+import spacesettlers.objects.*;
 import spacesettlers.simulator.SpaceSettlersSimulator;
 
 public class ObjectInfoPanel extends JPanel {
@@ -139,6 +135,9 @@ public class ObjectInfoPanel extends JPanel {
 		} else if (selectedObject.getClass() == Beacon.class) {
 			Beacon beacon = (Beacon) selectedObject;
 			name = "Beacon";
+		} else if (selectedObject.getClass() == Star.class) {
+			Star star = (Star) selectedObject;
+			name = "Star";
 		}
 		objectName.setText(name);
 		
