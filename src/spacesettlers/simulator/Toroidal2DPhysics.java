@@ -23,11 +23,7 @@ import spacesettlers.objects.Star;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.AbstractObject;
 import spacesettlers.objects.AiCore;
-import spacesettlers.objects.powerups.PowerupDoubleHealingBaseEnergy;
-import spacesettlers.objects.powerups.PowerupDoubleMaxEnergy;
-import spacesettlers.objects.powerups.PowerupDoubleWeapon;
-import spacesettlers.objects.powerups.PowerupToggleShield;
-import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
+import spacesettlers.objects.powerups.*;
 import spacesettlers.objects.resources.ResourcePile;
 import spacesettlers.objects.weapons.AbstractWeapon;
 import spacesettlers.utilities.Movement;
@@ -626,6 +622,14 @@ public class Toroidal2DPhysics {
 			base.updateEnergy(base.getHealingIncrement());
 		}
 
+		// heal any ships that have self-healing available
+		for (Ship ship : ships) {
+			if (ship.getHealingStepsRemaining() > 0) {
+				ship.updateEnergy(ship.HEALING_INCREMENT);
+				ship.setHealingStepsRemaining(ship.getHealingStepsRemaining()-1);
+			}
+		}
+
 		// detect collisions across all objects
 		detectCollisions();
 
@@ -947,18 +951,14 @@ public class Toroidal2DPhysics {
 			baseDoubler.applyPowerup(swobject);
 			break;
 
+		case SET_SHIP_SELF_HEAL:
+			PowerupSetShipSelfHeal shipHealer = new PowerupSetShipSelfHeal();
+			shipHealer.applyPowerup(swobject);
+			break;
+
 		case DOUBLE_MAX_ENERGY:
 			PowerupDoubleMaxEnergy maxEnergyDoubler = new PowerupDoubleMaxEnergy();
 			maxEnergyDoubler.applyPowerup(swobject);
-			break;
-
-		case FIRE_HEAT_SEEKING_MISSILE:
-			break;
-
-		case FIRE_TURRET:
-			break;
-
-		case LAY_MINE:
 			break;
 
 		default:

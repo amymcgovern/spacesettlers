@@ -463,7 +463,7 @@ public class Team {
 	 * Allows the client to do cleanup after an action and before
 	 * the next one (if needed)
 	 * 
-	 * @param simulatedSpace
+	 * @param space
 	 * @return
 	 */
 	public void getTeamMovementEnd(Toroidal2DPhysics space) {
@@ -540,6 +540,11 @@ public class Team {
 			
 			// check team ships for how much damageInflicted they have received
 			damagedReceived += ship.getDamageReceived();
+		}
+		// add in the stars to team resources.  Have to do it here because otherwise we end up with a circular
+		// pointer in star and team and then stack overflows when we deepClone
+		if (this.totalStarsCollected != starsCollected) {
+			this.incrementAvailableResources(new ResourcePile(0, 0, 0, starsCollected - this.totalStarsCollected));
 		}
 		
 		// check the bases for how much damageInflicted they have received
@@ -866,7 +871,7 @@ public class Team {
 
 	/**
 	 * Increases the amount of stars collected by the team by the specified amount.
-	 * @param numCores
+	 * @param numStars
 	 */
 	public void incrementStarsCollected (int numStars) {
 		this.totalStarsCollected += numStars;

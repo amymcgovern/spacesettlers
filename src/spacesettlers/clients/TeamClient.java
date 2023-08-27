@@ -166,7 +166,7 @@ abstract public class TeamClient {
 	 * @param space
 	 * @param actionableObjects
 	 * @param resourcesAvailable how much resourcesAvailable you have
-	 * @param clonedPurchaseCost how much each type of purchase currently costs for this team
+	 * @param purchaseCosts how much each type of purchase currently costs for this team
 	 * @return
 	 */
 	abstract public Map<UUID, PurchaseTypes> getTeamPurchases(Toroidal2DPhysics space, 

@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Random;
 
 import spacesettlers.actions.AbstractAction;
+import spacesettlers.clients.Team;
 import spacesettlers.game.AbstractGameAgent;
 import spacesettlers.graphics.ShipGraphics;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
@@ -27,6 +28,11 @@ public class Ship extends AbstractActionableObject {
 	public static final int RESPAWN_INCREMENT = 2;
 	public static final int MAX_RESPAWN_INTERVAL = 1000;
 	public static final int SHIP_MAX_ENERGY = 5000;
+	/**
+	 * This is the amount a ship heals each time step if it is healing
+	 */
+	public static final int HEALING_INCREMENT = 1;
+
 
 	/**
 	 * The action the ship is currently executing
@@ -78,7 +84,14 @@ public class Ship extends AbstractActionableObject {
 	 * Reference to the flag the ship has (if it has one)
 	 */
 	Flag flag;
-	
+
+	/**
+	 * the number of steps left in healing (this is 0 unless you purchase the powerup to allow self-healing
+	 * and then it will self-heal until the timer runs down to 0 again
+	 */
+	int healingStepsRemaining = 0;
+
+
 	/**
 	 * Make a new ship for the specified team.  
 	 * @param teamName
@@ -109,6 +122,7 @@ public class Ship extends AbstractActionableObject {
 		assistTagTeam = null;
 		healthAtKillTag = 0;
 		healthAtAssistTag = 0;
+		healingStepsRemaining = 0;
 	}
 
 	/**
@@ -145,7 +159,8 @@ public class Ship extends AbstractActionableObject {
 		newShip.numCores = numCores; 
 		newShip.killTagTeam = null;
 		newShip.assistTagTeam = null;
-		
+		newShip.healingStepsRemaining = healingStepsRemaining;
+
 		if (this.killTagTeam != null) {
 			newShip.killTagTeam = killTagTeam.deepCloneNoTags();
 		}
@@ -199,7 +214,8 @@ public class Ship extends AbstractActionableObject {
 		newShip.assistTagTeam = null;
 		newShip.healthAtAssistTag = healthAtAssistTag;
 		newShip.healthAtKillTag = healthAtKillTag;
-		
+		newShip.healingStepsRemaining = healingStepsRemaining;
+
 		if (this.flag != null){
 			newShip.flag = flag.deepClone();
 		}
@@ -418,7 +434,7 @@ public class Ship extends AbstractActionableObject {
 	 * Note, this should only be done within the simulator and not
 	 * within the team client (where it will be ignored)
 	 * 
-	 * @param currentAction
+	 * @param currentAgent
 	 */
 	public void setCurrentGameAgent(AbstractGameAgent currentAgent) {
 		this.currentGameAgent = currentAgent;
@@ -433,7 +449,6 @@ public class Ship extends AbstractActionableObject {
 		return currentGameAgent;
 	}
 
-	
 	public String toString() {
 		String str = "Ship id " + id + " team " + teamName + " at " + position + " resources " + resources + 
 				" flags: " + numFlags;
@@ -452,6 +467,22 @@ public class Ship extends AbstractActionableObject {
 			return false;
 		}
 
+	}
+
+	/**
+	 * @return Return the number of steps left in the healing cycle
+	 */
+	public int getHealingStepsRemaining() {
+		return healingStepsRemaining;
+	}
+
+	/**
+	 * Set the healing steps left (through a power up purchase) to the new number
+	 *
+	 * @param newHealingStepsRemaining
+	 */
+	public void setHealingStepsRemaining(int newHealingStepsRemaining) {
+		healingStepsRemaining = newHealingStepsRemaining;
 	}
 
 	/**
@@ -474,5 +505,4 @@ public class Ship extends AbstractActionableObject {
 		flag.depositFlag();
 		flag = null;
 	}
-	
 }

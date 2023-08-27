@@ -121,8 +121,6 @@ abstract public class AbstractActionableObject extends AbstractObject {
 			return false;
 		}
 	}
-	
-	
 
 	/**
 	 * Add the power up to the current list of things this item can use
@@ -343,7 +341,7 @@ abstract public class AbstractActionableObject extends AbstractObject {
 	/**
 	 * Tag the current shooter in case of kill 
 	 * 
-	 * @param teamName
+	 * @param firingShip
 	 */
 	public void tagShooter(Ship firingShip) {
 		if (killTagTeam != null) {

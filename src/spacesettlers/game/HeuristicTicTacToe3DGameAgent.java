@@ -8,8 +8,7 @@ package spacesettlers.game;
  */
 public class HeuristicTicTacToe3DGameAgent extends AbstractGameAgent {
 
-	public HeuristicTicTacToe3DGameAgent(int player1) {
-		// Does nothing, but needed to not break any client APIs for now.
+	public HeuristicTicTacToe3DGameAgent() {
 	}
 
 	/**
@@ -21,7 +20,7 @@ public class HeuristicTicTacToe3DGameAgent extends AbstractGameAgent {
 	 */
 	public AbstractGameAction getNextMove(AbstractGame game) {
 		TicTacToe3DBoard board = (TicTacToe3DBoard) game.getBoard();
-		System.out.println("Heuristic agent current state of the board is \n" + board);
+		//System.out.println("Heuristic agent current state of the board is \n" + board);
 		
 		// check to see if the center is free
 		if (board.board[1][1][1] == board.empty) {

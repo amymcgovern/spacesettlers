@@ -153,7 +153,7 @@ public class Base extends AbstractActionableObject {
 	 * at a base but are available to the whole team once they arrive at a base.  
 	 * Method is overridden to add things to the team also.
 	 * 
-	 * @param difference
+	 * @param newResources the new resources to add to the pile
 	 */
 	public void addResources(ResourcePile newResources) {
 		super.addResources(newResources);
@@ -172,16 +172,6 @@ public class Base extends AbstractActionableObject {
 		flag.depositFlag();
 		super.incrementFlags();
 		team.incrementTotalFlagsCollected();
-	}
-	
-	/**
-	 * Add a star to this team.  The star itself is then killed so it can regenerate.
-	 * 
-	 * @param star
-	 */
-	public void addStar(Star star) {
-		super.incrementFlags();
-		team.incrementStarsCollected(1);
 	}
 
 	/**

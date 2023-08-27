@@ -6,15 +6,13 @@ package spacesettlers.objects.powerups;
  * @author amy
  */
 public enum SpaceSettlersPowerupEnum {
-	TOGGLE_SHIELD,
-	FIRE_EMP,
-	LAY_MINE,
-	FIRE_TURRET,
 	FIRE_MISSILE,
-	FIRE_HEAT_SEEKING_MISSILE,
+	FIRE_EMP,
+	TOGGLE_SHIELD,
+	DOUBLE_WEAPON_CAPACITY,
 	DOUBLE_BASE_HEALING_SPEED,
 	DOUBLE_MAX_ENERGY,
-	DOUBLE_WEAPON_CAPACITY,
+	SET_SHIP_SELF_HEAL,
 	DRONE, //herr0861 edit
 	CORE,
 }

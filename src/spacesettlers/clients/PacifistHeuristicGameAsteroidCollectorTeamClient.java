@@ -19,6 +19,7 @@ import spacesettlers.actions.PurchaseCosts;
 import spacesettlers.actions.PurchaseTypes;
 import spacesettlers.game.AbstractGame;
 import spacesettlers.game.AbstractGameAgent;
+import spacesettlers.game.HeuristicGameAgent;
 import spacesettlers.game.HeuristicTicTacToe3DGameAgent;
 import spacesettlers.graphics.SpacewarGraphics;
 import spacesettlers.objects.AbstractActionableObject;
@@ -397,14 +398,13 @@ public class PacifistHeuristicGameAsteroidCollectorTeamClient extends TeamClient
 	}
 
 	/**
-	 * Plays the game randomly (just to show how to use the interface)
-	 * 
+	 * Plays the game using the heuristic (no minimax for the example agents)
 	 */
 	@Override
 	public Map<UUID, AbstractGameAgent> getGameSearch(Toroidal2DPhysics space,
 			Set<AbstractActionableObject> actionableObjects) {
-		HeuristicTicTacToe3DGameAgent agent = new HeuristicTicTacToe3DGameAgent(AbstractGame.player1);
-		
+		HeuristicGameAgent agent = new HeuristicGameAgent();
+
 		HashMap<UUID, AbstractGameAgent> actions = new HashMap<UUID, AbstractGameAgent>();
 
 		// loop through each ship

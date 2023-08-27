@@ -35,7 +35,8 @@ public class PurchaseCosts {
 		costs.put(PurchaseTypes.POWERUP_DOUBLE_WEAPON_CAPACITY, new ResourcePile(250, 1000, 1000));
 		costs.put(PurchaseTypes.POWERUP_EMP_LAUNCHER, new ResourcePile(0, 750, 250));
 		costs.put(PurchaseTypes.POWERUP_SHIELD, new ResourcePile(0,1500,500));
-		
+		costs.put(PurchaseTypes.POWERUP_SET_SHIP_SELF_HEAL, new ResourcePile(0,0,0, 5));
+
 		/*
 		 * The major expense of the drone should be the core. Compete gets lots of cores, but this serves little purpose there.
 		 * The Core plus the drone costs about as much as a ship. I honestly think it might be too expensive, but we can play with the value.

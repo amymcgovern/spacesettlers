@@ -13,7 +13,6 @@ public class ResourcePile {
 
 	/**
 	 * Initialize with zero resources (can be set using setResource)
-	 * @param resources
 	 */
 	public ResourcePile() {
 		super();
@@ -34,8 +33,26 @@ public class ResourcePile {
 		resources.put(ResourceTypes.WATER, water);
 		resources.put(ResourceTypes.FUEL, fuel);
 		resources.put(ResourceTypes.METALS, metals);
+		resources.put(ResourceTypes.STARS, 0);
 	}
-	
+
+	/**
+	 * Initialize resources using the specified amounts
+	 *
+	 * @param water initial water
+	 * @param fuel initial fuel
+	 * @param metals initial metals
+	 * @param stars initial stars
+	 */
+	public ResourcePile(int water, int fuel, int metals, int stars) {
+		super();
+		resources = new HashMap<ResourceTypes, Integer>();
+		resources.put(ResourceTypes.WATER, water);
+		resources.put(ResourceTypes.FUEL, fuel);
+		resources.put(ResourceTypes.METALS, metals);
+		resources.put(ResourceTypes.STARS, stars);
+	}
+
 	/**
 	 * Make a new pile with the same resources as the specified pile
 	 * 
@@ -47,6 +64,7 @@ public class ResourcePile {
 		resources.put(ResourceTypes.WATER, other.getResourceQuantity(ResourceTypes.WATER));
 		resources.put(ResourceTypes.FUEL, other.getResourceQuantity(ResourceTypes.FUEL));
 		resources.put(ResourceTypes.METALS, other.getResourceQuantity(ResourceTypes.METALS));
+		resources.put(ResourceTypes.STARS, other.getResourceQuantity(ResourceTypes.STARS));
 	}
 
 	
@@ -82,7 +100,7 @@ public class ResourcePile {
 	/**
 	 * Adds two resource piles together
 	 * 
-	 * @param newResource new resource to add in
+	 * @param otherPile new resource to add in
 	 */
 	public void add(ResourcePile otherPile) {
 		for (ResourceTypes type : resources.keySet()) {
@@ -97,10 +115,12 @@ public class ResourcePile {
 		resources.put(ResourceTypes.WATER, 0);
 		resources.put(ResourceTypes.FUEL, 0);
 		resources.put(ResourceTypes.METALS, 0);
+		resources.put(ResourceTypes.STARS, 0);
 	}
 
 	/**
-	 * Double the costs (e.g. how much an item costs, which piles are also used for, in addition to storage)
+	 * Double the costs (e.g. how much an item costs, which piles are also used for, in addition to storage).
+	 * Note that stars do not double on purpose since they are used for a different kind of purchase.
 	 */
 	public void doubleCosts() {
 		resources.put(ResourceTypes.WATER, resources.get(ResourceTypes.WATER) * 2);
@@ -162,7 +182,7 @@ public class ResourcePile {
 	
 	public String toString() {
 		String str = "Water: " + resources.get(ResourceTypes.WATER) + " Fuel: " + resources.get(ResourceTypes.FUEL) + 
-				" Metals: " + resources.get(ResourceTypes.METALS);
+				" Metals: " + resources.get(ResourceTypes.METALS) + " Stars: " + resources.get(ResourceTypes.STARS);
 		return str;
 	}
 

@@ -2,10 +2,7 @@ package spacesettlers.simulator;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import spacesettlers.game.AbstractGame;
-import spacesettlers.game.AbstractGameAgent;
-import spacesettlers.game.GameFactory;
-import spacesettlers.game.HeuristicTicTacToe3DGameAgent;
+import spacesettlers.game.*;
 import spacesettlers.objects.AbstractObject;
 import spacesettlers.objects.AiCore;
 import spacesettlers.objects.Asteroid;
@@ -15,6 +12,7 @@ import spacesettlers.objects.Drone;
 import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
 import spacesettlers.objects.Star;
+import spacesettlers.objects.resources.ResourcePile;
 import spacesettlers.objects.weapons.EMP;
 import spacesettlers.objects.weapons.Missile;
 import spacesettlers.utilities.Position;
@@ -209,8 +207,8 @@ public class CollisionHandler {
 	 * 
 	 * Anything else that touches a flag is ignored or just bounces off
 	 *  
-	 * @param object1
-	 * @param object2
+	 * @param flag
+	 * @param ship
 	 */
 	private void flagCollision(Flag flag, Ship ship) {
 		if (flag.getTeamName().equalsIgnoreCase(ship.getTeamName())) {
@@ -251,7 +249,7 @@ public class CollisionHandler {
 
 	/**
 	 * Collide with a missile
-	 * @param object1
+	 * @param missile
 	 * @param object2
 	 */
 	private void missileCollision(Missile missile, AbstractObject object2) {
@@ -372,7 +370,7 @@ public class CollisionHandler {
 
 	/**
 	 * Collide with a EMP
-	 * @param object1
+	 * @param emp
 	 * @param object2
 	 */
 	private void EMPCollision(EMP emp, AbstractObject object2) {
@@ -441,8 +439,8 @@ public class CollisionHandler {
 	/**
 	 * Collide with an AI Core
 	 * 
-	 * @param AiCore
-	 * @param Ship
+	 * @param core
+	 * @param ship
 	 */
 	public void collectCore(AiCore core, Ship ship) {
 		if (ship.getTeamName().equalsIgnoreCase(core.getTeamName())) {
@@ -500,7 +498,7 @@ public class CollisionHandler {
 	/**
 	 * Play a game with a ship and an asteroid
 	 * 
-	 * @return
+	 * @return true if the winner was the ship and false if it was the asteroid (aka simulator)
 	 */
 	public boolean playGame(AbstractGameAgent opponent) {
 		
@@ -511,9 +509,23 @@ public class CollisionHandler {
 			System.out.println("Gaming asteroid reached and proceeding with game");
 		}
 
-		HeuristicTicTacToe3DGameAgent myPlayer = new HeuristicTicTacToe3DGameAgent(0); // arg does nothing, but didn't want to break the api so it needs an int passed in
-		final AbstractGame game = GameFactory.generateNewGame(myPlayer, opponent);
-		
+		// create the heuristic player for the asteroid
+		HeuristicGameAgent myPlayer = new HeuristicGameAgent();
+
+		// choose the game from the gaming factory
+
+		final AbstractGame game = GameFactory.generateNewGame(myPlayer, opponent, ThreadLocalRandom.current());
+
+		// and set the player correctly so we try to win
+		if (game.getPlayer1() == myPlayer) {
+			System.out.println("Setting player 1 to the asteroid");
+			myPlayer.setPlayer(1);
+		} else {
+			System.out.println("Setting player 1 to the ship");
+			myPlayer.setPlayer(2);
+		}
+
+		// play the game
 		while (!game.isGameOver()) {
 			game.playAction(game.getCurrentPlayer().getNextMove(game));
 		}
@@ -533,7 +545,7 @@ public class CollisionHandler {
 	 * Collide with an asteroid
 	 * 
 	 * @param asteroid
-	 * @param object
+	 * @param ship
 	 */
 	public void mineAsteroid(Asteroid asteroid, Ship ship) {
 		// if the asteroid isn't mineable, nothing changes
@@ -613,7 +625,7 @@ public class CollisionHandler {
 		if (object.getClass() == Ship.class) {
 			Ship ship = (Ship) object;
 			ship.incrementStarCount();
-		} 
+		}
 	}
 	
 	/**

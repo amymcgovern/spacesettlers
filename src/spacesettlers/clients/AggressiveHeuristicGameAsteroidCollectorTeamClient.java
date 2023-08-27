@@ -555,7 +555,7 @@ public class AggressiveHeuristicGameAsteroidCollectorTeamClient extends TeamClie
 	@Override
 	public Map<UUID, AbstractGameAgent> getGameSearch(Toroidal2DPhysics space,
 			Set<AbstractActionableObject> actionableObjects) {
-		HeuristicTicTacToe3DGameAgent agent = new HeuristicTicTacToe3DGameAgent(AbstractGame.player1);
+		HeuristicTicTacToe3DGameAgent agent = new HeuristicTicTacToe3DGameAgent();
 		
 		HashMap<UUID, AbstractGameAgent> actions = new HashMap<UUID, AbstractGameAgent>();
 

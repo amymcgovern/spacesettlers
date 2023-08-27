@@ -802,8 +802,6 @@ public final class SpaceSettlersSimulator {
 			}
 		}
 
-		
-
 		updateScores();
 
 		//		for (Team team : teams) {
@@ -999,6 +997,16 @@ public final class SpaceSettlersSimulator {
 				team.updateCost(purchase);
 				System.out.println("Buying a weapons doubler");
 				break;
+
+			case POWERUP_SET_SHIP_SELF_HEAL:
+				// this can only be applied to ships
+				if (purchasingObject instanceof Ship) {
+					purchasingObject.addPowerup(SpaceSettlersPowerupEnum.SET_SHIP_SELF_HEAL);
+					// charge for the purchase
+					team.decrementAvailableResources(team.getCurrentCost(purchase));
+					team.updateCost(purchase);
+					System.out.println("Buying a self healer for the ship");
+				}
 
 			case NOTHING:
 				break;
