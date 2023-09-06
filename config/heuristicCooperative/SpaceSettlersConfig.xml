@@ -35,7 +35,7 @@
 		     which bound where the ships and the base will be created. -->
 		<HighLevelTeamConfig>
 			<teamName>RandomClient</teamName>
-			<configFile>amy-spacesettlersinit.xml</configFile>
+			<configFile>random-clientinit.xml</configFile>
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
 			<teamName>BeaconCollectorTeam</teamName>
@@ -74,7 +74,7 @@
 		<probabilityMineable>0.5</probabilityMineable>
 
 		<!-- The probability that a newly spawned asteroid will be gameable -->
-		<probabilityGameable>1.0</probabilityGameable>
+		<probabilityGameable>0.0</probabilityGameable>
 		
 		<!-- The number of asteroids when the game starts -->
 		<numberInitialAsteroids>40</numberInitialAsteroids>
