@@ -621,7 +621,7 @@ public class CollisionHandler {
 		// stars die when they are touched (respawned elsewhere)
 		star.setAlive(false);
 
-		System.out.println("Star hit an object of type " + object);
+		//System.out.println("Star hit an object of type " + object);
 		if (object.getClass() == Ship.class) {
 			Ship ship = (Ship) object;
 			ship.incrementStarCount();
