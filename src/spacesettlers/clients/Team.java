@@ -553,9 +553,9 @@ public class Team {
 			damageInflicted += ship.getDamageInflicted();
 			starsCollected += ship.getNumStars();
 			totalAsteroidsCollected += ship.getNumMineableAsteroids();
-			totalAsteroidsHit += ship.getNumNonMineableAsteroids();
+			totalAsteroidsHit += ship.getNumCollisions();
 			ship.resetNumMineableAsteroids();
-			ship.resetNumNonMineableAsteroids();
+			ship.resetNumCollisions();
 
 			
 			// check team ships for how much damageInflicted they have received

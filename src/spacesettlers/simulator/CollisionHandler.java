@@ -12,7 +12,6 @@ import spacesettlers.objects.Drone;
 import spacesettlers.objects.Flag;
 import spacesettlers.objects.Ship;
 import spacesettlers.objects.Star;
-import spacesettlers.objects.resources.ResourcePile;
 import spacesettlers.objects.weapons.EMP;
 import spacesettlers.objects.weapons.Missile;
 import spacesettlers.utilities.Position;
@@ -98,11 +97,15 @@ public class CollisionHandler {
 			if (((Asteroid) object1).isMineable()) {
 				mineAsteroid((Asteroid) object1, (Ship) object2);
 				return;
+			} else {
+				countCollision((Ship) object2);
 			}
 		} else if (object2 instanceof Asteroid && object1 instanceof Ship) {
 			if (((Asteroid) object2).isMineable()) {
 				mineAsteroid((Asteroid) object2, (Ship) object1);
 				return;
+			} else {
+				countCollision((Ship) object1);
 			}
 		}
 		
@@ -137,6 +140,11 @@ public class CollisionHandler {
 		} else if (object2 instanceof AiCore && object1 instanceof Asteroid) {
 			damageAiCore((AiCore)object2);
 			//no return because we still want to collide
+		}
+
+		if (object1 instanceof Ship && object2 instanceof  Ship) {
+			countCollision((Ship) object1);
+			countCollision((Ship) object2);
 		}
 		
 		//Handle Drones colliding with ships - herr0861 edit
@@ -219,6 +227,11 @@ public class CollisionHandler {
 			flag.pickupFlag(ship);
 		}
 		
+	}
+
+	private void countCollision(Ship ship) {
+		ship.incrementCollisions();
+		return;
 	}
 	
 	/**
@@ -550,7 +563,7 @@ public class CollisionHandler {
 	public void mineAsteroid(Asteroid asteroid, Ship ship) {
 		// if the asteroid isn't mineable, nothing changes
 		if (!asteroid.isMineable()) {
-			ship.incrementNumNonMineableAsteroids();
+			ship.incrementCollisions();
 			return;
 		}
 		
@@ -662,6 +675,8 @@ public class CollisionHandler {
 				double energyChange = ship.getEnergy() - origEnergy;
 				base.updateEnergy(-(int)energyChange);
 				//System.out.println("ship " + ship.getTeamName() + ship.getId() + " left resourcesAvailable at base and now has resourcesAvailable " + ship.getMoney());
+			} else {
+				countCollision(ship);
 			}
 		} else if(object.getClass() == Drone.class) {//herr0861 edit
 			Drone drone = (Drone) object;

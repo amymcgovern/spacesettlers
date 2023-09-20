@@ -5,7 +5,6 @@ import java.util.LinkedHashSet;
 import java.util.Random;
 
 import spacesettlers.actions.AbstractAction;
-import spacesettlers.clients.Team;
 import spacesettlers.game.AbstractGameAgent;
 import spacesettlers.graphics.ShipGraphics;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
@@ -67,7 +66,7 @@ public class Ship extends AbstractActionableObject {
 	/**
 	 * Number of non-mineable asteroids hit
 	 */
-	int numNonMineableAsteroids;
+	int numCollisions;
 
 	/**
 	 * Last time the respawn counter was used
@@ -134,7 +133,7 @@ public class Ship extends AbstractActionableObject {
 		healthAtAssistTag = 0;
 		healingStepsRemaining = 0;
 		this.numMineableAsteroids = 0;
-		this.numNonMineableAsteroids = 0;
+		this.numCollisions = 0;
 	}
 
 	/**
@@ -173,7 +172,7 @@ public class Ship extends AbstractActionableObject {
 		newShip.assistTagTeam = null;
 		newShip.healingStepsRemaining = healingStepsRemaining;
 		newShip.numMineableAsteroids = numMineableAsteroids;
-		newShip.numNonMineableAsteroids = numNonMineableAsteroids;
+		newShip.numCollisions = numCollisions;
 
 		if (this.killTagTeam != null) {
 			newShip.killTagTeam = killTagTeam.deepCloneNoTags();
@@ -229,7 +228,7 @@ public class Ship extends AbstractActionableObject {
 		newShip.healthAtAssistTag = healthAtAssistTag;
 		newShip.healthAtKillTag = healthAtKillTag;
 		newShip.healingStepsRemaining = healingStepsRemaining;
-		newShip.numNonMineableAsteroids = numNonMineableAsteroids;
+		newShip.numCollisions = numCollisions;
 		newShip.numMineableAsteroids = numMineableAsteroids;
 
 		if (this.flag != null){
@@ -398,19 +397,19 @@ public class Ship extends AbstractActionableObject {
 	 * Reset number of non-mineable asteroids hit by ship
 	 * @author wrmf
 	 */
-	public void resetNumNonMineableAsteroids() { numNonMineableAsteroids = 0; }
+	public void resetNumCollisions() { numCollisions = 0; }
 
 	/***
 	 * Increment number of non-mineable asteroids hit by ship
 	 * @author wrmf
 	 */
-	public void incrementNumNonMineableAsteroids() { numNonMineableAsteroids++; }
+	public void incrementCollisions() { numCollisions++; }
 
 	/***
 	 * Get number of asteroids hit by a ship
 	 * @author wrmf
 	 */
-	public int getNumNonMineableAsteroids() { return this.numNonMineableAsteroids; }
+	public int getNumCollisions() { return this.numCollisions; }
 
 	/**
 	 * A ship drops the flag when it dies

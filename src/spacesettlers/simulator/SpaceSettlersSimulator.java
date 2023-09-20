@@ -1101,7 +1101,8 @@ public final class SpaceSettlersSimulator {
 				int stars = (int) team.getTotalStarsCollected();
 				int beacons = (int) team.getTotalBeaconsCollected();
 				int asteroids = (int) team.getTotalAsteroidsCollected();
-				team.setScore(stars+beacons+asteroids);
+				int asteroidsHit = (int) team.getTotalAsteroidsHit();
+				team.setScore(stars+beacons+asteroids-(0.5*asteroidsHit));
 			}
 		}else if (simConfig.getScoringMethod().equalsIgnoreCase("Cores")) {
 			for (Team team : teams) {
