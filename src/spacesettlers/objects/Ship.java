@@ -60,6 +60,16 @@ public class Ship extends AbstractActionableObject {
 	int numStars;
 
 	/**
+	 * Number of mineable asteroids collected
+	 */
+	int numMineableAsteroids;
+
+	/**
+	 * Number of non-mineable asteroids hit
+	 */
+	int numNonMineableAsteroids;
+
+	/**
 	 * Last time the respawn counter was used
 	 */
 	int lastRespawnCounter;
@@ -123,6 +133,8 @@ public class Ship extends AbstractActionableObject {
 		healthAtKillTag = 0;
 		healthAtAssistTag = 0;
 		healingStepsRemaining = 0;
+		this.numMineableAsteroids = 0;
+		this.numNonMineableAsteroids = 0;
 	}
 
 	/**
@@ -160,6 +172,8 @@ public class Ship extends AbstractActionableObject {
 		newShip.killTagTeam = null;
 		newShip.assistTagTeam = null;
 		newShip.healingStepsRemaining = healingStepsRemaining;
+		newShip.numMineableAsteroids = numMineableAsteroids;
+		newShip.numNonMineableAsteroids = numNonMineableAsteroids;
 
 		if (this.killTagTeam != null) {
 			newShip.killTagTeam = killTagTeam.deepCloneNoTags();
@@ -215,6 +229,8 @@ public class Ship extends AbstractActionableObject {
 		newShip.healthAtAssistTag = healthAtAssistTag;
 		newShip.healthAtKillTag = healthAtKillTag;
 		newShip.healingStepsRemaining = healingStepsRemaining;
+		newShip.numNonMineableAsteroids = numNonMineableAsteroids;
+		newShip.numMineableAsteroids = numMineableAsteroids;
 
 		if (this.flag != null){
 			newShip.flag = flag.deepClone();
@@ -359,7 +375,43 @@ public class Ship extends AbstractActionableObject {
 	public void incrementCores() {
 		super.incrementCores(1);//herr0861 edit
 	}
-	
+
+	/***
+	 * Reset number of mineable asteroids hit by ship
+	 * @author wrmf
+	 */
+	public void resetNumMineableAsteroids() { numMineableAsteroids = 0; }
+
+	/***
+	 * Increment number of mineable asteroids hit by ship
+	 * @author wrmf
+	 */
+	public void incrementNumMineableAsteroids() { numMineableAsteroids++; }
+
+	/***
+	 * Get number of asteroids mined by a ship
+	 * @author wrmf
+	 */
+	public int getNumMineableAsteroids() { return this.numMineableAsteroids; }
+
+	/***
+	 * Reset number of non-mineable asteroids hit by ship
+	 * @author wrmf
+	 */
+	public void resetNumNonMineableAsteroids() { numNonMineableAsteroids = 0; }
+
+	/***
+	 * Increment number of non-mineable asteroids hit by ship
+	 * @author wrmf
+	 */
+	public void incrementNumNonMineableAsteroids() { numNonMineableAsteroids++; }
+
+	/***
+	 * Get number of asteroids hit by a ship
+	 * @author wrmf
+	 */
+	public int getNumNonMineableAsteroids() { return this.numNonMineableAsteroids; }
+
 	/**
 	 * A ship drops the flag when it dies
 	 */

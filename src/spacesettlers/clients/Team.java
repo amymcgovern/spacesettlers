@@ -94,6 +94,16 @@ public class Team {
 	 * The number of AiCores collected by this team
 	 */
 	int totalCoresCollected;
+
+	/**
+	 * The number of mineable asteroids collected by this team
+	 */
+	int totalAsteroidsCollected;
+
+	/***
+	 * The number of non-mineable asteroids collected by this team
+	 */
+	int totalAsteroidsHit;
 	
 	/**
 	 * The number of Stars collected by this team
@@ -180,7 +190,9 @@ public class Team {
 		this.totalDamageInflicted = 0;
 		this.totalDamageReceived = 0;
 		this.totalFlagsCollected = 0;
-		this.totalCoresCollected = 0; 
+		this.totalCoresCollected = 0;
+		this.totalAsteroidsCollected = 0;
+		this.totalAsteroidsHit = 0;
 		executor = null;
 	}
 	
@@ -215,7 +227,9 @@ public class Team {
 		newTeam.totalDamageInflicted = this.totalDamageInflicted;
 		newTeam.totalDamageReceived = this.totalDamageReceived;
 		newTeam.totalFlagsCollected = this.totalFlagsCollected;
-		newTeam.totalCoresCollected = this.totalCoresCollected; 
+		newTeam.totalCoresCollected = this.totalCoresCollected;
+		newTeam.totalAsteroidsCollected = this.totalAsteroidsCollected;
+		newTeam.totalAsteroidsHit = this.totalAsteroidsHit;
 		return newTeam;
 	}
 	
@@ -529,6 +543,7 @@ public class Team {
 		int damagedReceived = 0;
 		int totalAssists = 0;
 		int starsCollected = 0;
+
 		for (Ship ship : teamShips) {
 			beacons += ship.getNumBeacons();
 			hits += ship.getHitsInflicted();
@@ -537,6 +552,11 @@ public class Team {
 			totalAssists += ship.getTotalAssistsInflicted();
 			damageInflicted += ship.getDamageInflicted();
 			starsCollected += ship.getNumStars();
+			totalAsteroidsCollected += ship.getNumMineableAsteroids();
+			totalAsteroidsHit += ship.getNumNonMineableAsteroids();
+			ship.resetNumMineableAsteroids();
+			ship.resetNumNonMineableAsteroids();
+
 			
 			// check team ships for how much damageInflicted they have received
 			damagedReceived += ship.getDamageReceived();
@@ -859,6 +879,36 @@ public class Team {
 	 */
 	public int getTotalCoresCollected() { 
 		return this.totalCoresCollected;
+	}
+
+	/**
+	 * Increases the amount of asteroids collected by the team by the specified amount.
+	 * @param numAsteroids number of asteroids to increment
+	 */
+	public void incrementAsteroidsCollected (int numAsteroids) {
+		this.totalAsteroidsCollected += numAsteroids;
+	}
+
+	/**
+	 * This returns the amount of asteroids that the team has collected as an integer.
+	 * @return int
+	 */
+	public int getTotalAsteroidsCollected() {
+		return this.totalAsteroidsCollected;
+	}
+
+	/**
+	 * Increases the amount of asteroids hit by the team by the specified amount.
+	 * @param numAsteroids number of asteroids to increment
+	 */
+	public void incrementAsteroidsHit (int numAsteroids) { this.totalAsteroidsHit += numAsteroids; }
+
+	/**
+	 * This returns the amount of asteroids that the team has hit as an integer.
+	 * @return int
+	 */
+	public int getTotalAsteroidsHit() {
+		return this.totalAsteroidsHit;
 	}
 
 	/**

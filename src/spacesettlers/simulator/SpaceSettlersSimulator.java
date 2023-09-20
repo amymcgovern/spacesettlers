@@ -1087,19 +1087,23 @@ public final class SpaceSettlersSimulator {
 				double cores = team.getTotalCoresCollected();
 				team.setScore(kills - deaths + cores);			
 			}
-				
-			
 		} else if (simConfig.getScoringMethod().equalsIgnoreCase("KillsPlusAssistsMinusDeathsPlusCores")) {
 			// revised from original kill death ratio to get rid of suicide issues (by tagging deaths)
 			for (Team team : teams) {
-				// adding one to the denominator to handle divide by zero issues
 				double kills = (double) team.getTotalKillsInflicted();
 				double assists = (double) team.getTotalAssistsInflicted();
 				double deaths = team.getTotalKillsReceived();
 				double cores = team.getTotalCoresCollected();
 				team.setScore(kills + (0.5*assists) - deaths + cores);
 			}
-		} else if (simConfig.getScoringMethod().equalsIgnoreCase("Cores")) {
+		} else if (simConfig.getScoringMethod().equalsIgnoreCase("StarsPlusBeaconsPlusAsteroids")) {
+			for (Team team : teams) {
+				int stars = (int) team.getTotalStarsCollected();
+				int beacons = (int) team.getTotalBeaconsCollected();
+				int asteroids = (int) team.getTotalAsteroidsCollected();
+				team.setScore(stars+beacons+asteroids);
+			}
+		}else if (simConfig.getScoringMethod().equalsIgnoreCase("Cores")) {
 			for (Team team : teams) {
 				team.setScore(team.getTotalCoresCollected());				
 			}
