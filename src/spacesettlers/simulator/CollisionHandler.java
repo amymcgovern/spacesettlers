@@ -550,6 +550,7 @@ public class CollisionHandler {
 	public void mineAsteroid(Asteroid asteroid, Ship ship) {
 		// if the asteroid isn't mineable, nothing changes
 		if (!asteroid.isMineable()) {
+			ship.incrementNumNonMineableAsteroids();
 			return;
 		}
 		
@@ -558,10 +559,12 @@ public class CollisionHandler {
 			boolean win = playGame(ship.getCurrentGameAgent());
 			if (win) {
 				// if a ship ran into it, it "mines" the asteroid
+				ship.incrementNumMineableAsteroids();
 				ship.addResources(asteroid.getResources());
 			}
 		} else {
 			// if a ship ran into it, it "mines" the asteroid
+			ship.incrementNumMineableAsteroids();
 			ship.addResources(asteroid.getResources());
 		}
 

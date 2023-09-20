@@ -59,7 +59,19 @@ abstract public class AbstractObject {
 	 * Number of cores this ship or base has collected
 	 */
 	protected int numCores;
-	
+
+	/**
+	 * Number of mineable asteroids the ship has collected
+	 * @author wrmf
+	 */
+	protected int numMineableAsteroids;
+
+	/**
+	 * Number of non-mineable asteroids the ship has hit
+	 * @author wrmf
+	 */
+	protected int numNonMineableAsteroids;
+
 	/**
 	 * The graphics for this object in the GUI
 	 */
@@ -93,6 +105,8 @@ abstract public class AbstractObject {
 		this.numFlags = 0;
 		this.respawn = true;
 		this.numCores = 0;
+		this.numMineableAsteroids = 0;
+		this.numNonMineableAsteroids = 0;
 	}
 
 	/**
@@ -108,6 +122,8 @@ abstract public class AbstractObject {
 		this.numFlags = 0;
 		this.respawn = true;
 		this.numCores = 0;
+		this.numNonMineableAsteroids = 0;
+		this.numMineableAsteroids = 0;
 	}
 
 	
@@ -344,5 +360,19 @@ abstract public class AbstractObject {
 	public void incrementCores(int number) {
 		numCores+= number;
 	}
+
+	/***
+	 * Increment number of mineable asteroids
+	 * @param number
+	 * @wrmf
+	 */
+	public void incrementNumMineableCores(int number) { numMineableAsteroids += number; }
+
+	/**
+	 * Increment number of non-mineable asteroids
+	 * @param number
+	 * @author wrmf
+	 */
+	public void incrementNumNonMineableCores(int number) { numNonMineableAsteroids += number; }
 
 }
