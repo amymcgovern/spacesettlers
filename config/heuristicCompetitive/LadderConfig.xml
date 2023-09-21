@@ -24,7 +24,7 @@
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
 			<teamName>CoreCollectorTeam</teamName>
-			<configFile>core-clientinit.xml</configFile>
+			<configFile>aggressive-heuristic-core-clientinit.xml</configFile>
 			<initialRegionULX>724</initialRegionULX>
 			<initialRegionULY>300</initialRegionULY>
 			<initialRegionLRX>1024</initialRegionLRX>
@@ -37,11 +37,11 @@
 	<variableTeams>
 		<HighLevelTeamConfig>
 			<teamName>HeuristicMinerTeam</teamName>
-			<configFile>aggressive-heuristic-clientinit.xml</configFile>
+			<configFile>core-clientinit.xml</configFile>
 		</HighLevelTeamConfig>
 		<HighLevelTeamConfig>
 			<teamName>MyTeam</teamName>
-			<configFile>spacesettlersinit.xml</configFile>
+			<configFile>donothing-clientinit.xml</configFile>
 		</HighLevelTeamConfig>
 	</variableTeams>
 

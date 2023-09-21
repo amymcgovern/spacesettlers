@@ -116,11 +116,11 @@ public class Toroidal2DPhysics {
 	public static final double MAX_ANGULAR_VELOCITY = Math.PI;
 
 	/**
-	 * Energy penalty is used for decreasing ship energy at every step based on intertia
+	 * Energy penalty is used for decreasing ship energy at every step based on inertia
 	 * In the past, it has been
 	 * public static final double ENERGY_PENALTY = 0.0005;
 	 */
-	public static final double ENERGY_PENALTY = 0.0005;
+	public static final double ENERGY_PENALTY = 0.0008;
 
 	/**
 	 * Handles collisions between spacewar objects
