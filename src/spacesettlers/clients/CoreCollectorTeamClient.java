@@ -133,7 +133,7 @@ public class CoreCollectorTeamClient extends TeamClient {
 			}
 
 			double dist = space.findShortestDistance(ship.getPosition(), core.getPosition());
-			if (dist < bestDistance) {
+			if (dist < bestDistance && !core.getTeamName().equals(ship.getTeamName())) {
 				bestDistance = dist;
 				closestCore = core;
 			}

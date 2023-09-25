@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -163,10 +164,14 @@ public class PacifistHeuristicGameAsteroidCollectorTeamClient extends TeamClient
 		int bestMoney = Integer.MIN_VALUE;
 		Asteroid bestAsteroid = null;
 		double minDistance = Double.MAX_VALUE;
+		HashSet<AbstractObject> obstructions = new HashSet<>(); //List of obstructions that block edges
+		obstructions.addAll(getNonMineableAsteroids(space)); //Add non-mineable asteroids to obstructions
+		obstructions.addAll(findNonTeamBases(space, teamName));
+
 
 		for (Asteroid asteroid : asteroids) {
 			if (!asteroidToShipMap.containsKey(asteroid.getId())) {
-				if (asteroid.isMineable() && asteroid.getResources().getTotal() > bestMoney && asteroid.isGameable()) {
+				if (asteroid.isMineable() && asteroid.getResources().getTotal() > bestMoney && asteroid.isGameable() && space.isPathClearOfObstructions(ship.getPosition(), asteroid.getPosition(), obstructions, 30)) {
 					double dist = space.findShortestDistance(asteroid.getPosition(), ship.getPosition());
 					if (dist < minDistance) {
 						bestMoney = asteroid.getResources().getTotal();
@@ -412,6 +417,43 @@ public class PacifistHeuristicGameAsteroidCollectorTeamClient extends TeamClient
 			actions.put(actionable.getId(), agent);
 		} 
 		return actions;
+	}
+
+	/***
+	 * Find bases that do not belong to your team
+	 * @param space space to search
+	 * @param teamName name of team to compare against
+	 * @return list of non-team bases as set
+	 */
+	public Set<Base> findNonTeamBases(Toroidal2DPhysics space, String teamName) {
+		Set<Base> bases = space.getBases(); //Base set of all bases
+		Set<Base> bases2 = new HashSet<>(); //Solution set
+
+		for(Base base : bases) { //Iterate through all bases
+			if(!base.getTeamName().equals(teamName)) { //Check if it's our base
+				bases2.add(base); //Add if not ours
+			}
+		}
+
+		return bases2; //Return set of all non-team bases
+	}
+
+	/***
+	 * Get non-mineable asteroid in space
+	 * @param space space to check
+	 * @return set of non-mineable asteroids
+	 */
+	public Set<Asteroid> getNonMineableAsteroids(Toroidal2DPhysics space) {
+		Set<Asteroid> asteroids = space.getAsteroids(); //Base set of all asteroids
+		Set<Asteroid> asteroids2 = new HashSet<>(); //Solution set to return
+
+		for(Asteroid asteroid : asteroids) {
+			if(!asteroid.isMineable()) {
+				asteroids2.add(asteroid); //Add non-mineable asteroids to solution
+			}
+		}
+
+		return asteroids2; //Return solution list
 	}
 
 }

@@ -21,7 +21,11 @@ public class TeamRecord {
 	int totalResources;
 	
 	double averageResources;
-	
+
+	int totalStars;
+
+	double averageStars;
+
 	int totalKills, totalDeaths, totalAssists, totalCores;
 	
 	double averageKills, averageDeaths, averageAssists, averageCores;
@@ -58,6 +62,8 @@ public class TeamRecord {
 		averageKills = 0;
 		averageAssists = 0;
 		averageCores = 0;
+		totalStars = 0;
+		averageStars = 0;
 	}
 
 	@Override
@@ -113,6 +119,9 @@ public class TeamRecord {
 		
 		totalCores += team.getTotalCoresCollected();
 		averageCores = (double) totalCores / numGames;
+
+		totalStars += team.getTotalStarsCollected();
+		averageStars = (double) totalStars / numGames;
 	}
 
 	public double getAverageScore() {
@@ -151,12 +160,17 @@ public class TeamRecord {
 		return averageCores;
 	}
 
+	public double getAverageStars() {
+		return averageStars;
+	}
+
 	@Override
 	public String toString() {
 		return "TeamRecord [numGames=" + numGames + ", totalScore=" + totalScore + ", averageScore=" + averageScore
 				+ ", totalBeacons=" + totalBeacons + ", averageBeacons=" + averageBeacons + ", totalResources="
 				+ totalResources + ", averageResources=" + averageResources + ", totalKills=" + totalKills
-				+ ", totalDeaths=" + totalDeaths + ", averageKills=" + averageKills + ", averageDeaths=" + averageDeaths
+				+ ", totalDeaths=" + totalDeaths + ", averageKills=" + averageKills +
+				", averageDeaths=" + averageDeaths + ", totalStars" + totalStars + ", averageStars=" + averageStars
 				+ ", teamName=" + teamName + "]";
 	}
 
