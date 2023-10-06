@@ -11,9 +11,7 @@ import spacesettlers.actions.DoNothingAction;
 import spacesettlers.actions.MoveToObjectAction;
 import spacesettlers.actions.PurchaseCosts;
 import spacesettlers.actions.PurchaseTypes;
-import spacesettlers.game.AbstractGame;
-import spacesettlers.game.AbstractGameAgent;
-import spacesettlers.game.HeuristicTicTacToe3DGameAgent;
+import spacesettlers.game.*;
 import spacesettlers.graphics.SpacewarGraphics;
 import spacesettlers.objects.AbstractActionableObject;
 import spacesettlers.objects.AbstractObject;
@@ -555,8 +553,8 @@ public class AggressiveHeuristicGameAsteroidCollectorTeamClient extends TeamClie
 	@Override
 	public Map<UUID, AbstractGameAgent> getGameSearch(Toroidal2DPhysics space,
 			Set<AbstractActionableObject> actionableObjects) {
-		HeuristicTicTacToe3DGameAgent agent = new HeuristicTicTacToe3DGameAgent();
-		
+		HeuristicGameAgent agent = new HeuristicGameAgent();
+
 		HashMap<UUID, AbstractGameAgent> actions = new HashMap<UUID, AbstractGameAgent>();
 
 		// loop through each ship
