@@ -20,7 +20,7 @@ public class TicTacToe2D extends AbstractGame {
 	public TicTacToe2D(final AbstractGameAgent lhs_player, final AbstractGameAgent rhs_player) {
 		myBoard = new TicTacToe2DBoard();
 		random = new Random();
-		isPlayer1Turn = random.nextBoolean();
+		isPlayer1Turn = true;
 
 		if (random.nextBoolean()) {
 			(this.player1 = lhs_player).setPlayer(AbstractGame.player1);
