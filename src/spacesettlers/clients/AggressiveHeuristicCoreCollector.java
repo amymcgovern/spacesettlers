@@ -2,6 +2,7 @@ package spacesettlers.clients;
 
 import spacesettlers.actions.*;
 import spacesettlers.game.AbstractGameAgent;
+import spacesettlers.game.HeuristicGameAgent;
 import spacesettlers.game.HeuristicTicTacToe3DGameAgent;
 import spacesettlers.graphics.SpacewarGraphics;
 import spacesettlers.objects.*;
@@ -467,14 +468,14 @@ public class AggressiveHeuristicCoreCollector extends TeamClient {
 	@Override
 	public Map<UUID, AbstractGameAgent> getGameSearch(Toroidal2DPhysics space,
 			Set<AbstractActionableObject> actionableObjects) {
-		HeuristicTicTacToe3DGameAgent agent = new HeuristicTicTacToe3DGameAgent();
-		
+		HeuristicGameAgent agent = new HeuristicGameAgent();
+
 		HashMap<UUID, AbstractGameAgent> actions = new HashMap<UUID, AbstractGameAgent>();
 
 		// loop through each ship
 		for (AbstractObject actionable :  actionableObjects) {
 			actions.put(actionable.getId(), agent);
-		} 
+		}
 		return actions;
 	}
 
