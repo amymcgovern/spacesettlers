@@ -104,7 +104,7 @@
                   fork="true"
                   dir="src"
                       classpath="${dist}/spacesettlers.jar">
-	        <jvmarg value="-Xmx10G" />
+	        <jvmarg value="-Xmx32G" />
                     <arg line="--graphics false "/>
 		<arg line="--configPath ../config/heuristicCooperative/"/>
                 <arg line="--simulatorConfigFile SpaceSettlersConfig.xml"/>
@@ -120,7 +120,7 @@
                   fork="true"
                   dir="src"
                       classpath="${dist}/spacesettlers.jar">
-	        <jvmarg value="-Xmx10G" />
+	        <jvmarg value="-Xmx32G" />
                     <arg line="--graphics false "/>
 		<arg line="--configPath ../config/heuristicCompetitive/"/>
                 <arg line="--simulatorConfigFile SpaceSettlersConfig.xml"/>
