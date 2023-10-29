@@ -514,7 +514,7 @@ public class CollisionHandler {
 	 * @return true if the winner was the ship and false if it was the asteroid (aka simulator)
 	 */
 	public boolean playGame(AbstractGameAgent opponent) {
-		
+		// break if there is no opponent specified
 		if (opponent == null) {
 			System.out.println("Gaming asteroid reached and no player specified by opponent: Winner is asteroid.");
 			return false;
@@ -526,7 +526,6 @@ public class CollisionHandler {
 		HeuristicGameAgent myPlayer = new HeuristicGameAgent();
 
 		// choose the game from the gaming factory
-
 		final AbstractGame game = GameFactory.generateNewGame(myPlayer, opponent, ThreadLocalRandom.current());
 
 		// and set the player correctly so we try to win

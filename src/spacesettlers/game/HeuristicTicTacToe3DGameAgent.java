@@ -21,7 +21,8 @@ public class HeuristicTicTacToe3DGameAgent extends AbstractGameAgent {
 	public AbstractGameAction getNextMove(AbstractGame game) {
 		TicTacToe3DBoard board = (TicTacToe3DBoard) game.getBoard();
 		//System.out.println("Heuristic agent current state of the board is \n" + board);
-		
+		//System.out.println("Player is " + this.getPlayer());
+
 		// check to see if the center is free
 		if (board.board[1][1][1] == board.empty) {
 			return new TicTacToe3DAction(1, 1, 1);
