@@ -15,51 +15,62 @@ import spacesettlers.utilities.Vector2D;
 public class LineGraphics extends SpacewarGraphics {
 	public static final Color DEFAULT_LINE_COLOR = Color.CYAN;
 	Position startPoint, endPoint;
+	Vector2D startToFinish;
 	Color lineColor;
 	float strokeWidth;
-	
+
 	/**
 	 * Draw a line segment from the starting point to the ending point
 	 * 
-	 * @param startPoint starting point
-	 * @param endPoint end point
+	 * @param startPoint    starting point
+	 * @param endPoint      end point
 	 * @param startToFinish vector pointing from start to end
 	 */
-    public LineGraphics(Position startPoint, Position endPoint, Vector2D startToFinish) {
-    	// height/width for the line segment comes from the vector
-    	super((int)Math.abs(startToFinish.getXValue()), (int)Math.abs(startToFinish.getYValue()));
-    	
-    	double regularDistance = Math.sqrt((startPoint.getX() - endPoint.getX()) * (startPoint.getX() - endPoint.getX()) +
-    			(startPoint.getY() - endPoint.getY()) * (startPoint.getY() - endPoint.getY()));
-    	//System.out.println("regular distance is " + regularDistance + " and shortest is " + startToFinish.getMagnitude());
-    	
-    	double newEndX = startPoint.getX() + startToFinish.getXValue();
-    	double newEndY = startPoint.getY() + startToFinish.getYValue();
-    	
-    	this.startPoint = startPoint;
-    	this.endPoint = new Position(newEndX, newEndY);
-    	
-    	lineColor = DEFAULT_LINE_COLOR;
-		strokeWidth = 2f;
-    }
+	public LineGraphics(Position startPoint, Position endPoint, Vector2D startToFinish) {
+		// height/width for the line segment comes from the vector
+		super((int) Math.abs(startToFinish.getYValue()), (int) Math.abs(startToFinish.getXValue()));
 
-	
-	@Override
-	public Position getActualLocation() {
-		return startPoint;
+		this.startToFinish = startToFinish;
+
+		double newEndX = startPoint.getX() + startToFinish.getXValue();
+		double newEndY = startPoint.getY() + startToFinish.getYValue();
+
+		this.startPoint = startPoint;
+		this.endPoint = new Position(newEndX, newEndY);
+
+		lineColor = DEFAULT_LINE_COLOR;
+		strokeWidth = 2f;
 	}
 
+	@Override
+	/*
+	 * Returns the midpoint (center) of the line, used for toroidal wraparound.
+	 */
+	public Position getActualLocation() {
+		double x = (startPoint.getX() + endPoint.getX()) / 2;
+		double y = (startPoint.getY() + endPoint.getY()) / 2;
+
+		return new Position(x, y);
+	}
+
+	@Override
 	/**
-	 * This handles the toroidal space wrapping internally.  It probably shouldn't.
-	 * 
-	 * TODO: Fix it so it does the wrapping externally like the other graphics (but it is harder here)
+	 * Draws the line using the object's drawLocation and the startToFinish vector
 	 */
 	public void draw(Graphics2D graphics) {
 		graphics.setColor(lineColor);
 		graphics.setStroke(new BasicStroke(strokeWidth));
-		
-		graphics.drawLine((int)startPoint.getX(), (int)startPoint.getY(), 
-				(int)endPoint.getX(), (int)endPoint.getY());
+
+		// Get the start and end point of the line
+		// using the midpoint (drawLocation) and vector
+		double startX = drawLocation.getX() - 0.5 * startToFinish.getXValue();
+		double startY = drawLocation.getY() - 0.5 * startToFinish.getYValue();
+		double endX = drawLocation.getX() + 0.5 * startToFinish.getXValue();
+		double endY = drawLocation.getY() + 0.5 * startToFinish.getYValue();
+
+		graphics.drawLine(
+				(int) startX, (int) startY,
+				(int) endX, (int) endY);
 	}
 
 	/**
@@ -69,25 +80,22 @@ public class LineGraphics extends SpacewarGraphics {
 		return true;
 	}
 
-
 	/**
 	 * Change the line color
+	 * 
 	 * @param lineColor
 	 */
 	public void setLineColor(Color lineColor) {
 		this.lineColor = lineColor;
 	}
 
-
 	/**
 	 * Set the width of the line
+	 * 
 	 * @param strokeWidth
 	 */
 	public void setStrokeWidth(float strokeWidth) {
 		this.strokeWidth = strokeWidth;
 	}
-	
-	
-	
 
 }
