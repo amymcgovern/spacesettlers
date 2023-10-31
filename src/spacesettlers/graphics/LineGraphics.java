@@ -42,15 +42,14 @@ public class LineGraphics extends SpacewarGraphics {
 	}
 
 	/**
-	 * WARNING: OBSOLETE CONSTRUCTOR. Consider using an alternative
+	 * WARNING: OBSOLETE CONSTRUCTOR: Consider using an alternative.
 	 * Draw a line segment from the starting point to the ending point
 	 * 
 	 * @param startPoint    starting point
-	 * @param endPoint      end point (UNUSED BY CONSTRUCTOR)
+	 * @param endPoint      UNUSED BY CONSTRUCTOR
 	 * @param startToFinish vector pointing from start to end
 	 */
 	public LineGraphics(Position startPoint, Position endPoint, Vector2D startToFinish) {
-		// Height/width for the line segment comes from the vector
 		this(startPoint, startToFinish);
 	}
 
