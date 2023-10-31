@@ -20,26 +20,38 @@ public class LineGraphics extends SpacewarGraphics {
 	float strokeWidth;
 
 	/**
-	 * Draw a line segment from the starting point to the ending point
+	 * Draw a ray from the starting point with dimensions of the vector
 	 * 
 	 * @param startPoint    starting point
-	 * @param endPoint      end point
 	 * @param startToFinish vector pointing from start to end
 	 */
-	public LineGraphics(Position startPoint, Position endPoint, Vector2D startToFinish) {
-		// height/width for the line segment comes from the vector
+	public LineGraphics(Position startPoint, Vector2D startToFinish) {
+		// Height/width for the line segment comes from the vector
 		super((int) Math.abs(startToFinish.getYValue()), (int) Math.abs(startToFinish.getXValue()));
+
+		this.lineColor = DEFAULT_LINE_COLOR;
+		this.strokeWidth = 2f;
 
 		this.startToFinish = startToFinish;
 
-		double newEndX = startPoint.getX() + startToFinish.getXValue();
-		double newEndY = startPoint.getY() + startToFinish.getYValue();
+		double endX = startPoint.getX() + startToFinish.getXValue();
+		double endY = startPoint.getY() + startToFinish.getYValue();
 
 		this.startPoint = startPoint;
-		this.endPoint = new Position(newEndX, newEndY);
+		this.endPoint = new Position(endX, endY);
+	}
 
-		lineColor = DEFAULT_LINE_COLOR;
-		strokeWidth = 2f;
+	/**
+	 * WARNING: OBSOLETE CONSTRUCTOR. Consider using an alternative
+	 * Draw a line segment from the starting point to the ending point
+	 * 
+	 * @param startPoint    starting point
+	 * @param endPoint      end point (UNUSED BY CONSTRUCTOR)
+	 * @param startToFinish vector pointing from start to end
+	 */
+	public LineGraphics(Position startPoint, Position endPoint, Vector2D startToFinish) {
+		// Height/width for the line segment comes from the vector
+		this(startPoint, startToFinish);
 	}
 
 	@Override
