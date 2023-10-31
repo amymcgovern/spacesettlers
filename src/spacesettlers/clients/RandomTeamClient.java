@@ -14,6 +14,7 @@ import spacesettlers.actions.PurchaseCosts;
 import spacesettlers.actions.PurchaseTypes;
 import spacesettlers.game.AbstractGameAgent;
 import spacesettlers.graphics.CircleGraphics;
+import spacesettlers.graphics.LineGraphics;
 import spacesettlers.graphics.SpacewarGraphics;
 import spacesettlers.graphics.TargetGraphics;
 import spacesettlers.objects.AbstractActionableObject;
@@ -35,6 +36,7 @@ public class RandomTeamClient extends TeamClient {
 	HashSet<SpacewarGraphics> graphics;
 	boolean fired = false;
 	Position currentTarget;
+	LineGraphics lineGraphic;
 	
 	public static int RANDOM_MOVE_RADIUS = 200;
 	public static double SHOOT_PROBABILITY = 0.1;
@@ -69,6 +71,8 @@ public class RandomTeamClient extends TeamClient {
 					Position newGoal = space.getRandomFreeLocationInRegion(random, Ship.SHIP_RADIUS, (int) currentPosition.getX(), 
 							(int) currentPosition.getY(), RANDOM_MOVE_RADIUS);
 					currentTarget = newGoal;
+					lineGraphic = new LineGraphics(currentPosition, space.findShortestDistanceVector(currentPosition, newGoal));
+					lineGraphic.setLineColor(getTeamColor());
 					MoveAction newAction = null;
 					newAction = new MoveAction(space, currentPosition, newGoal);
 					//System.out.println("Ship is at " + currentPosition + " and goal is " + newGoal);
@@ -100,6 +104,9 @@ public class RandomTeamClient extends TeamClient {
 		if (currentTarget != null) {
 			SpacewarGraphics graphic = new TargetGraphics(20, getTeamColor(), this.currentTarget);
 			newGraphics.add(graphic);
+			if (lineGraphic != null) {
+				newGraphics.add(lineGraphic);
+			}
 		}
 		return newGraphics;
 	}
