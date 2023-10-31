@@ -15,7 +15,7 @@
 	<randomSeed>0</randomSeed>
 
 	<!-- Scoring mechanism used for this game: Can be Resources, Beacons, ... (more as we add them) -->
-	<scoringMethod>StarsPlusBeaconsPlusAsteroids</scoringMethod>
+	<scoringMethod>Resources</scoringMethod>
 
 	<!-- Specify the number of the beacons.  The locations are initialized randomly -->
 	<numBeacons>6</numBeacons>
@@ -24,7 +24,7 @@
 	<numStars>6</numStars>
 
 	<!-- Specify the maximum number of ships in a team -->
-	<maximumShipsPerTeam>1</maximumShipsPerTeam>
+	<maximumShipsPerTeam>5</maximumShipsPerTeam>
 	<maximumInitialShipsPerTeam>1</maximumInitialShipsPerTeam>
 	
 	<!-- Specify any controllable clients in the simulator (this can include heuristics).  
@@ -74,7 +74,7 @@
 		<probabilityMineable>0.5</probabilityMineable>
 
 		<!-- The probability that a newly spawned asteroid will be gameable -->
-		<probabilityGameable>0.0</probabilityGameable>
+		<probabilityGameable>0.25</probabilityGameable>
 		
 		<!-- The number of asteroids when the game starts -->
 		<numberInitialAsteroids>40</numberInitialAsteroids>

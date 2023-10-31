@@ -22,9 +22,11 @@ public class HeuristicGameAgent extends AbstractGameAgent{
     public AbstractGameAction getNextMove(AbstractGame game) {
         if (game.getClass() == TicTacToe2D.class) {
             //System.out.println("Getting a move for the 2D game\n");
+            heuristic2DTTTPlayer.setPlayer(this.getPlayer());
             return heuristic2DTTTPlayer.getNextMove(game);
         } else {
             //System.out.println("Getting a move for the 3D game\n");
+            heuristic3DTTTPlayer.setPlayer(this.getPlayer());
             return heuristic3DTTTPlayer.getNextMove(game);
         }
     }

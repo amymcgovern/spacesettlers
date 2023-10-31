@@ -15,7 +15,7 @@
 	<randomSeed>0</randomSeed>
 
 	<!-- Scoring mechanism used for this game: Can be Resources, Beacons, ... (more as we add them) -->
-	<scoringMethod>KillsPlusAssistsMinusDeathsPlusCores</scoringMethod>
+	<scoringMethod>ResourcesAndCores</scoringMethod>
 
 	<!-- Specify the number of the beacons.  The locations are initialized randomly -->
 	<numBeacons>6</numBeacons>
@@ -88,7 +88,7 @@
 		<probabilityMineable>0.5</probabilityMineable>
 
 		<!-- The probability that a newly spawned asteroid will be gameable -->
-		<probabilityGameable>0.0</probabilityGameable>
+		<probabilityGameable>0.75</probabilityGameable>
 		
 		<!-- The number of asteroids when the game starts -->
 		<numberInitialAsteroids>40</numberInitialAsteroids>
