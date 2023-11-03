@@ -347,6 +347,13 @@ abstract public class AbstractObject {
 	}
 
 	/**
+	 * Decrement the number of flags held by this object
+	 */
+	public void decrementFlags() {
+		numFlags--;
+	}
+
+	/**
 	 * Get the total number of cores owned by this object (ship or base)
 	 * @return
 	 */
