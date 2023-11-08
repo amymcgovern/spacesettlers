@@ -254,6 +254,7 @@ public class CollisionHandler {
 			if (ship.isCarryingFlag()) {
 				drone.addFlag(ship.getFlag());
 				ship.depositFlag(); //make the ship drop the flag
+				ship.removeFlag();
 				drone.getFlag().pickupFlag(drone); //the pickup method in the flag will automatically cause it to not be carried by the ship when the drone has it
 			}
 		
@@ -662,6 +663,7 @@ public class CollisionHandler {
 				if (ship.isCarryingFlag()) {
 					base.addFlag(ship.getFlag());
 					ship.depositFlag();
+					ship.removeFlag();
 				}
 
 				// deposit any AI Cores
@@ -686,6 +688,7 @@ public class CollisionHandler {
 				if (drone.isCarryingFlag()) {
 					base.addFlag(drone.getFlag());
 					drone.depositFlag();
+					drone.removeFlag();
 				}
 				
 				//deposit AI Cores
