@@ -19,7 +19,10 @@
 
 	<!-- Specify the number of the beacons.  The locations are initialized randomly -->
 	<numBeacons>5</numBeacons>
-	
+
+	<!-- Specify the number of the stars.  The locations are initialized randomly -->
+	<numStars>6</numStars>
+
 	<!-- Specify the maximum number of ships in a team -->
 	<maximumShipsPerTeam>10</maximumShipsPerTeam>
 	<maximumInitialShipsPerTeam>3</maximumInitialShipsPerTeam>
@@ -473,7 +476,7 @@
 		<FixedAsteroidConfig>
 			<x>0</x>
 			<y>0</y>
-			<radius>75</radius>
+			<radius>25</radius>
 			<isMoveable>True</isMoveable>
 			<isMineable>False</isMineable>
 			<maxInitialVelocity>10</maxInitialVelocity>
@@ -481,7 +484,7 @@
 		<FixedAsteroidConfig>
 			<x>800</x>
 			<y>0</y>
-			<radius>70</radius>
+			<radius>25</radius>
 			<isMoveable>True</isMoveable>
 			<isMineable>False</isMineable>
 			<maxInitialVelocity>10</maxInitialVelocity>
@@ -489,7 +492,7 @@
 		<FixedAsteroidConfig>
 			<x>0</x>
 			<y>540</y>
-			<radius>60</radius>
+			<radius>25</radius>
 			<isMoveable>True</isMoveable>
 			<isMineable>False</isMineable>
 			<maxInitialVelocity>10</maxInitialVelocity>
@@ -497,7 +500,7 @@
 		<FixedAsteroidConfig>
 			<x>250</x>
 			<y>0</y>
-			<radius>50</radius>
+			<radius>20</radius>
 			<isMoveable>True</isMoveable>
 			<isMineable>False</isMineable>
 			<maxInitialVelocity>10</maxInitialVelocity>
@@ -505,7 +508,7 @@
 		<FixedAsteroidConfig>
 			<x>1250</x>
 			<y>0</y>
-			<radius>50</radius>
+			<radius>20</radius>
 			<isMoveable>True</isMoveable>
 			<isMineable>False</isMineable>
 			<maxInitialVelocity>10</maxInitialVelocity>
