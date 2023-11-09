@@ -138,7 +138,11 @@ public class ObjectInfoPanel extends JPanel {
 		} else if (selectedObject.getClass() == Star.class) {
 			Star star = (Star) selectedObject;
 			name = "Star";
+		}else if (selectedObject.getClass() == Drone.class) {
+			Drone drone = (Drone) selectedObject;
+			name = "Drone for " + drone.getTeamName();
 		}
+
 		objectName.setText(name);
 		
 		innerPanel.updateData(simulator);

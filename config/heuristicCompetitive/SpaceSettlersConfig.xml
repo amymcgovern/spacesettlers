@@ -50,14 +50,6 @@
 			<teamName>HeuristicMinerTeam</teamName>
 			<configFile>aggressive-heuristic-clientinit.xml</configFile>
 		</HighLevelTeamConfig>
-		<HighLevelTeamConfig>
-			<teamName>DoNothingTeam</teamName>
-			<configFile>donothing-clientinit.xml</configFile>
-		</HighLevelTeamConfig>		
-		<HighLevelTeamConfig>
-			<teamName>CoreCollectorTeam</teamName>
-			<configFile>core-clientinit.xml</configFile>
-		</HighLevelTeamConfig>
 	</teams>
 
 	<!-- Each team needs a base.  Optionally, you can initialize the location of the base -->
@@ -70,12 +62,6 @@
 		</BaseConfig>
 		<BaseConfig>
 			<teamName>HeuristicMinerTeam</teamName>
-		</BaseConfig>
-		<BaseConfig>
-			<teamName>DoNothingTeam</teamName>
-		</BaseConfig>
-		<BaseConfig>
-			<teamName>CoreCollectorTeam</teamName>
 		</BaseConfig>
 		<BaseConfig>
 			<teamName>HeuristicCoreTeam</teamName>

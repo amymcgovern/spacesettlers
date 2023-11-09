@@ -272,7 +272,16 @@ public class Ship extends AbstractActionableObject {
 		this.flag = flag;
 		this.carryingFlag = true;
 		this.incrementFlags();
-		//System.out.println("Ship " + this + " has a flag now");
+	}
+
+	/**
+	 * Add the flag to the ship's inventory
+	 *
+	 */
+	public void removeFlag() {
+		this.flag = null;
+		this.carryingFlag = false;
+		this.decrementFlags();
 	}
 	
 	/**
@@ -328,6 +337,7 @@ public class Ship extends AbstractActionableObject {
 		resetPowerups();
 		if (carryingFlag) {
 			dropFlag(rand, space);
+			removeFlag();
 		}
 		resetAiCores(); 
 		super.setAlive(false);

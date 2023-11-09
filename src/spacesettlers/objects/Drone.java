@@ -165,6 +165,17 @@ public class Drone extends AbstractActionableObject {
 		this.carryingFlag = true;
 		this.incrementFlags();
 	}
+
+	/**
+	 * Add the flag to the drone's inventory
+	 *
+	 * @param flag
+	 */
+	public void removeFlag() {
+		this.flag = null;
+		this.carryingFlag = false;
+		this.decrementFlags();
+	}
 	
 	/**
 	 * Get the color of this team
@@ -194,6 +205,7 @@ public class Drone extends AbstractActionableObject {
 		resetAiCores(); 
 		if (carryingFlag) {
 			dropFlag(rand, space);
+			removeFlag();
 		}
 		super.setAlive(false);
 
