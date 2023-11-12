@@ -166,7 +166,7 @@ public class PacifistHeuristicGameAsteroidCollectorTeamClient extends TeamClient
 		double minDistance = Double.MAX_VALUE;
 		HashSet<AbstractObject> obstructions = new HashSet<>(); //List of obstructions that block edges
 		obstructions.addAll(getNonMineableAsteroids(space)); //Add non-mineable asteroids to obstructions
-		obstructions.addAll(findNonTeamBases(space, teamName));
+		obstructions.addAll(findNonTeamBases(space, ship.getTeamName()));
 
 
 		for (Asteroid asteroid : asteroids) {
