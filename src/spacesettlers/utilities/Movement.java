@@ -11,7 +11,7 @@ public final class Movement {
 	/**
 	 * Acceleration in orientation
 	 */
-	double angularAccleration;
+	double angularAcceleration;
 
 	/**
 	 * Accelerating in x and y (x'' and y'' if you prefer)
@@ -48,22 +48,22 @@ public final class Movement {
 		}
 	}
 
-	public double getAngularAccleration() {
-		return angularAccleration;
+	public double getAngularAcceleration() {
+		return angularAcceleration;
 	}
 
 	/**
 	 * Set the acceleration and respect the max/mins
 	 * 
-	 * @param orientationAccleration
+	 * @param angularAcceleration
 	 */
-	public void setAngularAccleration(double angularAccleration) {
-		if (angularAccleration > MAX_ANGULAR_ACCELERATION) {
-			this.angularAccleration = MAX_ANGULAR_ACCELERATION;
-		} else if (angularAccleration < -MAX_ANGULAR_ACCELERATION) {
-			this.angularAccleration = -MAX_ANGULAR_ACCELERATION;
+	public void setAngularAcceleration(double angularAcceleration) {
+		if (angularAcceleration > MAX_ANGULAR_ACCELERATION) {
+			this.angularAcceleration = MAX_ANGULAR_ACCELERATION;
+		} else if (angularAcceleration < -MAX_ANGULAR_ACCELERATION) {
+			this.angularAcceleration = -MAX_ANGULAR_ACCELERATION;
 		} else {
-			this.angularAccleration = angularAccleration;
+			this.angularAcceleration = angularAcceleration;
 		}
 	}
 

@@ -11,7 +11,6 @@ import java.util.UUID;
 import spacesettlers.actions.DoNothingAction;
 import spacesettlers.actions.AbstractAction;
 import spacesettlers.clients.ImmutableTeamInfo;
-import spacesettlers.clients.Team;
 import spacesettlers.configs.SpaceSettlersConfig;
 import spacesettlers.objects.Asteroid;
 import spacesettlers.objects.Base;
@@ -1047,7 +1046,7 @@ public class Toroidal2DPhysics {
 	 */
 	public Position applyMovement(Position position, Movement movement, double timeStep) {
 		Vector2D translationalAcceleration = movement.getTranslationalAcceleration();
-		double angularAccel = movement.getAngularAccleration();
+		double angularAccel = movement.getAngularAcceleration();
 
 		// velocity is acceleration times time
 		Vector2D translationalVelocity = position.getTranslationalVelocity().add(new Vector2D(

@@ -9,7 +9,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Movement;
 import spacesettlers.utilities.Position;
 import spacesettlers.utilities.Vector2D;
@@ -36,7 +35,7 @@ public class TestToroidal2DPhysics {
 	public void testApplyOrientationMoveFromStop() {
 		Movement movement = new Movement();
 		double angularAccel = Math.PI / 60.0;
-		movement.setAngularAccleration(angularAccel);
+		movement.setAngularAcceleration(angularAccel);
 		movement.setTranslationalAcceleration(new Vector2D());
 		
 		double expectedOrientation = angularAccel;
@@ -53,7 +52,7 @@ public class TestToroidal2DPhysics {
 	@Test
 	public void testApplyOrientationMoveFromTurning() {
 		Movement movement = new Movement();
-		movement.setAngularAccleration(Math.PI / 180.0);
+		movement.setAngularAcceleration(Math.PI / 180.0);
 		movement.setTranslationalAcceleration(new Vector2D());
 		
 		double expectedOrientation = (3.0 * Math.PI) / 180.0;
@@ -75,7 +74,7 @@ public class TestToroidal2DPhysics {
 	@Test
 	public void testApplyTranslationalMovementHorizontalFromStop() {
 		Movement movement = new Movement();
-		movement.setAngularAccleration(0);
+		movement.setAngularAcceleration(0);
 		movement.setTranslationalAcceleration(new Vector2D(10, 0));
 
 		double expectedX = 10;
@@ -94,7 +93,7 @@ public class TestToroidal2DPhysics {
 	@Test
 	public void testApplyTranslationalMovementVerticalFromStop() {
 		Movement movement = new Movement();
-		movement.setAngularAccleration(0);
+		movement.setAngularAcceleration(0);
 		movement.setTranslationalAcceleration(new Vector2D(0,10));
 		position.setOrientation(Math.PI / 2);
 
@@ -114,7 +113,7 @@ public class TestToroidal2DPhysics {
 	@Test
 	public void testApplyTranslationalMovementAngledFromStop() {
 		Movement movement = new Movement();
-		movement.setAngularAccleration(0);
+		movement.setAngularAcceleration(0);
 		movement.setTranslationalAcceleration(new Vector2D(10,10));
 		position.setOrientation(Math.PI / 4);
 
@@ -134,7 +133,7 @@ public class TestToroidal2DPhysics {
 	@Test
 	public void testApplyNoMovementFromStop() {
 		Movement movement = new Movement();
-		movement.setAngularAccleration(0);
+		movement.setAngularAcceleration(0);
 		movement.setTranslationalAcceleration(new Vector2D());
 
 		Position newPosition = space.applyMovement(position, movement, timestep);
@@ -150,7 +149,7 @@ public class TestToroidal2DPhysics {
 	@Test
 	public void testApplyMovementTurnAndMoveFromStop() {
 		Movement movement = new Movement();
-		movement.setAngularAccleration(Math.PI / 60);
+		movement.setAngularAcceleration(Math.PI / 60);
 		movement.setTranslationalAcceleration(new Vector2D(10, 10));
 		position.setOrientation(Math.PI / 4);
 
