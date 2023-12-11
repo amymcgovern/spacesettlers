@@ -53,7 +53,7 @@ public class RawAction extends AbstractAction {
 	@Override
 	public Movement getMovement(Toroidal2DPhysics space, Ship ship) {
 		Movement movement = new Movement();
-		movement.setAngularAccleration(angularAcceleration);
+		movement.setAngularAcceleration(angularAcceleration);
 		movement.setTranslationalAcceleration(translationalAcceleration);
 		return movement;
 	}
@@ -72,7 +72,7 @@ public class RawAction extends AbstractAction {
 	@Override
 	public Movement getMovement(Toroidal2DPhysics space, Drone drone) {
 		Movement movement = new Movement();
-		movement.setAngularAccleration(angularAcceleration);
+		movement.setAngularAcceleration(angularAcceleration);
 		movement.setTranslationalAcceleration(translationalAcceleration);
 		return movement;
 	}

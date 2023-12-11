@@ -254,7 +254,7 @@ public class MoveAction extends AbstractAction {
 	 * @param goalLoc location that you are trying to get to
 	 * @param currentLoc your current location
 	 * @param goalVelocity velocity you want to be at when you reach the goal location
-	 * @return the accleration vector needed to move to the goal
+	 * @return the acceleration vector needed to move to the goal
 	 */
 	public Vector2D pdControlMoveToGoal(Toroidal2DPhysics space, Position goalLoc,
 			Position currentLoc, Vector2D goalVelocity) {
@@ -294,7 +294,7 @@ public class MoveAction extends AbstractAction {
 
 		// set the angular and translational velocity at the same time
 		double angularAccel = pdControlOrientToGoal(space, targetLocation, ship.getPosition(), 0);
-		movement.setAngularAccleration(angularAccel);
+		movement.setAngularAcceleration(angularAccel);
 		Vector2D goalAccel = pdControlMoveToGoal(space, targetLocation, ship.getPosition(), targetVelocity);
 		movement.setTranslationalAcceleration(goalAccel);
 
@@ -323,7 +323,7 @@ public class MoveAction extends AbstractAction {
 
 		// set the angular and translational velocity at the same time
 		double angularAccel = pdControlOrientToGoal(space, targetLocation, drone.getPosition(), 0);
-		movement.setAngularAccleration(angularAccel);
+		movement.setAngularAcceleration(angularAccel);
 		Vector2D goalAccel = pdControlMoveToGoal(space, targetLocation, drone.getPosition(), targetVelocity);
 		movement.setTranslationalAcceleration(goalAccel);
 

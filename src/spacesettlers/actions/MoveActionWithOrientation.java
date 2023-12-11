@@ -114,7 +114,7 @@ public class MoveActionWithOrientation extends MoveAction {
 
 		// set the angular and translational velocity at the same time
 		double angularAccel = this.pdControlOrientToGoal(space, targetLocation, ship.getPosition(), 0);
-		movement.setAngularAccleration(angularAccel);
+		movement.setAngularAcceleration(angularAccel);
 		Vector2D goalAccel = super.pdControlMoveToGoal(space, targetLocation, ship.getPosition(), targetVelocity);
 		movement.setTranslationalAcceleration(goalAccel);
 

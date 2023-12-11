@@ -6,8 +6,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import spacesettlers.actions.MoveAction;
-import spacesettlers.actions.SpaceSettlersActionException;
 import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Movement;
 import spacesettlers.utilities.Position;
@@ -56,7 +54,7 @@ public class TestMoveActionWithOrientation {
 		Movement movement = new Movement();
 		
 		while (Math.abs(accel) > MoveAction.TARGET_REACHED_ACCEL) {
-			movement.setAngularAccleration(accel);
+			movement.setAngularAcceleration(accel);
 			currentLoc = space.applyMovement(currentLoc, movement, timestep);
 			accel = moveAction.pdControlOrientToGoal(space, goalLoc, currentLoc, 0);
 		}
@@ -74,7 +72,7 @@ public class TestMoveActionWithOrientation {
 		movement = new Movement();
 		
 		while (Math.abs(accel) > MoveAction.TARGET_REACHED_ACCEL) {
-			movement.setAngularAccleration(accel);
+			movement.setAngularAcceleration(accel);
 			currentLoc = space.applyMovement(currentLoc, movement, timestep);
 			accel = moveAction.pdControlOrientToGoal(space, goalLoc, currentLoc, 0);
 		}
