@@ -118,8 +118,12 @@ public class Toroidal2DPhysics {
 	 * Energy penalty is used for decreasing ship energy at every step based on inertia
 	 * In the past, it has been
 	 * public static final double ENERGY_PENALTY = 0.0005;
+	 *
+	 * We tried
+	 * public static final double ENERGY_PENALTY = 0.0008;
+	 * And it was a bit too high to make success
 	 */
-	public static final double ENERGY_PENALTY = 0.0008;
+	public static final double ENERGY_PENALTY = 0.0005;
 
 	/**
 	 * Handles collisions between spacewar objects
